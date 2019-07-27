@@ -1,0 +1,6 @@
+[submodule "engine"]
+	path = engine
+	url = git@github.com:John-Sharp/engine.git
+[submodule "jTypes"]
+	path = jTypes
+	url = git@github.com:John-Sharp/jTypes.git
