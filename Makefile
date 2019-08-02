@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -g -Wall -lm -lSDL2 -lSDL2_image
+CFLAGS = -g -Wall -lm -lSDL2 -lSDL2_image -I /home/john/code/cairo/lib/include/cairo -L /home/john/code/cairo/lib/lib -lcairo -Wl,-rpath=/home/john/code/cairo/lib/lib
 
 jTypes: jTypes/jTypes.h jTypes/jTypes.c
 	$(CC) jTypes/jTypes.c -g -Wall -lm -fpic -c
