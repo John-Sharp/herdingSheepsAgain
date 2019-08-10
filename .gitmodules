@@ -4,3 +4,6 @@
 [submodule "jTypes"]
 	path = jTypes
 	url = git@github.com:John-Sharp/jTypes.git
+[submodule "dataStructures"]
+	path = dataStructures
+	url = git@github.com:John-Sharp/dataStructures.git

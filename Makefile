@@ -11,8 +11,11 @@ inputProcessor: jTypes engine/inputProcessor/inputProcessor.c engine/inputProces
 test : jTypes test/test.c
 	$(CC) -IjTypes jTypes.o test/test.c -g -Wall -lm -o test
 
-engine: jTypes inputProcessor engine/engine.h engine/engine.c  
+frameRateTracker: engine/frameRateTracker/frameRateTracker.h engine/frameRateTracker/frameRateTracker.c
+	$(CC) engine/frameRateTracker/frameRateTracker.c $(CFLAGS) -c
+
+engine: jTypes inputProcessor frameRateTracker engine/engine.h engine/engine.c 
 	$(CC) -IjTypes engine/engine.c $(CFLAGS) -c
 
 all: engine main.c 
-	$(CC) -IjTypes main.c engine.o inputProcessor.o jTypes.o $(CFLAGS) -o herdingSheeps
+	$(CC) -IjTypes main.c engine.o inputProcessor.o jTypes.o frameRateTracker.o $(CFLAGS) -o herdingSheeps
