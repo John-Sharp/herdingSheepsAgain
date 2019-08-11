@@ -1,0 +1,11 @@
+* move collisionDiagram to own file
+* move movingPointActor to own file
+* move herdingSheepsEngine to own file
+* allow choice of start/end position by clicking
+* introduce frame marker to frameRateBar
+* space-bar pauses running
+* right cursor goes forward frame, ctrl+right forward 10 frames
+* introduce wall actor
+* mark tick point before collision orange
+* on frame of collision mark tick point red
+* enable adding of multiple vertical and horizontal lines

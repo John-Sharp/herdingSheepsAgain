@@ -17,5 +17,14 @@ frameRateTracker: engine/frameRateTracker/frameRateTracker.h engine/frameRateTra
 engine: jTypes inputProcessor frameRateTracker engine/engine.h engine/engine.c 
 	$(CC) -IjTypes engine/engine.c $(CFLAGS) -c
 
-all: engine main.c 
-	$(CC) -IjTypes main.c engine.o inputProcessor.o jTypes.o frameRateTracker.o $(CFLAGS) -o herdingSheeps
+frameRateBarActor: actors/frameRateBarActor/frameRateBarActor.h actors/frameRateBarActor/frameRateBarActor.c
+	$(CC) -IjTypes actors/frameRateBarActor/frameRateBarActor.c $(CFLAGS) -c
+
+collisionDiagramActor: actors/collisionDiagramActor/collisionDiagramActor.h actors/collisionDiagramActor/collisionDiagramActor.c
+	$(CC) -IjTypes actors/collisionDiagramActor/collisionDiagramActor.c $(CFLAGS) -c
+
+movingPointActor: actors/movingPointActor/movingPointActor.h actors/movingPointActor/movingPointActor.c
+	$(CC) -IjTypes actors/movingPointActor/movingPointActor.c $(CFLAGS) -c
+
+all: engine frameRateBarActor collisionDiagramActor movingPointActor main.c 
+	$(CC) -IjTypes main.c engine.o inputProcessor.o jTypes.o frameRateTracker.o frameRateBarActor.o collisionDiagramActor.o movingPointActor.o $(CFLAGS) -o herdingSheeps
