@@ -30,15 +30,7 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     initFrameRateBar(eng->engine, &eng->frameRateBar);
 
     // setup bluePoint
-    eng->bluePoint.a.owner = &eng->bluePoint;
-    eng->bluePoint.a.renderHandler = NULL;
-    eng->bluePoint.a.logicHandler = NULL; // bluePointLogicHandler;
-    eng->bluePoint.rStart[0] = 50;
-    eng->bluePoint.rStart[1] = 50;
-    eng->bluePoint.frameStart = 0;
-    eng->bluePoint.targFrame  = 80;
-    eng->bluePoint.sTarg[0]  = 150;
-    eng->bluePoint.sTarg[1]  = 150;
+    initMovingPointActor(eng->engine, &eng->bluePoint);
 
     return eng;
 }
