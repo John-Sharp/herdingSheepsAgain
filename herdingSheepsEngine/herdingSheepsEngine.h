@@ -20,4 +20,6 @@ typedef struct herdingSheepsEngine {
 } herdingSheepsEngine;
 
 
+herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng);
+
 #endif

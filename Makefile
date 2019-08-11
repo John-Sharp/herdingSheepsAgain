@@ -26,5 +26,8 @@ collisionDiagramActor: actors/collisionDiagramActor/collisionDiagramActor.h acto
 movingPointActor: actors/movingPointActor/movingPointActor.h actors/movingPointActor/movingPointActor.c
 	$(CC) -IjTypes actors/movingPointActor/movingPointActor.c $(CFLAGS) -c
 
-all: engine frameRateBarActor collisionDiagramActor movingPointActor main.c 
-	$(CC) -IjTypes main.c engine.o inputProcessor.o jTypes.o frameRateTracker.o frameRateBarActor.o collisionDiagramActor.o movingPointActor.o $(CFLAGS) -o herdingSheeps
+herdingSheepsEngine: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEngine/herdingSheepsEngine.c
+	$(CC) -IjTypes herdingSheepsEngine/herdingSheepsEngine.c $(CFLAGS) -c
+
+all: engine herdingSheepsEngine frameRateBarActor collisionDiagramActor movingPointActor main.c 
+	$(CC) -IjTypes main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o frameRateBarActor.o collisionDiagramActor.o movingPointActor.o $(CFLAGS) -o herdingSheeps
