@@ -1,13 +1,24 @@
 #include "herdingSheepsEngine.h"
 
-void herdingSheepsPreLogic(engine * e)
-{
-}
-
 typedef enum STARTUP_CLICK_STATE {
     STARTUP_CLICK_STATE_POSITION_SELECT,
     STARTUP_CLICK_STATE_VELOCITY_SELECT,
 } STARTUP_CLICK_STATE;
+
+typedef enum KEYPRESS_STATE {
+    KEYPRESS_STATE_QUIT,
+    KEYPRESS_STATE_FRAME_PAUSE,
+} KEYPRESS_STATE;
+
+void herdingSheepsPreRender(engine * e)
+{
+    if (isStateActive(KEYPRESS_STATE_FRAME_PAUSE))
+    {
+        engineIsPaused(e) ? engineUnpause(e) : enginePause(e);
+        deactivateState(KEYPRESS_STATE_FRAME_PAUSE);
+    }
+}
+
 STARTUP_CLICK_STATE startupClickState;
 void startUpClicksCB(jint x, jint y, void * owner)
 {
@@ -31,7 +42,7 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 {
     eng->engine = createEngine(800, 600, eng);
 
-    enginePreLogicCallBackReg(eng->engine, herdingSheepsPreLogic);
+    enginePreRenderCallBackReg(eng->engine, herdingSheepsPreRender);
 
     // setup collisionDiagram
     initCollisionDiagram(eng->engine, &eng->collisionDiagram);
@@ -50,6 +61,13 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
         .owner = eng
     };
     addMouseCallback(&mouseBinding);
+
+    keyStateBinding ksb = {
+        .k = SDLK_SPACE,
+        .s = KEYPRESS_STATE_FRAME_PAUSE,
+        .t = BINDING_ONE_TIME
+    };
+    addBinding(&ksb);
 
     return eng;
 }

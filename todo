@@ -3,7 +3,7 @@
 * move herdingSheepsEngine to own file DONE
 * allow choice of start/end position by clicking DONE
 * introduce frame marker to frameRateBar DONE
-* space-bar pauses running
+* space-bar pauses running DONE
 * right cursor goes forward frame, ctrl+right forward 10 frames
 * introduce wall actor
 * mark tick point before collision orange

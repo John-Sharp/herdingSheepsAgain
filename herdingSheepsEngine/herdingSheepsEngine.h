@@ -19,7 +19,6 @@ typedef struct herdingSheepsEngine {
     jintRect mainWindow;
 } herdingSheepsEngine;
 
-
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng);
 
 #endif

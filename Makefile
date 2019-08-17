@@ -18,7 +18,10 @@ test : jTypes test/test.c
 frameRateTracker: engine/frameRateTracker/frameRateTracker.h engine/frameRateTracker/frameRateTracker.c
 	$(CC) engine/frameRateTracker/frameRateTracker.c $(CFLAGS) -c
 
-engine: jTypes inputProcessor frameRateTracker engine/engine.h engine/engine.c 
+engineLists: engine/listHeaders engine/listCode
+	dataStructures/generateList.py engine/listHeaders engine/listCode preLogicCallBack:preLogicCallBack preRenderCallBack:preRenderCallBack
+
+engine: jTypes inputProcessor frameRateTracker engine/engine.h engine/engine.c engineLists
 	$(CC) -IjTypes engine/engine.c $(CFLAGS) -c
 
 frameRateBarActor: actors/frameRateBarActor/frameRateBarActor.h actors/frameRateBarActor/frameRateBarActor.c
@@ -30,8 +33,8 @@ collisionDiagramActor: actors/collisionDiagramActor/collisionDiagramActor.h acto
 movingPointActor: actors/movingPointActor/movingPointActor.h actors/movingPointActor/movingPointActor.c
 	$(CC) -IjTypes actors/movingPointActor/movingPointActor.c $(CFLAGS) -c
 
-herdingSheepsEngine: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEngine/herdingSheepsEngine.c
+herdingSheepsEngineT: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEngine/herdingSheepsEngine.c
 	$(CC) -IjTypes herdingSheepsEngine/herdingSheepsEngine.c $(CFLAGS) -c
 
-all: engine herdingSheepsEngine frameRateBarActor collisionDiagramActor movingPointActor main.c 
+all: engine herdingSheepsEngineT frameRateBarActor collisionDiagramActor movingPointActor main.c 
 	$(CC) -IjTypes main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o frameRateBarActor.o collisionDiagramActor.o movingPointActor.o $(CFLAGS) -o herdingSheeps
