@@ -29,7 +29,8 @@ void drawFrameRateBar(void * pixels, int pitch, void * ctx)
     char frameRateInfoBuffer[256];
     uint32_t renderFPS, logicFPS;
     engineGetFrameRate(f->a.eng, &logicFPS, &renderFPS);
-    sprintf(frameRateInfoBuffer, "render FPS: %u, logic FPS: %u", renderFPS, logicFPS);
+    sprintf(frameRateInfoBuffer, "render FPS: %u, logic FPS: %u, current logic frame: %u",
+            renderFPS, logicFPS, f->a.eng->currentFrame);
     cairo_show_text(cr, frameRateInfoBuffer);
 }
 
@@ -38,7 +39,7 @@ void frameRateBarRenderer(actor * a)
     frameRateBarActor * f = (frameRateBarActor *)a->owner;
     static int prevUpdate = 0;
 
-    int update = SDL_GetTicks() / 500;
+    int update = SDL_GetTicks() / 250;
     if (update > prevUpdate)
     {
         prevUpdate = update;

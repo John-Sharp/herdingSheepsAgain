@@ -2,7 +2,7 @@
 * move movingPointActor to own file DONE
 * move herdingSheepsEngine to own file DONE
 * allow choice of start/end position by clicking DONE
-* introduce frame marker to frameRateBar
+* introduce frame marker to frameRateBar DONE
 * space-bar pauses running
 * right cursor goes forward frame, ctrl+right forward 10 frames
 * introduce wall actor
