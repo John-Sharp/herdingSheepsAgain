@@ -4,7 +4,7 @@
 * allow choice of start/end position by clicking DONE
 * introduce frame marker to frameRateBar DONE
 * space-bar pauses running DONE
-* right cursor goes forward frame, ctrl+right forward 10 frames
+* right cursor goes forward frame, ctrl+right forward 10 frames DONE
 * introduce wall actor
 * mark tick point before collision orange
 * on frame of collision mark tick point red

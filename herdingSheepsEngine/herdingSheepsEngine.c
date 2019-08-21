@@ -8,7 +8,16 @@ typedef enum STARTUP_CLICK_STATE {
 typedef enum KEYPRESS_STATE {
     KEYPRESS_STATE_QUIT,
     KEYPRESS_STATE_FRAME_PAUSE,
+    KEYPRESS_STATE_FORWARD_FRAME,
+    KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER, // used for keeping track of
+                                             // whether ctrl is pressed,
+                                             // since this should make us
+                                             // move forward 10 frames
+                                             // rather than one if
+                                             // KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER
+                                             // is also active
 } KEYPRESS_STATE;
+const juint KEYPRESS_REFRESH_MS = 250;
 
 void herdingSheepsPreRender(engine * e)
 {
@@ -16,6 +25,34 @@ void herdingSheepsPreRender(engine * e)
     {
         engineIsPaused(e) ? engineUnpause(e) : enginePause(e);
         deactivateState(KEYPRESS_STATE_FRAME_PAUSE);
+    }
+    if (engineIsPaused(e))
+    {
+        Uint32 time = SDL_GetTicks();
+        static Uint32 lastTime = 0;
+        if (isStateActive(KEYPRESS_STATE_FORWARD_FRAME))
+        {
+            if (isStateActive(KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER))
+            {
+                if (time - lastTime > KEYPRESS_REFRESH_MS)
+                {
+                    lastTime = time;
+                    engineAdvanceFrames(e, 10);
+                }
+            }
+            else
+            {
+                if (time - lastTime > KEYPRESS_REFRESH_MS)
+                {
+                    lastTime = time;
+                    engineAdvanceFrames(e, 1);
+                }
+            }
+        }
+        else
+        {
+            lastTime = 0;
+        }
     }
 }
 
@@ -69,6 +106,15 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     };
     addBinding(&ksb);
 
+    ksb.k = SDLK_RIGHT;
+    ksb.s = KEYPRESS_STATE_FORWARD_FRAME;
+    ksb.t = BINDING_CONTINUOUS;
+    addBinding(&ksb);
+
+    ksb.k = SDLK_LCTRL;
+    ksb.s = KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER;
+    ksb.t = BINDING_CONTINUOUS;
+    addBinding(&ksb);
+
     return eng;
 }
-
