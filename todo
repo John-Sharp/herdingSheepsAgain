@@ -5,7 +5,7 @@
 * introduce frame marker to frameRateBar DONE
 * space-bar pauses running DONE
 * right cursor goes forward frame, ctrl+right forward 10 frames DONE
-* introduce wall actor
+* introduce wall actor DONE
 * mark tick point before collision orange
 * on frame of collision mark tick point red
 * enable adding of multiple vertical and horizontal lines

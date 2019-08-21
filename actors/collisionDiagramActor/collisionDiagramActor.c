@@ -24,11 +24,17 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 
 	cairo_set_source_rgb (cr, 0, 0, 1);
 
+    // draw blue Point
     jintVec r;
     movingPointActorGetPosition(&e->bluePoint, &r[0], &r[1], e->engine->currentFrame);
     cairo_arc (cr, r[0], (600-25) - r[1], 30, 0, 2 * M_PI);
-
 	cairo_fill (cr);
+
+    // draw wall
+	cairo_set_source_rgb (cr, 1, 0, 1);
+    cairo_move_to(cr, e->wall.pos[0], (600-25) - e->wall.pos[1]);
+    cairo_rel_line_to (cr, 0, -e->wall.length);
+    cairo_stroke(cr);
 
     if (e->bluePoint.sTarg[0] != 0 || e->bluePoint.sTarg[0] != 0)
     {

@@ -90,6 +90,8 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     // setup bluePoint
     initMovingPointActor(eng->engine, &eng->bluePoint);
 
+    // setup wallActors
+    initWallActor(eng->engine, &eng->wall);
 
     mouseCallbackBinding mouseBinding = {
         .type = SDL_MOUSEBUTTONDOWN,

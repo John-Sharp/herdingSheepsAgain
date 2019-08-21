@@ -7,6 +7,7 @@
 #include "../actors/collisionDiagramActor/collisionDiagramActor.h"
 #include "../actors/frameRateBarActor/frameRateBarActor.h"
 #include "../actors/movingPointActor/movingPointActor.h"
+#include "../actors/wallActor/wallActor.h"
 
 typedef struct herdingSheepsEngine {
     engine * engine;
@@ -15,6 +16,8 @@ typedef struct herdingSheepsEngine {
     frameRateBarActor frameRateBar;
 
     movingPointActor bluePoint;
+
+    wallActor wall;
 
     jintRect mainWindow;
 } herdingSheepsEngine;
