@@ -3,16 +3,16 @@ CC = gcc
 CFLAGS = -g -Wall -lm -lSDL2 -lSDL2_image -I /home/john/code/cairo/lib/include/cairo -L /home/john/code/cairo/lib/lib -lcairo -Wl,-rpath=/home/john/code/cairo/lib/lib
 
 
-jTypes: jTypes/jTypes.h jTypes/jTypes.c
+jTypesT: jTypes/jTypes.h jTypes/jTypes.c
 	$(CC) jTypes/jTypes.c -g -Wall -lm -fpic -c
 
 generateInputProcessorListCode: dataStructures/templates/listTemplate.h dataStructures/templates/listTemplate.inc
 	dataStructures/generateList.py engine/inputProcessor/listHeaders engine/inputProcessor/listCode mouseCallbackBinding:mouseCallbackBinding
 
-inputProcessor: generateInputProcessorListCode jTypes engine/inputProcessor/inputProcessor.c engine/inputProcessor/inputProcessor.h
+inputProcessor: generateInputProcessorListCode jTypesT engine/inputProcessor/inputProcessor.c engine/inputProcessor/inputProcessor.h
 	$(CC) -IjTypes engine/inputProcessor/inputProcessor.c -g -Wall -lm -fpic -c
 
-test : jTypes test/test.c
+test : jTypesT test/test.c
 	$(CC) -IjTypes jTypes.o test/test.c -g -Wall -lm -o test
 
 frameRateTracker: engine/frameRateTracker/frameRateTracker.h engine/frameRateTracker/frameRateTracker.c
@@ -21,7 +21,7 @@ frameRateTracker: engine/frameRateTracker/frameRateTracker.h engine/frameRateTra
 engineLists: engine/listHeaders engine/listCode
 	dataStructures/generateList.py engine/listHeaders engine/listCode preLogicCallBack:preLogicCallBack preRenderCallBack:preRenderCallBack
 
-engine: jTypes inputProcessor frameRateTracker engine/engine.h engine/engine.c engineLists
+engine: jTypesT inputProcessor frameRateTracker engine/engine.h engine/engine.c engineLists
 	$(CC) -IjTypes engine/engine.c $(CFLAGS) -c
 
 frameRateBarActor: actors/frameRateBarActor/frameRateBarActor.h actors/frameRateBarActor/frameRateBarActor.c

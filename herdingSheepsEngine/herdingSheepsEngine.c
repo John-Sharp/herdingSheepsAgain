@@ -62,15 +62,15 @@ void startUpClicksCB(jint x, jint y, void * owner)
     herdingSheepsEngine * eng = (herdingSheepsEngine *)owner;
     if (startupClickState == STARTUP_CLICK_STATE_POSITION_SELECT)
     {
-        eng->bluePoint.rStart[0] = x;
-        eng->bluePoint.rStart[1] = (600 - y);
+        eng->bluePoint.vLine.rStart.x = x;
+        eng->bluePoint.vLine.rStart.y = (600 - y);
 
         startupClickState = STARTUP_CLICK_STATE_VELOCITY_SELECT;
     }
     else if (startupClickState == STARTUP_CLICK_STATE_VELOCITY_SELECT)
     {
-        eng->bluePoint.sTarg[0] = x - eng->bluePoint.rStart[0];
-        eng->bluePoint.sTarg[1] = (600 - y) - eng->bluePoint.rStart[1];
+        eng->bluePoint.vLine.sTarg.x = x - eng->bluePoint.vLine.rStart.x;
+        eng->bluePoint.vLine.sTarg.y = (600 - y) - eng->bluePoint.vLine.rStart.y;
         eng->bluePoint.frameStart = eng->engine->currentFrame;
     }
 }
