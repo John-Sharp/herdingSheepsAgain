@@ -7,8 +7,7 @@
 typedef struct wallActor {
     actor a;
 
-    jintVec pos;
-    jint length;
+    jintAxPlLine line;
 } wallActor;
 
 void initWallActor(engine * eng, wallActor * a);

@@ -32,8 +32,8 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 
     // draw wall
 	cairo_set_source_rgb (cr, 1, 0, 1);
-    cairo_move_to(cr, e->wall.pos.x, (600-25) - e->wall.pos.y);
-    cairo_rel_line_to (cr, 0, -e->wall.length);
+    cairo_move_to(cr, e->wall.line.rStart.x, (600-25) - e->wall.line.rStart.y);
+    cairo_rel_line_to (cr, 0, -e->wall.line.length);
     cairo_stroke(cr);
 
     if (e->bluePoint.vLine.sTarg.x != 0 || e->bluePoint.vLine.sTarg.x != 0)

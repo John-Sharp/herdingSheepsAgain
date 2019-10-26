@@ -75,6 +75,43 @@ void startUpClicksCB(jint x, jint y, void * owner)
     }
 }
 
+// typedef enum COLL_ACTOR_TYPE
+// {
+//     COLL_ACTOR_TYPE_POINT,
+//     COLL_ACTOR_TYPE_V_LINE,
+//     COLL_ACTOR_TYPE_H_LINE,
+// } COLL_ACTOR_TYPE;
+// 
+// typedef struct collActor {
+//     COLL_ACTOR_TYPE type;
+// 
+//     jintVec * rStart;
+//     juint * frameStart;
+//     jint * targFrame;
+//     jintVec * sTarg;
+// 
+//     jint collFrame; // frame before collision
+// } collActor;
+// 
+// typedef enum COLL_FRAME_CALC_ERROR
+// {
+//     COLL_FRAME_CALC_OK,
+//     COLL_FRAME_CALC_ERROR_UNHANDLED_TYPES,
+// } COLL_FRAME_CALC_ERROR;
+// 
+// COLL_FRAME_CALC_ERROR calculateNextCollisionFrame(jint * collFrame, const collActor * ca1, const collActor * ca2)
+// {
+//     bool handled_collision = 
+//         (ca1->type == COLL_ACTOR_TYPE_POINT && ca2->type == COLL_ACTOR_TYPE_V_LINE);
+// 
+//     if (!handled_collision)
+//     {
+//         return COLL_FRAME_CALC_ERROR_UNHANDLED_TYPES;
+//     }
+// 
+//     // (*ca->rStart)[0] 
+// }
+
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 {
     eng->engine = createEngine(800, 600, eng);
