@@ -7,3 +7,6 @@
 [submodule "dataStructures"]
 	path = dataStructures
 	url = git@github.com:John-Sharp/dataStructures.git
+[submodule "collDetect"]
+	path = collDetect
+	url = git@github.com:John-Sharp/collDetect.git

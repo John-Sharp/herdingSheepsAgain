@@ -1,4 +1,5 @@
 #include "herdingSheepsEngine.h"
+#include "../collDetect/collDetect.h"
 
 typedef enum STARTUP_CLICK_STATE {
     STARTUP_CLICK_STATE_POSITION_SELECT,
@@ -72,45 +73,34 @@ void startUpClicksCB(jint x, jint y, void * owner)
         eng->bluePoint.vLine.sTarg.x = x - eng->bluePoint.vLine.rStart.x;
         eng->bluePoint.vLine.sTarg.y = (600 - y) - eng->bluePoint.vLine.rStart.y;
         eng->bluePoint.frameStart = eng->engine->currentFrame;
+
+        // calculate next collision frame here
+        jint frame;
+        collActor ca1 = {
+            .type = COLL_ACTOR_TYPE_POINT,
+            .shape = {
+                .point = eng->bluePoint.vLine
+            }
+        };
+        collActor ca2 = {
+            .type = COLL_ACTOR_TYPE_V_LINE,
+            .shape = {
+                .line = {
+                    .direction = AX_PL_DIR_Y,
+                    .rStart = {
+                        .x = 300,
+                        .y = 10
+                    },
+                    .length = 150
+                }
+            }
+        };
+
+        calculateNextCollisionFrame(
+                &frame, &ca1, &ca2);
+        printf("collision frame is %d\n", frame);
     }
 }
-
-// typedef enum COLL_ACTOR_TYPE
-// {
-//     COLL_ACTOR_TYPE_POINT,
-//     COLL_ACTOR_TYPE_V_LINE,
-//     COLL_ACTOR_TYPE_H_LINE,
-// } COLL_ACTOR_TYPE;
-// 
-// typedef struct collActor {
-//     COLL_ACTOR_TYPE type;
-// 
-//     jintVec * rStart;
-//     juint * frameStart;
-//     jint * targFrame;
-//     jintVec * sTarg;
-// 
-//     jint collFrame; // frame before collision
-// } collActor;
-// 
-// typedef enum COLL_FRAME_CALC_ERROR
-// {
-//     COLL_FRAME_CALC_OK,
-//     COLL_FRAME_CALC_ERROR_UNHANDLED_TYPES,
-// } COLL_FRAME_CALC_ERROR;
-// 
-// COLL_FRAME_CALC_ERROR calculateNextCollisionFrame(jint * collFrame, const collActor * ca1, const collActor * ca2)
-// {
-//     bool handled_collision = 
-//         (ca1->type == COLL_ACTOR_TYPE_POINT && ca2->type == COLL_ACTOR_TYPE_V_LINE);
-// 
-//     if (!handled_collision)
-//     {
-//         return COLL_FRAME_CALC_ERROR_UNHANDLED_TYPES;
-//     }
-// 
-//     // (*ca->rStart)[0] 
-// }
 
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 {
