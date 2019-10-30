@@ -103,7 +103,8 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 
         // draw collision point
         cairo_set_source_rgb (cr, 1, 0.6, 0);
-        cairo_arc (cr, 100, (600-25) - 100, 3, 0, 2 * M_PI);
+        jintVec collision_point = jintLineGetPosition(e->bluePoint.pos, e->bluePoint.ca.collFrame);
+        cairo_arc (cr, collision_point.x, (600-25) - collision_point.y, 3, 0, 2 * M_PI);
         cairo_fill (cr);
     }
 }

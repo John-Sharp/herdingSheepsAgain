@@ -6,7 +6,7 @@
 * space-bar pauses running DONE
 * right cursor goes forward frame, ctrl+right forward 10 frames DONE
 * introduce wall actor DONE
-* make rStart, targFrame, sTarg into jType
-* mark tick point before collision orange
+* make rStart, targFrame, sTarg into jType DONE
+* mark tick point before collision orange DONE
 * on frame of collision mark tick point red
 * enable adding of multiple vertical and horizontal lines
