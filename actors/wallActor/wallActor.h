@@ -3,11 +3,13 @@
 
 #include "../../engine/engine.h"
 #include <jTypes.h>
+#include <collDetect.h>
 
 typedef struct wallActor {
     actor a;
 
-    jintAxPlLine line;
+    collActor ca;
+    const jintAxPlLine * line;
 } wallActor;
 
 void initWallActor(engine * eng, wallActor * a);

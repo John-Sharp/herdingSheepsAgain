@@ -3,12 +3,16 @@
 
 #include "../../engine/engine.h"
 #include <jTypes.h>
+#include <collDetect.h>
 
 typedef struct movingPointActor {
     actor a;
     sprite s;
     decal d;
-    jintLine vLine; // line describing the actor's velocity
+
+    collActor ca;
+    const jintLine *pos;
+
     juint frameStart;
 } movingPointActor;
 

@@ -3,6 +3,7 @@
 
 #include "../engine/engine.h"
 #include <jTypes.h>
+#include <collDetect.h>
 
 #include "../actors/collisionDiagramActor/collisionDiagramActor.h"
 #include "../actors/frameRateBarActor/frameRateBarActor.h"
