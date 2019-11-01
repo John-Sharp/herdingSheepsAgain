@@ -74,9 +74,13 @@ void startUpClicksCB(jint x, jint y, void * owner)
         eng->bluePoint.frameStart = eng->engine->currentFrame;
 
         // calculate next collision frame here
-        int frame;
-        calculateNextCollisionFrame(
-                &frame, &eng->bluePoint.ca, &eng->wall.ca);
+        int frame = -1;
+        if (calculateNextCollisionFrame(
+                &frame, &eng->bluePoint.ca, &eng->wall.ca) == COLL_FRAME_CALC_NO_COLLISION)
+        {
+            printf("no collision detected\n\n");
+            frame = -1;
+        }
         eng->bluePoint.ca.collFrame = frame;
         eng->wall.ca.collFrame = frame;
     }
