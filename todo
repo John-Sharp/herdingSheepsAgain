@@ -8,5 +8,5 @@
 * introduce wall actor DONE
 * make rStart, targFrame, sTarg into jType DONE
 * mark tick point before collision orange DONE
-* on frame of collision mark tick point red
+* on frame of collision mark tick point red DONE
 * enable adding of multiple vertical and horizontal lines

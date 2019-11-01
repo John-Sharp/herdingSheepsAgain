@@ -104,7 +104,14 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         // draw collision point
         if (e->bluePoint.ca.collFrame >= 0)
         {
-            cairo_set_source_rgb (cr, 1, 0.6, 0);
+            if (e->engine->currentFrame < e->bluePoint.ca.collFrame + e->bluePoint.frameStart)
+            {
+                cairo_set_source_rgb (cr, 1, 0.6, 0);
+            }
+            else
+            {
+                cairo_set_source_rgb (cr, 1, 0.0, 0);
+            }
             jintVec collision_point = jintLineGetPosition(e->bluePoint.pos, e->bluePoint.ca.collFrame);
             cairo_arc (cr, collision_point.x, (600-25) - collision_point.y, 3, 0, 2 * M_PI);
             cairo_fill (cr);
