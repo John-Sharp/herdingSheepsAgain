@@ -30,11 +30,16 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     cairo_arc (cr, r.x, (600-25) - r.y, 30, 0, 2 * M_PI);
 	cairo_fill (cr);
 
-    // draw wall
-	cairo_set_source_rgb (cr, 1, 0, 1);
-    cairo_move_to(cr, e->wall.line->rStart.x, (600-25) - e->wall.line->rStart.y);
-    cairo_rel_line_to (cr, 0, -e->wall.line->length);
-    cairo_stroke(cr);
+    // draw walls
+    wallActorList * wallActorNode = NULL;
+    for (wallActorNode = e->walls; wallActorNode != NULL; wallActorNode = wallActorNode->next)
+    {
+        wallActor * wall = wallActorNode->val;
+        cairo_set_source_rgb (cr, 1, 0, 1);
+        cairo_move_to(cr, wall->line->rStart.x, (600-25) - wall->line->rStart.y);
+        cairo_rel_line_to (cr, 0, -wall->line->length);
+        cairo_stroke(cr);
+    }
 
     if (e->bluePoint.pos->sTarg.x != 0 || e->bluePoint.pos->sTarg.y != 0)
     {

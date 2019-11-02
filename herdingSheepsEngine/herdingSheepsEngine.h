@@ -10,6 +10,8 @@
 #include "../actors/movingPointActor/movingPointActor.h"
 #include "../actors/wallActor/wallActor.h"
 
+#include "listHeaders/wallActorList.h"
+
 typedef struct herdingSheepsEngine {
     engine * engine;
 
@@ -18,7 +20,7 @@ typedef struct herdingSheepsEngine {
 
     movingPointActor bluePoint;
 
-    wallActor wall;
+    wallActorList * walls;
 
     jintRect mainWindow;
 } herdingSheepsEngine;

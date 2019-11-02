@@ -33,10 +33,13 @@ collisionDiagramActor: actors/collisionDiagramActor/collisionDiagramActor.h acto
 collDetectT: collDetect/collDetect.h collDetect/collDetect.c
 	$(CC) -IjTypes collDetect/collDetect.c $(CFLAGS) -c
 
+generateHerdingSheepsEngineListCode: dataStructures/templates/listTemplate.h dataStructures/templates/listTemplate.inc
+	dataStructures/generateList.py herdingSheepsEngine/listHeaders herdingSheepsEngine/listCode wallActor:wallActor
+
 movingPointActor: actors/movingPointActor/movingPointActor.h actors/movingPointActor/movingPointActor.c
 	$(CC) -IjTypes -IcollDetect actors/movingPointActor/movingPointActor.c $(CFLAGS) -c
 
-herdingSheepsEngineT: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEngine/herdingSheepsEngine.c
+herdingSheepsEngineT: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEngine/herdingSheepsEngine.c generateHerdingSheepsEngineListCode
 	$(CC) -IjTypes -IcollDetect herdingSheepsEngine/herdingSheepsEngine.c $(CFLAGS) -c
 
 wallActor: actors/wallActor/wallActor.h actors/wallActor/wallActor.c

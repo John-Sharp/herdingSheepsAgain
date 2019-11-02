@@ -74,17 +74,25 @@ void startUpClicksCB(jint x, jint y, void * owner)
         eng->bluePoint.frameStart = eng->engine->currentFrame;
 
         // calculate next collision frame here
-        int frame = -1;
-        if (calculateNextCollisionFrame(
-                &frame, &eng->bluePoint.ca, &eng->wall.ca) == COLL_FRAME_CALC_NO_COLLISION)
+        wallActorList * wallNode = NULL;
+        for (wallNode = eng->walls; wallNode != NULL; wallNode = wallNode->next)
         {
-            printf("no collision detected\n\n");
-            frame = -1;
+            wallActor * wall = wallNode->val;
+
+            int frame = -1;
+            if (calculateNextCollisionFrame(
+                        &frame, &eng->bluePoint.ca, &wall->ca) == COLL_FRAME_CALC_NO_COLLISION)
+            {
+                printf("no collision detected\n\n");
+                frame = -1;
+            }
+            eng->bluePoint.ca.collFrame = frame;
+            wall->ca.collFrame = frame;
         }
-        eng->bluePoint.ca.collFrame = frame;
-        eng->wall.ca.collFrame = frame;
     }
 }
+
+#include "listCode/wallActorList.inc"
 
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 {
@@ -102,7 +110,15 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     initMovingPointActor(eng->engine, &eng->bluePoint);
 
     // setup wallActors
-    initWallActor(eng->engine, &eng->wall);
+    wallActor * wa = malloc(sizeof(*wa));
+    if (!wa)
+    {
+        fprintf(stderr, "failed to allocate memory for wall actor");
+        exit(1);
+    }
+    initWallActor(eng->engine, wa);
+    eng->walls = NULL;
+    eng->walls = wallActorListAdd(eng->walls, wa);
 
     mouseCallbackBinding mouseBinding = {
         .type = SDL_MOUSEBUTTONDOWN,
