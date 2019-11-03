@@ -5,6 +5,8 @@
 #include <jTypes.h>
 #include <collDetect.h>
 
+typedef struct herdingSheepsEngine herdingSheepsEngine;
+
 typedef struct wallActor {
     actor a;
 
@@ -12,5 +14,5 @@ typedef struct wallActor {
     const jintAxPlLine * line;
 } wallActor;
 
-void initWallActor(engine * eng, wallActor * a);
+void initWallActors(herdingSheepsEngine * eng);
 #endif

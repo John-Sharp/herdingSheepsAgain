@@ -92,8 +92,6 @@ void startUpClicksCB(jint x, jint y, void * owner)
     }
 }
 
-#include "listCode/wallActorList.inc"
-
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 {
     eng->engine = createEngine(800, 600, eng);
@@ -110,15 +108,7 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     initMovingPointActor(eng->engine, &eng->bluePoint);
 
     // setup wallActors
-    wallActor * wa = malloc(sizeof(*wa));
-    if (!wa)
-    {
-        fprintf(stderr, "failed to allocate memory for wall actor");
-        exit(1);
-    }
-    initWallActor(eng->engine, wa);
-    eng->walls = NULL;
-    eng->walls = wallActorListAdd(eng->walls, wa);
+    initWallActors(eng);
 
     mouseCallbackBinding mouseBinding = {
         .type = SDL_MOUSEBUTTONDOWN,
