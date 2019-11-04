@@ -11,12 +11,12 @@ void initWallActors(herdingSheepsEngine * eng)
     jintAxPlLine lines[] = {
         {
             .direction = AX_PL_DIR_Y,
-            .rStart = {300, 10},
+            .rStart = {{300, 10}},
             .length = 150
         },
         {
             .direction = AX_PL_DIR_X,
-            .rStart = {350, 50},
+            .rStart = {{350, 50}},
             .length = 150
         }
     };

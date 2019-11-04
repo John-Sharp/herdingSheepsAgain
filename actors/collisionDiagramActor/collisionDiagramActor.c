@@ -26,8 +26,8 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 
     // draw blue Point
     jintVec r;
-    movingPointActorGetPosition(&e->bluePoint, &r.x, &r.y, e->engine->currentFrame);
-    cairo_arc (cr, r.x, (600-25) - r.y, 30, 0, 2 * M_PI);
+    movingPointActorGetPosition(&e->bluePoint, &r.v[0], &r.v[1], e->engine->currentFrame);
+    cairo_arc (cr, r.v[0], (600-25) - r.v[1], 30, 0, 2 * M_PI);
 	cairo_fill (cr);
 
     // draw walls
@@ -37,7 +37,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     {
         wallActor * wall = wallActorNode->val;
         cairo_set_source_rgb (cr, 1, 0, 1);
-        cairo_move_to(cr, wall->line->rStart.x, (600-25) - wall->line->rStart.y);
+        cairo_move_to(cr, wall->line->rStart.v[0], (600-25) - wall->line->rStart.v[1]);
         if (wall->line->direction == AX_PL_DIR_Y)
         {
             cairo_rel_line_to (cr, 0, -wall->line->length);
@@ -50,34 +50,34 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     }
     }
 
-    if (e->bluePoint.pos->sTarg.x != 0 || e->bluePoint.pos->sTarg.y != 0)
+    if (e->bluePoint.pos->sTarg.v[0] != 0 || e->bluePoint.pos->sTarg.v[1] != 0)
     {
         const jintLine * bluePoint = e->bluePoint.pos;
         // draw extended velocity vector
         cairo_set_source_rgb (cr, 1, 1, 0);
-        cairo_move_to(cr, bluePoint->rStart.x, (600-25) - bluePoint->rStart.y);
+        cairo_move_to(cr, bluePoint->rStart.v[0], (600-25) - bluePoint->rStart.v[1]);
         jint u, v;
 
-        if (bluePoint->sTarg.x > bluePoint->rStart.x)
+        if (bluePoint->sTarg.v[0] > bluePoint->rStart.v[0])
         {
-            u = bluePoint->sTarg.x ? (800 - bluePoint->rStart.x) / bluePoint->sTarg.x + 1 : 0;
+            u = bluePoint->sTarg.v[0] ? (800 - bluePoint->rStart.v[0]) / bluePoint->sTarg.v[0] + 1 : 0;
         }
         else
         {
-            u = bluePoint->sTarg.x ? -1 * (bluePoint->rStart.x) / bluePoint->sTarg.x + 1 : 0;
+            u = bluePoint->sTarg.v[0] ? -1 * (bluePoint->rStart.v[0]) / bluePoint->sTarg.v[0] + 1 : 0;
         }
 
-        if (bluePoint->sTarg.y > bluePoint->rStart.y)
+        if (bluePoint->sTarg.v[1] > bluePoint->rStart.v[1])
         {
-            v = bluePoint->sTarg.y ? ((600 - 25) - bluePoint->rStart.y) / bluePoint->sTarg.y + 1 : 0;
+            v = bluePoint->sTarg.v[1] ? ((600 - 25) - bluePoint->rStart.v[1]) / bluePoint->sTarg.v[1] + 1 : 0;
         }
         else
         {
-            v = bluePoint->sTarg.y ? -1 * (bluePoint->rStart.y) / bluePoint->sTarg.y + 1 : 0;
+            v = bluePoint->sTarg.v[1] ? -1 * (bluePoint->rStart.v[1]) / bluePoint->sTarg.v[1] + 1 : 0;
         }
 
         u = u > v ? u : v;
-        cairo_rel_line_to (cr, u * bluePoint->sTarg.x, -u * bluePoint->sTarg.y);
+        cairo_rel_line_to (cr, u * bluePoint->sTarg.v[0], -u * bluePoint->sTarg.v[1]);
         cairo_stroke(cr);
 
         //draw extended tick marks
@@ -85,8 +85,8 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         int i;
         for (i = 10; ; i+=10)
         {
-            int tickx = i * bluePoint->sTarg.x / bluePoint->tScale + bluePoint->rStart.x;
-            int ticky = i * bluePoint->sTarg.y / bluePoint->tScale + bluePoint->rStart.y;
+            int tickx = i * bluePoint->sTarg.v[0] / bluePoint->tScale + bluePoint->rStart.v[0];
+            int ticky = i * bluePoint->sTarg.v[1] / bluePoint->tScale + bluePoint->rStart.v[1];
 
             if (tickx > 800+5 || tickx < 0)
                 break;
@@ -100,16 +100,16 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 
         // draw velocity vector
         cairo_set_source_rgb (cr, 0, 1, 0);
-        cairo_move_to(cr, bluePoint->rStart.x, (600-25) - bluePoint->rStart.y);
-        cairo_rel_line_to (cr, bluePoint->sTarg.x, -bluePoint->sTarg.y);
+        cairo_move_to(cr, bluePoint->rStart.v[0], (600-25) - bluePoint->rStart.v[1]);
+        cairo_rel_line_to (cr, bluePoint->sTarg.v[0], -bluePoint->sTarg.v[1]);
         cairo_stroke(cr);
 
         // draw tickmarks
         cairo_set_source_rgb (cr, 0, 1, 0);
         for (i = 10; i <=  bluePoint->tScale; i+=10)
         {
-            int tickx = i * bluePoint->sTarg.x / bluePoint->tScale + bluePoint->rStart.x;
-            int ticky = i * bluePoint->sTarg.y / bluePoint->tScale + bluePoint->rStart.y;
+            int tickx = i * bluePoint->sTarg.v[0] / bluePoint->tScale + bluePoint->rStart.v[0];
+            int ticky = i * bluePoint->sTarg.v[1] / bluePoint->tScale + bluePoint->rStart.v[1];
 
             cairo_arc (cr, tickx, (600-25) - ticky, 5, 0, 2 * M_PI);
             cairo_fill (cr);
@@ -130,7 +130,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
                     cairo_set_source_rgb (cr, 1, 0.0, 0);
                 }
                 jintVec collision_point = jintLineGetPosition(e->bluePoint.pos, wall->ca.collFrame);
-                cairo_arc (cr, collision_point.x, (600-25) - collision_point.y, 3, 0, 2 * M_PI);
+                cairo_arc (cr, collision_point.v[0], (600-25) - collision_point.v[1], 3, 0, 2 * M_PI);
                 cairo_fill (cr);
 
             }
@@ -147,7 +147,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
                 cairo_set_source_rgb (cr, 1, 0.0, 0);
             }
             jintVec collision_point = jintLineGetPosition(e->bluePoint.pos, e->bluePoint.ca.collFrame);
-            cairo_arc (cr, collision_point.x, (600-25) - collision_point.y, 3, 0, 2 * M_PI);
+            cairo_arc (cr, collision_point.v[0], (600-25) - collision_point.v[1], 3, 0, 2 * M_PI);
             cairo_fill (cr);
         }
     }

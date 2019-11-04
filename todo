@@ -9,5 +9,5 @@
 * make rStart, targFrame, sTarg into jType DONE
 * mark tick point before collision orange DONE
 * on frame of collision mark tick point red DONE
-* add vertical line
+* add vertical line DONE
 * enable adding of multiple vertical and horizontal lines

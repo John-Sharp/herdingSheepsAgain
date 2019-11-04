@@ -62,15 +62,15 @@ void startUpClicksCB(jint x, jint y, void * owner)
     herdingSheepsEngine * eng = (herdingSheepsEngine *)owner;
     if (startupClickState == STARTUP_CLICK_STATE_POSITION_SELECT)
     {
-        eng->bluePoint.ca.shape.point.rStart.x = x;
-        eng->bluePoint.ca.shape.point.rStart.y = (600 - y);
+        eng->bluePoint.ca.shape.point.rStart.v[0] = x;
+        eng->bluePoint.ca.shape.point.rStart.v[1] = (600 - y);
 
         startupClickState = STARTUP_CLICK_STATE_VELOCITY_SELECT;
     }
     else if (startupClickState == STARTUP_CLICK_STATE_VELOCITY_SELECT)
     {
-        eng->bluePoint.ca.shape.point.sTarg.x = x - eng->bluePoint.ca.shape.point.rStart.x;
-        eng->bluePoint.ca.shape.point.sTarg.y = (600 - y) - eng->bluePoint.ca.shape.point.rStart.y;
+        eng->bluePoint.ca.shape.point.sTarg.v[0] = x - eng->bluePoint.ca.shape.point.rStart.v[0];
+        eng->bluePoint.ca.shape.point.sTarg.v[1] = (600 - y) - eng->bluePoint.ca.shape.point.rStart.v[1];
         eng->bluePoint.frameStart = eng->engine->currentFrame;
 
         // calculate next collision frame here

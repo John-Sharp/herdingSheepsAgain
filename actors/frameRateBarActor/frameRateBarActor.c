@@ -52,8 +52,8 @@ void frameRateBarRenderer(actor * a)
 void initFrameRateBar(engine * eng, frameRateBarActor * f)
 {
     f->window = createJintRect(0,600-25, 800, 600);
-    jint frameRateBarWidth = f->window.tr.x - f->window.bl.x;
-    jint frameRateBarHeight = f->window.tr.y - f->window.bl.y;
+    jint frameRateBarWidth = f->window.tr.v[0] - f->window.bl.v[0];
+    jint frameRateBarHeight = f->window.tr.v[1] - f->window.bl.v[1];
     f->a.owner = f;
     f->a.renderHandler = frameRateBarRenderer;
     f->a.logicHandler = NULL;
