@@ -11,7 +11,6 @@ typedef struct movingPointActor {
     decal d;
 
     collActor ca;
-    const jintLine *pos;
 
     juint frameStart;
 } movingPointActor;
