@@ -28,7 +28,7 @@ frameRateBarActor: actors/frameRateBarActor/frameRateBarActor.h actors/frameRate
 	$(CC) -IjTypes actors/frameRateBarActor/frameRateBarActor.c $(CFLAGS) -c
 
 collisionDiagramActor: actors/collisionDiagramActor/collisionDiagramActor.h actors/collisionDiagramActor/collisionDiagramActor.c
-	$(CC) -IjTypes -IcollDetect actors/collisionDiagramActor/collisionDiagramActor.c $(CFLAGS) -c
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/collisionDiagramActor/collisionDiagramActor.c $(CFLAGS) -c
 
 collDetectT: collDetect/collDetect.h collDetect/collDetect.c
 	$(CC) -IjTypes collDetect/collDetect.c $(CFLAGS) -c
@@ -39,11 +39,18 @@ generateHerdingSheepsEngineListCode: dataStructures/templates/listTemplate.h dat
 movingPointActor: actors/movingPointActor/movingPointActor.h actors/movingPointActor/movingPointActor.c
 	$(CC) -IjTypes -IcollDetect actors/movingPointActor/movingPointActor.c $(CFLAGS) -c
 
+studiousBroccoliT: studiousBroccoli/studiousBroccoli.c studiousBroccoli/studiousBroccoli.h dataStructures/templates/listTemplate.h dataStructures/templates/listTemplate.inc
+	./dataStructures/generateList.py studiousBroccoli/listHeaders studiousBroccoli/listCode transitionFnNode:transitionFnNode state:state
+	$(CC) -I jTypes studiousBroccoli/studiousBroccoli.c $(CFLAGS) -c
+
+hsStateMachine: herdingSheepsEngine/HSStateMachine.h herdingSheepsEngine/herdingSheepsEngine.c
+	$(CC) -IjTypes -IstudiousBroccoli herdingSheepsEngine/HSStateMachine/HSStateMachine.c $(CFLAGS) -c
+
 herdingSheepsEngineT: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEngine/herdingSheepsEngine.c generateHerdingSheepsEngineListCode
-	$(CC) -IjTypes -IcollDetect herdingSheepsEngine/herdingSheepsEngine.c $(CFLAGS) -c
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli herdingSheepsEngine/herdingSheepsEngine.c $(CFLAGS) -c
 
 wallActor: actors/wallActor/wallActor.h actors/wallActor/wallActor.c
-	$(CC) -IjTypes -IcollDetect actors/wallActor/wallActor.c $(CFLAGS) -c
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/wallActor/wallActor.c $(CFLAGS) -c
 
-all: engine herdingSheepsEngineT frameRateBarActor collisionDiagramActor movingPointActor wallActor collDetectT main.c 
-	$(CC) -IjTypes -IcollDetect main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o frameRateBarActor.o collisionDiagramActor.o movingPointActor.o wallActor.o collDetect.o $(CFLAGS) -o herdingSheeps
+all: engine herdingSheepsEngineT frameRateBarActor collisionDiagramActor movingPointActor wallActor collDetectT studiousBroccoliT hsStateMachine main.c 
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o frameRateBarActor.o collisionDiagramActor.o movingPointActor.o wallActor.o collDetect.o studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps

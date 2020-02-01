@@ -1,26 +1,18 @@
 #include "herdingSheepsEngine.h"
+#include "HSStateMachine/HSStateMachine.h"
 
 typedef enum STARTUP_CLICK_STATE {
     STARTUP_CLICK_STATE_POSITION_SELECT,
     STARTUP_CLICK_STATE_VELOCITY_SELECT,
 } STARTUP_CLICK_STATE;
 
-typedef enum KEYPRESS_STATE {
-    KEYPRESS_STATE_QUIT,
-    KEYPRESS_STATE_FRAME_PAUSE,
-    KEYPRESS_STATE_FORWARD_FRAME,
-    KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER, // used for keeping track of
-                                             // whether ctrl is pressed,
-                                             // since this should make us
-                                             // move forward 10 frames
-                                             // rather than one if
-                                             // KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER
-                                             // is also active
-} KEYPRESS_STATE;
 const juint KEYPRESS_REFRESH_MS = 250;
 
 void herdingSheepsPreRender(engine * e)
 {
+    herdingSheepsEngine * hsEng = e->owner;
+    HSStateMachineProcessInput(hsEng->mainStateMachine);
+
     if (isStateActive(KEYPRESS_STATE_FRAME_PAUSE))
     {
         engineIsPaused(e) ? engineUnpause(e) : enginePause(e);
@@ -135,6 +127,8 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     ksb.s = KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER;
     ksb.t = BINDING_CONTINUOUS;
     addBinding(&ksb);
+
+    eng->mainStateMachine = createHSStateMachine(eng);
 
     return eng;
 }
