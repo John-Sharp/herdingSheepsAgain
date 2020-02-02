@@ -131,6 +131,6 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
         exit(1);
     }
 
-    SBStateMachineSetCurrentState(eng->mainStateMachine, HS_GAME_STATE_CHOOSE_MAIN_OBJECT);
+    SBStateMachineSetCurrentState(stateMachine, HS_GAME_STATE_CHOOSE_MAIN_OBJECT);
     return stateMachine;
 }
