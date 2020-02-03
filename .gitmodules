@@ -10,3 +10,6 @@
 [submodule "collDetect"]
 	path = collDetect
 	url = git@github.com:John-Sharp/collDetect.git
+[submodule "studiousBroccoli"]
+	path = studiousBroccoli
+	url = git@github.com:John-Sharp/studiousBroccoli.git

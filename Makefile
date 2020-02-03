@@ -43,8 +43,8 @@ studiousBroccoliT: studiousBroccoli/studiousBroccoli.c studiousBroccoli/studious
 	./dataStructures/generateList.py studiousBroccoli/listHeaders studiousBroccoli/listCode transitionFnNode:transitionFnNode state:state
 	$(CC) -I jTypes studiousBroccoli/studiousBroccoli.c $(CFLAGS) -c
 
-hsStateMachine: herdingSheepsEngine/HSStateMachine.h herdingSheepsEngine/herdingSheepsEngine.c
-	$(CC) -IjTypes -IstudiousBroccoli herdingSheepsEngine/HSStateMachine/HSStateMachine.c $(CFLAGS) -c
+hsStateMachine: herdingSheepsEngine/HSStateMachine/HSStateMachine.h herdingSheepsEngine/HSStateMachine/HSStateMachine.c
+	$(CC) -IjTypes -IstudiousBroccoli -IcollDetect herdingSheepsEngine/HSStateMachine/HSStateMachine.c $(CFLAGS) -c
 
 herdingSheepsEngineT: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEngine/herdingSheepsEngine.c generateHerdingSheepsEngineListCode
 	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli herdingSheepsEngine/herdingSheepsEngine.c $(CFLAGS) -c
