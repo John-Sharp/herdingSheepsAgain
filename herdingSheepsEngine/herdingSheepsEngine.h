@@ -6,7 +6,7 @@
 #include <collDetect.h>
 
 #include "../actors/collisionDiagramActor/collisionDiagramActor.h"
-#include "../actors/frameRateBarActor/frameRateBarActor.h"
+#include "../actors/textBoxActor/textBoxActor.h"
 #include "../actors/movingPointActor/movingPointActor.h"
 #include "../actors/wallActor/wallActor.h"
 
@@ -18,7 +18,7 @@ typedef struct herdingSheepsEngine {
     engine * engine;
 
     collisionDiagramActor collisionDiagram;
-    frameRateBarActor frameRateBar;
+    textBoxActor frameRateBar;
 
     movingPointActor bluePoint;
 

@@ -24,8 +24,8 @@ engineLists: engine/listHeaders engine/listCode
 engine: jTypesT inputProcessor frameRateTracker engine/engine.h engine/engine.c engineLists
 	$(CC) -IjTypes engine/engine.c $(CFLAGS) -c
 
-frameRateBarActor: actors/frameRateBarActor/frameRateBarActor.h actors/frameRateBarActor/frameRateBarActor.c
-	$(CC) -IjTypes actors/frameRateBarActor/frameRateBarActor.c $(CFLAGS) -c
+textBoxActor: actors/textBoxActor/textBoxActor.h actors/textBoxActor/textBoxActor.c
+	$(CC) -IjTypes actors/textBoxActor/textBoxActor.c $(CFLAGS) -c
 
 collisionDiagramActor: actors/collisionDiagramActor/collisionDiagramActor.h actors/collisionDiagramActor/collisionDiagramActor.c
 	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/collisionDiagramActor/collisionDiagramActor.c $(CFLAGS) -c
@@ -52,5 +52,5 @@ herdingSheepsEngineT: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEng
 wallActor: actors/wallActor/wallActor.h actors/wallActor/wallActor.c
 	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/wallActor/wallActor.c $(CFLAGS) -c
 
-all: engine herdingSheepsEngineT frameRateBarActor collisionDiagramActor movingPointActor wallActor collDetectT studiousBroccoliT hsStateMachine main.c 
-	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o frameRateBarActor.o collisionDiagramActor.o movingPointActor.o wallActor.o collDetect.o studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps
+all: engine herdingSheepsEngineT textBoxActor collisionDiagramActor movingPointActor wallActor collDetectT studiousBroccoliT hsStateMachine main.c 
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o textBoxActor.o collisionDiagramActor.o movingPointActor.o wallActor.o collDetect.o studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps

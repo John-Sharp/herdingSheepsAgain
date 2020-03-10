@@ -85,6 +85,17 @@ void startUpClicksCB(jint x, jint y, void * owner)
     }
 }
 
+void getFrameRateBarText(textBoxActor * t, textReceiver tr)
+{
+    uint32_t renderFPS, logicFPS;
+    engineGetFrameRate(t->a.eng, &logicFPS, &renderFPS);
+    char frameRateInfoBuffer[256];
+    sprintf(frameRateInfoBuffer, "render FPS: %u, logic FPS: %u, current logic frame: %u",
+            renderFPS, logicFPS, t->a.eng->currentFrame);
+    tr(frameRateInfoBuffer);
+    return;
+}
+
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 {
     eng->engine = createEngine(800, 600, eng);
@@ -95,7 +106,15 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     initCollisionDiagram(eng->engine, &eng->collisionDiagram);
 
     // setup frameRateBar
-    initFrameRateBar(eng->engine, &eng->frameRateBar);
+    textBoxParams params = {
+        .window = {.bl = {.v = {0,575}}, .tr = {.v = {800, 600}}},
+        .fg = {1,1,1},
+        .bg = {1,0,0},
+        .fontSize = 15,
+        .textProvider = getFrameRateBarText
+    };
+    initTextBox(eng->engine, &eng->frameRateBar,
+            &params);
 
     // setup bluePoint
     initMovingPointActor(eng->engine, &eng->bluePoint);
