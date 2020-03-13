@@ -17,7 +17,9 @@ typedef enum HS_GAME_STATE_TOKEN {
 
 juint pointObjectChosen(SBStateMachine * stateMachine, juint token)
 {
+    // TODO call-back into context to change text
     printf("add main point object\n\n");
+    printf("herding sheeps engine address: %p\n\n", (herdingSheepsEngine *)(stateMachine->context));
     return HS_GAME_STATE_MAIN_OBJECT_POINT;
 }
 

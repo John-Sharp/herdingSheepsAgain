@@ -9,6 +9,7 @@ void textReceiverImpl(const char * text)
 {
     cairo_show_text(cr_global, text);
 }
+static textProvider getTextBoxText;
 
 void drawTextBox(void * pixels, int pitch, void * ctx)
 {
@@ -36,18 +37,15 @@ void drawTextBox(void * pixels, int pitch, void * ctx)
     cairo_set_font_size(cr, t->fontSize);
 
     cr_global = cr;
-    t->getTextBoxText(t, textReceiverImpl);
+    getTextBoxText(t, textReceiverImpl);
 }
 
 void textBoxRenderer(actor * a)
 {
     textBoxActor * t = (textBoxActor *)a->owner;
-    static int prevUpdate = 0;
 
-    int update = SDL_GetTicks() / 250;
-    if (update > prevUpdate)
+    if ((getTextBoxText = t->hasRefreshedText(t)))
     {
-        prevUpdate = update;
         engineUpdateTexturesPixels(a->eng, t->d.textureId, drawTextBox, t);
     }
 
@@ -77,7 +75,8 @@ void initTextBox(
     memcpy(t->bgColor, params->bg, sizeof(t->bgColor));
     memcpy(t->fgColor, params->fg, sizeof(t->fgColor));
     t->fontSize = params->fontSize;
-    t->getTextBoxText = params->textProvider;
+    t->hasRefreshedText = params->hasRefreshedTextFn;
+    t->prevUpdate = 0;
 
     engineActorReg(eng, &t->a);
 }

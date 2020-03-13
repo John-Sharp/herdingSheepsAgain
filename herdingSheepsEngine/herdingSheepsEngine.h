@@ -19,6 +19,7 @@ typedef struct herdingSheepsEngine {
 
     collisionDiagramActor collisionDiagram;
     textBoxActor frameRateBar;
+    textBoxActor infoBar;
 
     movingPointActor bluePoint;
 

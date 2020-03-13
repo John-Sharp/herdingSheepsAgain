@@ -96,6 +96,36 @@ void getFrameRateBarText(textBoxActor * t, textReceiver tr)
     return;
 }
 
+textProvider hasRefreshedFrameRateBarText(textBoxActor * t)
+{
+    int update_rate_ms = 250;
+
+    int update = SDL_GetTicks() / update_rate_ms;
+
+    if (update > t->prevUpdate)
+    {
+        t->prevUpdate = update;
+        return getFrameRateBarText;
+    }
+    return NULL;
+}
+
+void getinfoBarText(textBoxActor * t, textReceiver tr)
+{
+    herdingSheepsEngine * eng = ((engine *)(t->a.eng))->owner;
+    juint state;
+    SBStateMachineGetCurrentState(eng->mainStateMachine , &state);
+    switch (state)
+    {
+        case 3:
+            tr("add main point object");
+            break;
+        case 0:
+            tr("choose object");
+            break;
+    }
+}
+
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 {
     eng->engine = createEngine(800, 600, eng);
@@ -106,15 +136,31 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     initCollisionDiagram(eng->engine, &eng->collisionDiagram);
 
     // setup frameRateBar
+    {
     textBoxParams params = {
         .window = {.bl = {.v = {0,575}}, .tr = {.v = {800, 600}}},
         .fg = {1,1,1},
         .bg = {1,0,0},
         .fontSize = 15,
-        .textProvider = getFrameRateBarText
+        .hasRefreshedTextFn = hasRefreshedFrameRateBarText
     };
     initTextBox(eng->engine, &eng->frameRateBar,
             &params);
+    }
+
+    // setup infoBar
+    // {
+    // textBoxParams params = {
+    //     .window = {.bl = {.v = {0,550}}, .tr = {.v = {800, 575}}},
+    //     .fg = {1,1,1},
+    //     .bg = {0,0,1},
+    //     .fontSize = 15,
+    //     .textProvider = getinfoBarText
+    // };
+    // initTextBox(eng->engine, &eng->infoBar,
+    //         &params);
+    // }
+
 
     // setup bluePoint
     initMovingPointActor(eng->engine, &eng->bluePoint);
