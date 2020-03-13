@@ -1,5 +1,7 @@
 #include "herdingSheepsEngine.h"
 #include "HSStateMachine/HSStateMachine.h"
+#include "../actors/textBoxActor/frameRateBar/frameRateBar.h"
+#include "../actors/textBoxActor/infoBox/infoBox.h"
 
 typedef enum STARTUP_CLICK_STATE {
     STARTUP_CLICK_STATE_POSITION_SELECT,
@@ -85,47 +87,6 @@ void startUpClicksCB(jint x, jint y, void * owner)
     }
 }
 
-void getFrameRateBarText(textBoxActor * t, textReceiver tr)
-{
-    uint32_t renderFPS, logicFPS;
-    engineGetFrameRate(t->a.eng, &logicFPS, &renderFPS);
-    char frameRateInfoBuffer[256];
-    sprintf(frameRateInfoBuffer, "render FPS: %u, logic FPS: %u, current logic frame: %u",
-            renderFPS, logicFPS, t->a.eng->currentFrame);
-    tr(frameRateInfoBuffer);
-    return;
-}
-
-textProvider hasRefreshedFrameRateBarText(textBoxActor * t)
-{
-    int update_rate_ms = 250;
-
-    int update = SDL_GetTicks() / update_rate_ms;
-
-    if (update > t->prevUpdate)
-    {
-        t->prevUpdate = update;
-        return getFrameRateBarText;
-    }
-    return NULL;
-}
-
-void getinfoBarText(textBoxActor * t, textReceiver tr)
-{
-    herdingSheepsEngine * eng = ((engine *)(t->a.eng))->owner;
-    juint state;
-    SBStateMachineGetCurrentState(eng->mainStateMachine , &state);
-    switch (state)
-    {
-        case 3:
-            tr("add main point object");
-            break;
-        case 0:
-            tr("choose object");
-            break;
-    }
-}
-
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 {
     eng->engine = createEngine(800, 600, eng);
@@ -148,18 +109,18 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
             &params);
     }
 
-    // setup infoBar
-    // {
-    // textBoxParams params = {
-    //     .window = {.bl = {.v = {0,550}}, .tr = {.v = {800, 575}}},
-    //     .fg = {1,1,1},
-    //     .bg = {0,0,1},
-    //     .fontSize = 15,
-    //     .textProvider = getinfoBarText
-    // };
-    // initTextBox(eng->engine, &eng->infoBar,
-    //         &params);
-    // }
+    // setup infoBox
+    {
+    textBoxParams params = {
+        .window = {.bl = {.v = {0,550}}, .tr = {.v = {800, 575}}},
+        .fg = {1,1,1},
+        .bg = {0,0,1},
+        .fontSize = 15,
+        .hasRefreshedTextFn = hasRefreshedInfoBoxText
+    };
+    initTextBox(eng->engine, &eng->infoBar,
+            &params);
+    }
 
 
     // setup bluePoint

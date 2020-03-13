@@ -1,5 +1,5 @@
-#ifndef FRAME_RATE_BAR_ACTOR_H
-#define FRAME_RATE_BAR_ACTOR_H
+#ifndef TEXT_BOX_ACTOR_H
+#define TEXT_BOX_ACTOR_H
 
 #include "../../engine/engine.h"
 #include <jTypes.h>

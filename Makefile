@@ -27,6 +27,12 @@ engine: jTypesT inputProcessor frameRateTracker engine/engine.h engine/engine.c 
 textBoxActor: actors/textBoxActor/textBoxActor.h actors/textBoxActor/textBoxActor.c
 	$(CC) -IjTypes actors/textBoxActor/textBoxActor.c $(CFLAGS) -c
 
+frameRateBar: actors/textBoxActor/frameRateBar/frameRateBar.h actors/textBoxActor/frameRateBar/frameRateBar.c
+	$(CC) -IjTypes actors/textBoxActor/frameRateBar/frameRateBar.c $(CFLAGS) -c
+
+infoBox: actors/textBoxActor/infoBox/infoBox.h actors/textBoxActor/infoBox/infoBox.c
+	$(CC) -IjTypes actors/textBoxActor/infoBox/infoBox.c $(CFLAGS) -c
+
 collisionDiagramActor: actors/collisionDiagramActor/collisionDiagramActor.h actors/collisionDiagramActor/collisionDiagramActor.c
 	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/collisionDiagramActor/collisionDiagramActor.c $(CFLAGS) -c
 
@@ -52,5 +58,5 @@ herdingSheepsEngineT: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEng
 wallActor: actors/wallActor/wallActor.h actors/wallActor/wallActor.c
 	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/wallActor/wallActor.c $(CFLAGS) -c
 
-all: engine herdingSheepsEngineT textBoxActor collisionDiagramActor movingPointActor wallActor collDetectT studiousBroccoliT hsStateMachine main.c 
-	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o textBoxActor.o collisionDiagramActor.o movingPointActor.o wallActor.o collDetect.o studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps
+all: engine herdingSheepsEngineT textBoxActor frameRateBar infoBox collisionDiagramActor movingPointActor wallActor collDetectT studiousBroccoliT hsStateMachine main.c 
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o textBoxActor.o frameRateBar.o infoBox.o collisionDiagramActor.o movingPointActor.o wallActor.o collDetect.o studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps

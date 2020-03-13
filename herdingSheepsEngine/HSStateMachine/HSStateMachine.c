@@ -1,4 +1,5 @@
 #include "HSStateMachine.h"
+#include "../actors/textBoxActor/infoBox/infoBox.h"
 
 typedef enum HS_GAME_STATE {
     HS_GAME_STATE_CHOOSE_MAIN_OBJECT,
@@ -17,9 +18,7 @@ typedef enum HS_GAME_STATE_TOKEN {
 
 juint pointObjectChosen(SBStateMachine * stateMachine, juint token)
 {
-    // TODO call-back into context to change text
-    printf("add main point object\n\n");
-    printf("herding sheeps engine address: %p\n\n", (herdingSheepsEngine *)(stateMachine->context));
+    setTextToAddMainObjectPoint();
     return HS_GAME_STATE_MAIN_OBJECT_POINT;
 }
 
@@ -37,7 +36,7 @@ juint hLineObjectChosen(SBStateMachine * stateMachine, juint token)
 
 juint returnToMainState(SBStateMachine * stateMachine, juint token)
 {
-    printf("going back to choose main object state\n\n");
+    setTextToAddMainObject();
     return HS_GAME_STATE_CHOOSE_MAIN_OBJECT;
 }
 
