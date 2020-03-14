@@ -7,8 +7,7 @@
 
 #include "../actors/collisionDiagramActor/collisionDiagramActor.h"
 #include "../actors/textBoxActor/textBoxActor.h"
-#include "../actors/movingPointActor/movingPointActor.h"
-#include "../actors/wallActor/wallActor.h"
+#include "../actors/mainActor/mainActor.h"
 
 #include "listHeaders/wallActorList.h"
 
@@ -21,7 +20,7 @@ typedef struct herdingSheepsEngine {
     textBoxActor frameRateBar;
     textBoxActor infoBar;
 
-    movingPointActor bluePoint;
+    struct mainActor mainActor;
 
     wallActorList * walls;
 

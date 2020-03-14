@@ -53,38 +53,38 @@ void herdingSheepsPreRender(engine * e)
 STARTUP_CLICK_STATE startupClickState;
 void startUpClicksCB(jint x, jint y, void * owner)
 {
-    herdingSheepsEngine * eng = (herdingSheepsEngine *)owner;
-    if (startupClickState == STARTUP_CLICK_STATE_POSITION_SELECT)
-    {
-        eng->bluePoint.ca.shape.point.v[0] = x;
-        eng->bluePoint.ca.shape.point.v[1] = (600 - y);
+    // herdingSheepsEngine * eng = (herdingSheepsEngine *)owner;
+    // if (startupClickState == STARTUP_CLICK_STATE_POSITION_SELECT)
+    // {
+    //     eng->bluePoint.ca.shape.point.v[0] = x;
+    //     eng->bluePoint.ca.shape.point.v[1] = (600 - y);
 
-        startupClickState = STARTUP_CLICK_STATE_VELOCITY_SELECT;
-    }
-    else if (startupClickState == STARTUP_CLICK_STATE_VELOCITY_SELECT)
-    {
-        eng->bluePoint.ca.vel.v[0] = x - eng->bluePoint.ca.shape.point.v[0];
-        eng->bluePoint.ca.vel.v[1] = (600 - y) - eng->bluePoint.ca.shape.point.v[1];
-        eng->bluePoint.frameStart = eng->engine->currentFrame;
+    //     startupClickState = STARTUP_CLICK_STATE_VELOCITY_SELECT;
+    // }
+    // else if (startupClickState == STARTUP_CLICK_STATE_VELOCITY_SELECT)
+    // {
+    //     eng->bluePoint.ca.vel.v[0] = x - eng->bluePoint.ca.shape.point.v[0];
+    //     eng->bluePoint.ca.vel.v[1] = (600 - y) - eng->bluePoint.ca.shape.point.v[1];
+    //     eng->bluePoint.frameStart = eng->engine->currentFrame;
 
-        // calculate next collision frame here
-        wallActorList * wallNode = NULL;
-        for (wallNode = eng->walls; wallNode != NULL; wallNode = wallNode->next)
-        {
-            wallActor * wall = wallNode->val;
+    //     // calculate next collision frame here
+    //     wallActorList * wallNode = NULL;
+    //     for (wallNode = eng->walls; wallNode != NULL; wallNode = wallNode->next)
+    //     {
+    //         wallActor * wall = wallNode->val;
 
-            int frame = -1;
-            if (calculateNextCollisionFrame(
-                        &frame, &eng->bluePoint.ca.vel,
-                        &eng->bluePoint.ca, &wall->ca) == COLL_FRAME_CALC_NO_COLLISION)
-            {
-                printf("no collision detected\n\n");
-                frame = -1;
-            }
-            eng->bluePoint.ca.collFrame = frame;
-            wall->ca.collFrame = frame;
-        }
-    }
+    //         int frame = -1;
+    //         if (calculateNextCollisionFrame(
+    //                     &frame, &eng->bluePoint.ca.vel,
+    //                     &eng->bluePoint.ca, &wall->ca) == COLL_FRAME_CALC_NO_COLLISION)
+    //         {
+    //             printf("no collision detected\n\n");
+    //             frame = -1;
+    //         }
+    //         eng->bluePoint.ca.collFrame = frame;
+    //         wall->ca.collFrame = frame;
+    //     }
+    // }
 }
 
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
@@ -123,8 +123,8 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     }
 
 
-    // setup bluePoint
-    initMovingPointActor(eng->engine, &eng->bluePoint);
+    // setup main actor
+    eng->mainActor.type = MAIN_ACTOR_TYPE_UNSET;
 
     // setup wallActors
     initWallActors(eng);

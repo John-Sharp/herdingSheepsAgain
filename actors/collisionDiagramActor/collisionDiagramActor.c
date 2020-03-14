@@ -24,11 +24,15 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 
 	cairo_set_source_rgb (cr, 0, 0, 1);
 
-    // draw blue Point
-    jintVec r;
-    movingPointActorGetPosition(&e->bluePoint, &r.v[0], &r.v[1], e->engine->currentFrame);
-    cairo_arc (cr, r.v[0], (600-25) - r.v[1], 30, 0, 2 * M_PI);
-	cairo_fill (cr);
+    // draw mainActor
+    if (e->mainActor.type == MAIN_ACTOR_TYPE_UNSET)
+    {
+        // do nothing
+    }
+    // jintVec r;
+    // movingPointActorGetPosition(&e->bluePoint, &r.v[0], &r.v[1], e->engine->currentFrame);
+    // cairo_arc (cr, r.v[0], (600-25) - r.v[1], 30, 0, 2 * M_PI);
+	// cairo_fill (cr);
 
     // draw walls
     {
@@ -50,111 +54,111 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     }
     }
 
-    jintLine bluePointVelLine = {
-        .rStart = e->bluePoint.ca.shape.point,
-        .sTarg = e->bluePoint.ca.vel,
-        .tScale = e->bluePoint.ca.vel.scale
-    };
-    if (bluePointVelLine.sTarg.v[0] != 0 || bluePointVelLine.sTarg.v[1] != 0)
-    {
-        // draw extended velocity vector
-        cairo_set_source_rgb (cr, 1, 1, 0);
-        cairo_move_to(cr, bluePointVelLine.rStart.v[0], (600-25) - bluePointVelLine.rStart.v[1]);
-        jint u, v;
+    // jintLine bluePointVelLine = {
+    //     .rStart = e->bluePoint.ca.shape.point,
+    //     .sTarg = e->bluePoint.ca.vel,
+    //     .tScale = e->bluePoint.ca.vel.scale
+    // };
+    // if (bluePointVelLine.sTarg.v[0] != 0 || bluePointVelLine.sTarg.v[1] != 0)
+    // {
+    //     // draw extended velocity vector
+    //     cairo_set_source_rgb (cr, 1, 1, 0);
+    //     cairo_move_to(cr, bluePointVelLine.rStart.v[0], (600-25) - bluePointVelLine.rStart.v[1]);
+    //     jint u, v;
 
-        if (bluePointVelLine.sTarg.v[0] > bluePointVelLine.rStart.v[0])
-        {
-            u = bluePointVelLine.sTarg.v[0] ? (800 - bluePointVelLine.rStart.v[0]) / bluePointVelLine.sTarg.v[0] + 1 : 0;
-        }
-        else
-        {
-            u = bluePointVelLine.sTarg.v[0] ? -1 * (bluePointVelLine.rStart.v[0]) / bluePointVelLine.sTarg.v[0] + 1 : 0;
-        }
+    //     if (bluePointVelLine.sTarg.v[0] > bluePointVelLine.rStart.v[0])
+    //     {
+    //         u = bluePointVelLine.sTarg.v[0] ? (800 - bluePointVelLine.rStart.v[0]) / bluePointVelLine.sTarg.v[0] + 1 : 0;
+    //     }
+    //     else
+    //     {
+    //         u = bluePointVelLine.sTarg.v[0] ? -1 * (bluePointVelLine.rStart.v[0]) / bluePointVelLine.sTarg.v[0] + 1 : 0;
+    //     }
 
-        if (bluePointVelLine.sTarg.v[1] > bluePointVelLine.rStart.v[1])
-        {
-            v = bluePointVelLine.sTarg.v[1] ? ((600 - 25) - bluePointVelLine.rStart.v[1]) / bluePointVelLine.sTarg.v[1] + 1 : 0;
-        }
-        else
-        {
-            v = bluePointVelLine.sTarg.v[1] ? -1 * (bluePointVelLine.rStart.v[1]) / bluePointVelLine.sTarg.v[1] + 1 : 0;
-        }
+    //     if (bluePointVelLine.sTarg.v[1] > bluePointVelLine.rStart.v[1])
+    //     {
+    //         v = bluePointVelLine.sTarg.v[1] ? ((600 - 25) - bluePointVelLine.rStart.v[1]) / bluePointVelLine.sTarg.v[1] + 1 : 0;
+    //     }
+    //     else
+    //     {
+    //         v = bluePointVelLine.sTarg.v[1] ? -1 * (bluePointVelLine.rStart.v[1]) / bluePointVelLine.sTarg.v[1] + 1 : 0;
+    //     }
 
-        u = u > v ? u : v;
-        cairo_rel_line_to (cr, u * bluePointVelLine.sTarg.v[0], -u * bluePointVelLine.sTarg.v[1]);
-        cairo_stroke(cr);
+    //     u = u > v ? u : v;
+    //     cairo_rel_line_to (cr, u * bluePointVelLine.sTarg.v[0], -u * bluePointVelLine.sTarg.v[1]);
+    //     cairo_stroke(cr);
 
-        //draw extended tick marks
-        cairo_set_source_rgb (cr, 1, 1, 0);
-        int i;
-        for (i = 10; ; i+=10)
-        {
-            int tickx = i * bluePointVelLine.sTarg.v[0] / bluePointVelLine.tScale + bluePointVelLine.rStart.v[0];
-            int ticky = i * bluePointVelLine.sTarg.v[1] / bluePointVelLine.tScale + bluePointVelLine.rStart.v[1];
+    //     //draw extended tick marks
+    //     cairo_set_source_rgb (cr, 1, 1, 0);
+    //     int i;
+    //     for (i = 10; ; i+=10)
+    //     {
+    //         int tickx = i * bluePointVelLine.sTarg.v[0] / bluePointVelLine.tScale + bluePointVelLine.rStart.v[0];
+    //         int ticky = i * bluePointVelLine.sTarg.v[1] / bluePointVelLine.tScale + bluePointVelLine.rStart.v[1];
 
-            if (tickx > 800+5 || tickx < 0)
-                break;
+    //         if (tickx > 800+5 || tickx < 0)
+    //             break;
 
-            if (ticky > 600-25+5 || ticky < 0)
-                break;
+    //         if (ticky > 600-25+5 || ticky < 0)
+    //             break;
 
-            cairo_arc (cr, tickx, (600-25) - ticky, 5, 0, 2 * M_PI);
-            cairo_fill (cr);
-        }
+    //         cairo_arc (cr, tickx, (600-25) - ticky, 5, 0, 2 * M_PI);
+    //         cairo_fill (cr);
+    //     }
 
-        // draw velocity vector
-        cairo_set_source_rgb (cr, 0, 1, 0);
-        cairo_move_to(cr, bluePointVelLine.rStart.v[0], (600-25) - bluePointVelLine.rStart.v[1]);
-        cairo_rel_line_to (cr, bluePointVelLine.sTarg.v[0], -bluePointVelLine.sTarg.v[1]);
-        cairo_stroke(cr);
+    //     // draw velocity vector
+    //     cairo_set_source_rgb (cr, 0, 1, 0);
+    //     cairo_move_to(cr, bluePointVelLine.rStart.v[0], (600-25) - bluePointVelLine.rStart.v[1]);
+    //     cairo_rel_line_to (cr, bluePointVelLine.sTarg.v[0], -bluePointVelLine.sTarg.v[1]);
+    //     cairo_stroke(cr);
 
-        // draw tickmarks
-        cairo_set_source_rgb (cr, 0, 1, 0);
-        for (i = 10; i <=  bluePointVelLine.tScale; i+=10)
-        {
-            int tickx = i * bluePointVelLine.sTarg.v[0] / bluePointVelLine.tScale + bluePointVelLine.rStart.v[0];
-            int ticky = i * bluePointVelLine.sTarg.v[1] / bluePointVelLine.tScale + bluePointVelLine.rStart.v[1];
+    //     // draw tickmarks
+    //     cairo_set_source_rgb (cr, 0, 1, 0);
+    //     for (i = 10; i <=  bluePointVelLine.tScale; i+=10)
+    //     {
+    //         int tickx = i * bluePointVelLine.sTarg.v[0] / bluePointVelLine.tScale + bluePointVelLine.rStart.v[0];
+    //         int ticky = i * bluePointVelLine.sTarg.v[1] / bluePointVelLine.tScale + bluePointVelLine.rStart.v[1];
 
-            cairo_arc (cr, tickx, (600-25) - ticky, 5, 0, 2 * M_PI);
-            cairo_fill (cr);
-        }
+    //         cairo_arc (cr, tickx, (600-25) - ticky, 5, 0, 2 * M_PI);
+    //         cairo_fill (cr);
+    //     }
 
-        // draw collision point(s)
-        {
-            wallActorList * wallActorNode = NULL;
-            for (wallActorNode = e->walls; wallActorNode != NULL; wallActorNode = wallActorNode->next)
-            {
-                wallActor * wall = wallActorNode->val;
-                if (e->engine->currentFrame < wall->ca.collFrame + e->bluePoint.frameStart)
-                {
-                    cairo_set_source_rgb (cr, 1, 0.6, 0);
-                }
-                else
-                {
-                    cairo_set_source_rgb (cr, 1, 0.0, 0);
-                }
-                jintVec collision_point = jintLineGetPosition(&bluePointVelLine, wall->ca.collFrame);
-                cairo_arc (cr, collision_point.v[0], (600-25) - collision_point.v[1], 3, 0, 2 * M_PI);
-                cairo_fill (cr);
+    //     // draw collision point(s)
+    //     {
+    //         wallActorList * wallActorNode = NULL;
+    //         for (wallActorNode = e->walls; wallActorNode != NULL; wallActorNode = wallActorNode->next)
+    //         {
+    //             wallActor * wall = wallActorNode->val;
+    //             if (e->engine->currentFrame < wall->ca.collFrame + e->bluePoint.frameStart)
+    //             {
+    //                 cairo_set_source_rgb (cr, 1, 0.6, 0);
+    //             }
+    //             else
+    //             {
+    //                 cairo_set_source_rgb (cr, 1, 0.0, 0);
+    //             }
+    //             jintVec collision_point = jintLineGetPosition(&bluePointVelLine, wall->ca.collFrame);
+    //             cairo_arc (cr, collision_point.v[0], (600-25) - collision_point.v[1], 3, 0, 2 * M_PI);
+    //             cairo_fill (cr);
 
-            }
-        }
+    //         }
+    //     }
 
-        if (e->bluePoint.ca.collFrame >= 0)
-        {
-            if (e->engine->currentFrame < e->bluePoint.ca.collFrame + e->bluePoint.frameStart)
-            {
-                cairo_set_source_rgb (cr, 1, 0.6, 0);
-            }
-            else
-            {
-                cairo_set_source_rgb (cr, 1, 0.0, 0);
-            }
-            jintVec collision_point = jintLineGetPosition(&bluePointVelLine, e->bluePoint.ca.collFrame);
-            cairo_arc (cr, collision_point.v[0], (600-25) - collision_point.v[1], 3, 0, 2 * M_PI);
-            cairo_fill (cr);
-        }
-    }
+    //     if (e->bluePoint.ca.collFrame >= 0)
+    //     {
+    //         if (e->engine->currentFrame < e->bluePoint.ca.collFrame + e->bluePoint.frameStart)
+    //         {
+    //             cairo_set_source_rgb (cr, 1, 0.6, 0);
+    //         }
+    //         else
+    //         {
+    //             cairo_set_source_rgb (cr, 1, 0.0, 0);
+    //         }
+    //         jintVec collision_point = jintLineGetPosition(&bluePointVelLine, e->bluePoint.ca.collFrame);
+    //         cairo_arc (cr, collision_point.v[0], (600-25) - collision_point.v[1], 3, 0, 2 * M_PI);
+    //         cairo_fill (cr);
+    //     }
+    // }
 }
 
 void collisionDiagramRenderer(actor * a)

@@ -1,7 +1,8 @@
 #include "infoBox.h"
 
-static const char * const addMainObjectText = "choose object";
-static const char * addMainObjectPointText = "add main point object";
+static const char * const addMainObjectText = "press key and choose object,"
+" 'p' : point, 'v' : vertical line, 'h' : horizontal line";
+static const char * addMainObjectPointText = "adding main point object";
 
 static const char * contentText = addMainObjectText;
 static bool needsRefresh = true;
