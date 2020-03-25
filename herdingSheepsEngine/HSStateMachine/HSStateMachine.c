@@ -19,6 +19,7 @@ typedef enum HS_GAME_STATE_TOKEN {
 juint pointObjectChosen(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddMainObjectPoint();
+    herdingSheepsEngineSwitchMainObject(stateMachine->context, MAIN_ACTOR_TYPE_POINT);
     return HS_GAME_STATE_MAIN_OBJECT_POINT;
 }
 
@@ -37,6 +38,7 @@ juint hLineObjectChosen(SBStateMachine * stateMachine, juint token)
 juint returnToMainState(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddMainObject();
+    herdingSheepsEngineSwitchMainObject(stateMachine->context, MAIN_ACTOR_TYPE_UNSET);
     return HS_GAME_STATE_CHOOSE_MAIN_OBJECT;
 }
 

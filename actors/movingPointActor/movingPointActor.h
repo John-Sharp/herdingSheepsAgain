@@ -15,6 +15,7 @@ typedef struct movingPointActor {
     juint frameStart;
 } movingPointActor;
 
+movingPointActor * createMovingPointActor(engine * eng);
 void initMovingPointActor(engine * eng, movingPointActor * a);
 void movingPointActorGetPosition(movingPointActor * a, jint * rx, jint * ry, juint frame);
 

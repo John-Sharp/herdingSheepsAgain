@@ -11,13 +11,13 @@
 void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 {
     herdingSheepsEngine * e = ((engine *)ctx)->owner;
-    memset(pixels, 0, (600 - 25) * pitch);
+    memset(pixels, 0, (600 - 50) * pitch);
 
     cairo_surface_t *cairosurf = cairo_image_surface_create_for_data (
             pixels,
             CAIRO_FORMAT_ARGB32,
             800,
-            600 - 25,
+            600 - 50,
             pitch);
 
     cairo_t * cr = cairo_create (cairosurf);
@@ -25,14 +25,28 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 	cairo_set_source_rgb (cr, 0, 0, 1);
 
     // draw mainActor
-    if (e->mainActor.type == MAIN_ACTOR_TYPE_UNSET)
+    switch(e->mainActor.type)
     {
-        // do nothing
+        case MAIN_ACTOR_TYPE_UNSET:
+        {
+            // do nothing
+            break;
+        }
+        case MAIN_ACTOR_TYPE_POINT:
+        {
+            jintVec r;
+            movingPointActor * mpa = e->mainActor.ptr.pt;
+            movingPointActorGetPosition(mpa, &r.v[0], &r.v[1], e->engine->currentFrame);
+            cairo_arc (cr, r.v[0], (600-50) - r.v[1], 30, 0, 2 * M_PI);
+            cairo_fill (cr);
+            break;
+        }
+        case MAIN_ACTOR_TYPE_WALL:
+        {
+            // TODO
+            break;
+        }
     }
-    // jintVec r;
-    // movingPointActorGetPosition(&e->bluePoint, &r.v[0], &r.v[1], e->engine->currentFrame);
-    // cairo_arc (cr, r.v[0], (600-25) - r.v[1], 30, 0, 2 * M_PI);
-	// cairo_fill (cr);
 
     // draw walls
     {
@@ -176,9 +190,9 @@ void initCollisionDiagram(engine * eng, collisionDiagramActor * c)
     c->a.renderHandler = collisionDiagramRenderer;
     c->a.logicHandler = NULL;
     juint collisionDiagramTexture = engineCreateTexture(
-            eng, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 800, 600 - 25);
-    decalInit(&c->d, eng, collisionDiagramTexture, createJintRect(0, 0, 800, 600 - 25));
+            eng, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 800, 600 - 50);
+    decalInit(&c->d, eng, collisionDiagramTexture, createJintRect(0, 0, 800, 600 - 50));
     c->s.d = &c->d;
-    c->s.rect = createJintRect(0, 0, 800, 600 -25);
+    c->s.rect = createJintRect(0, 0, 800, 600 -50);
     engineActorReg(eng, &c->a);
 }

@@ -2,6 +2,7 @@
 #include "HSStateMachine/HSStateMachine.h"
 #include "../actors/textBoxActor/frameRateBar/frameRateBar.h"
 #include "../actors/textBoxActor/infoBox/infoBox.h"
+#include <assert.h>
 
 typedef enum STARTUP_CLICK_STATE {
     STARTUP_CLICK_STATE_POSITION_SELECT,
@@ -122,7 +123,6 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
             &params);
     }
 
-
     // setup main actor
     eng->mainActor.type = MAIN_ACTOR_TYPE_UNSET;
 
@@ -157,4 +157,44 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     eng->mainStateMachine = createHSStateMachine(eng);
 
     return eng;
+}
+
+void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_TYPE type)
+{
+    if (eng->mainActor.type == type)
+        return;
+    switch (eng->mainActor.type)
+    {
+        case MAIN_ACTOR_TYPE_POINT:
+        {
+            free(eng->mainActor.ptr.pt);
+            break;
+        }
+        case MAIN_ACTOR_TYPE_WALL:
+        {
+            free(eng->mainActor.ptr.wa);
+            break;
+        }
+        case MAIN_ACTOR_TYPE_UNSET:
+        {
+            break;
+        }
+    }
+
+    eng->mainActor.type = type;
+    switch (type)
+    {
+        case MAIN_ACTOR_TYPE_POINT:
+        {
+            movingPointActor ** mpa = &eng->mainActor.ptr.pt;
+            *mpa = createMovingPointActor(eng->engine);
+            assert(*mpa);
+
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
 }
