@@ -66,6 +66,13 @@ void HSStateMachineProcessInput(SBStateMachine * stateMachine)
     }
 }
 
+void HSStateMachineMouseCB(jint x, jint y, void * owner)
+{
+    // SBStateMachine * stateMachine = owner;
+
+    printf("mouse cb received by hs state machine\n\n");
+}
+
 SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 {
     keyStateBinding ksb;
@@ -93,6 +100,14 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
     addBinding(&ksb);
 
     SBStateMachine * stateMachine = createSBStateMachine(eng);
+
+    mouseCallbackBinding mcb;
+    mcb.type = SDL_MOUSEBUTTONDOWN;
+    mcb.button = SDL_BUTTON_LEFT;
+    mcb.callback = HSStateMachineMouseCB;
+    mcb.owner = stateMachine;
+    addMouseCallback(&mcb);
+
     juint ret =  SBStateMachineAddState(
             stateMachine,
             HS_GAME_STATE_CHOOSE_MAIN_OBJECT, 3,
