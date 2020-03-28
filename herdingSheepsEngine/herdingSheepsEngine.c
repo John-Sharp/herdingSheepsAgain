@@ -95,7 +95,13 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     enginePreRenderCallBackReg(eng->engine, herdingSheepsPreRender);
 
     // setup collisionDiagram
-    initCollisionDiagram(eng->engine, &eng->collisionDiagram);
+    {
+    collisionDiagramParams params = {
+        .window = {.bl = {.v = {0, 0}}, .tr = {.v = {800, 550}}}
+    };
+    initCollisionDiagram(eng->engine, &eng->collisionDiagram,
+            &params);
+    }
 
     // setup frameRateBar
     {

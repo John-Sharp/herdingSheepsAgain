@@ -9,23 +9,29 @@
 #include <jTypes.h>
 
 static void drawVelocityVector(
-        cairo_t * cr, const jintVec * start, const jintVec * end);
+        cairo_t * cr, const collisionDiagramActor * cdActor,
+        const jintVec * start, const jintVec * end);
 
 void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 {
-    herdingSheepsEngine * e = ((engine *)ctx)->owner;
-    memset(pixels, 0, (600 - 50) * pitch);
+    collisionDiagramActor * c = ctx;
+    herdingSheepsEngine * e = c->a.eng->owner;
+    memset(pixels, 0, jintRectGetHeight(&c->d.rect) * pitch);
 
     cairo_surface_t *cairosurf = cairo_image_surface_create_for_data (
             pixels,
             CAIRO_FORMAT_ARGB32,
-            800,
-            600 - 50,
+            jintRectGetWidth(&c->d.rect),
+            jintRectGetHeight(&c->d.rect),
             pitch);
 
     cairo_t * cr = cairo_create (cairosurf);
 
 	cairo_set_source_rgb (cr, 0, 0, 1);
+
+    // transform coordinates so that (0,0) is bottom left of screen
+    cairo_scale(cr, 1, -1);
+    cairo_translate(cr, 0, -jintRectGetHeight(&c->d.rect));
 
     // draw mainActor
     switch(e->mainActor.type)
@@ -40,7 +46,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             jintVec r;
             movingPointActor * mpa = e->mainActor.ptr.pt;
             movingPointActorGetPosition(mpa, &r.v[0], &r.v[1], e->engine->currentFrame);
-            cairo_arc (cr, r.v[0], (600-50) - r.v[1], 30, 0, 2 * M_PI);
+            cairo_arc (cr, r.v[0], r.v[1], 30, 0, 2 * M_PI);
             cairo_fill (cr);
             break;
         }
@@ -57,7 +63,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     {
         jintVec lStart, lEnd;
         SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
-        lEnd.v[1] = lEnd.v[1] - 50;
+        lEnd.v[1] = c->a.eng->h - lEnd.v[1];
         switch(e->mainActor.type)
         {
             case MAIN_ACTOR_TYPE_UNSET:
@@ -70,7 +76,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
                 movingPointActor * mpa = e->mainActor.ptr.pt;
                 movingPointActorGetPosition(
                         mpa, &lStart.v[0], &lStart.v[1], e->engine->currentFrame);
-                lStart.v[1] = (600-50) - lStart.v[1];
+                lStart.v[1] = lStart.v[1];
 
                 break;
             }
@@ -80,7 +86,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
                 break;
             }
         }
-        drawVelocityVector(cr, &lStart, &lEnd);
+        drawVelocityVector(cr, c, &lStart, &lEnd);
     }
 
     // draw walls
@@ -90,10 +96,10 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     {
         wallActor * wall = wallActorNode->val;
         cairo_set_source_rgb (cr, 1, 0, 1);
-        cairo_move_to(cr, wall->line->rStart.v[0], (600-25) - wall->line->rStart.v[1]);
+        cairo_move_to(cr, wall->line->rStart.v[0], wall->line->rStart.v[1]);
         if (wall->line->direction == AX_PL_DIR_Y)
         {
-            cairo_rel_line_to (cr, 0, -wall->line->length);
+            cairo_rel_line_to (cr, 0, wall->line->length);
         }
         else
         {
@@ -142,8 +148,11 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 }
 
 static void drawVelocityVector(
-        cairo_t * cr, const jintVec * start, const jintVec * end)
+        cairo_t * cr, const collisionDiagramActor * cdActor,
+        const jintVec * start, const jintVec * end)
 {
+    const engine * eng = cdActor->a.eng;
+
     // draw extended velocity vector
     jintVec vel;
     vel.v[0] = end->v[0] - start->v[0];
@@ -160,7 +169,8 @@ static void drawVelocityVector(
 
     if (vel.v[0] > 0)
     {
-        u = vel.v[0] ? (800 - end->v[0]) / vel.v[0] + 1: 0;
+        u = vel.v[0] ? (jintRectGetWidth(&cdActor->d.rect) - end->v[0]) 
+            / vel.v[0] + 1: 0;
     }
     else
     {
@@ -169,7 +179,8 @@ static void drawVelocityVector(
 
     if (vel.v[1] > 0)
     {
-        v = vel.v[1] ? ((600 - 50) - end->v[1]) / vel.v[1] + 1 : 0;
+        v = vel.v[1] ? (jintRectGetHeight(&cdActor->d.rect) - end->v[1])
+            / vel.v[1] + 1 : 0;
     }
     else
     {
@@ -184,14 +195,13 @@ static void drawVelocityVector(
     int i;
     for (i = 10; ; i+=10)
     {
-        // TODO replace 80 with engine fps
-        int tickx = i * vel.v[0] / 80 + end->v[0];
-        int ticky = i * vel.v[1] / 80 + end->v[1];
+        int tickx = i * vel.v[0] / (jint)eng->fps + end->v[0];
+        int ticky = i * vel.v[1] / (jint)eng->fps + end->v[1];
 
-        if (tickx > 800+5 || tickx < 0)
+        if (tickx > jintRectGetHeight(&cdActor->d.rect)+5 || tickx < 0)
             break;
 
-        if (ticky > 600-50+5 || ticky < 0)
+        if (ticky > jintRectGetWidth(&cdActor->d.rect)+5 || ticky < 0)
             break;
 
         cairo_arc (cr, tickx, ticky, 5, 0, 2 * M_PI);
@@ -207,8 +217,8 @@ static void drawVelocityVector(
     // draw tickmarks
     for (i = 10; i <= 80; i+=10)
     {
-        int tickx = i * vel.v[0] / 80 + start->v[0];
-        int ticky = i * vel.v[1] / 80 + start->v[1];
+        int tickx = i * vel.v[0] / (jint)eng->fps + start->v[0];
+        int ticky = i * vel.v[1] / (jint)eng->fps + start->v[1];
 
         cairo_arc (cr, tickx, ticky, 5, 0, 2 * M_PI);
         cairo_fill (cr);
@@ -219,20 +229,23 @@ void collisionDiagramRenderer(actor * a)
 {
     collisionDiagramActor * c = (collisionDiagramActor *)a->owner;
 
-    engineUpdateTexturesPixels(a->eng, c->d.textureId, drawCollisionDiagram, a->eng);
+    engineUpdateTexturesPixels(a->eng, c->d.textureId, drawCollisionDiagram, c);
 
     engineSpriteRender(a->eng, &c->s);
 }
 
-void initCollisionDiagram(engine * eng, collisionDiagramActor * c)
+void initCollisionDiagram(engine * eng, collisionDiagramActor * c,
+        const collisionDiagramParams * params)
 {
     c->a.owner = c;
     c->a.renderHandler = collisionDiagramRenderer;
     c->a.logicHandler = NULL;
     juint collisionDiagramTexture = engineCreateTexture(
-            eng, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 800, 600 - 50);
-    decalInit(&c->d, eng, collisionDiagramTexture, createJintRect(0, 0, 800, 600 - 50));
+            eng, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, 
+            jintRectGetWidth(&params->window),
+            jintRectGetHeight(&params->window));
+    decalInit(&c->d, eng, collisionDiagramTexture, params->window);
     c->s.d = &c->d;
-    c->s.rect = createJintRect(0, 0, 800, 600 -50);
+    c->s.rect = params->window;
     engineActorReg(eng, &c->a);
 }
