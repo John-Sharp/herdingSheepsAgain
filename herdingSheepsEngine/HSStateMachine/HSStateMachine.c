@@ -31,8 +31,7 @@ juint hLineObjectChosen(SBStateMachine * stateMachine, juint token)
 
 juint goToChooseVelocityMainObject(SBStateMachine * stateMachine, juint token)
 {
-    printf("choose velocity main object\n\n");
-    // herdingSheepsEngineMainObjectGoToChooseVelocityMode(stateMachine->context);
+    setTextToChooseVelocity();
     return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY;
 }
 
@@ -48,7 +47,7 @@ juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
     switch (herdingSheepsEngineGetMainObjectType(stateMachine->context))
     {
         case MAIN_ACTOR_TYPE_POINT:
-            printf("returning to previous state HS_GAME_STATE_MAIN_OBJECT_POINT\n\n");
+            setTextToAddMainObjectPoint();
             return HS_GAME_STATE_MAIN_OBJECT_POINT;
         default:
             break;

@@ -2,7 +2,9 @@
 
 static const char * const addMainObjectText = "press key and choose object,"
 " 'p' : point, 'v' : vertical line, 'h' : horizontal line";
-static const char * addMainObjectPointText = "adding main point object";
+static const char * addMainObjectPointText = "adding main point object, "
+"click to place";
+static const char * chooseVelocityText = "click to choose velocity";
 
 static const char * contentText = addMainObjectText;
 static bool needsRefresh = true;
@@ -27,6 +29,16 @@ void setTextToAddMainObjectPoint()
     contentText = addMainObjectPointText;
 }
 
+void setTextToChooseVelocity()
+{
+    if (contentText == chooseVelocityText)
+    {
+        return;
+    }
+    needsRefresh = true;
+    contentText = chooseVelocityText;
+}
+
 void getInfoBoxText(textBoxActor * t, textReceiver tr)
 {
     tr(contentText);
@@ -39,6 +51,7 @@ textProvider hasRefreshedInfoBoxText(textBoxActor * t)
     {
         return NULL;
     }
+    needsRefresh = false;
     return getInfoBoxText;
 }
 
