@@ -6,12 +6,14 @@ typedef enum HS_GAME_STATE {
     HS_GAME_STATE_MAIN_OBJECT_H_LINE,
     HS_GAME_STATE_MAIN_OBJECT_V_LINE,
     HS_GAME_STATE_MAIN_OBJECT_POINT,
+    HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY
 } HS_GAME_STATE;
 
 typedef enum HS_GAME_STATE_TOKEN {
     HS_GAME_STATE_TOKEN_P,
     HS_GAME_STATE_TOKEN_V,
     HS_GAME_STATE_TOKEN_H,
+    HS_GAME_STATE_TOKEN_L_CLICK,
     HS_GAME_STATE_TOKEN_ESC
 } HS_GAME_STATE_TOKEN;
 
@@ -35,11 +37,30 @@ juint hLineObjectChosen(SBStateMachine * stateMachine, juint token)
     return HS_GAME_STATE_MAIN_OBJECT_H_LINE;
 }
 
+juint goToChooseVelocityMainObject(SBStateMachine * stateMachine, juint token)
+{
+    printf("choose velocity main object\n\n");
+    return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY;
+}
+
 juint returnToMainState(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddMainObject();
     herdingSheepsEngineSwitchMainObject(stateMachine->context, MAIN_ACTOR_TYPE_UNSET);
     return HS_GAME_STATE_CHOOSE_MAIN_OBJECT;
+}
+
+juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
+{
+    switch (herdingSheepsEngineGetMainObjectType(stateMachine->context))
+    {
+        case MAIN_ACTOR_TYPE_POINT:
+            printf("returning to previous state HS_GAME_STATE_MAIN_OBJECT_POINT\n\n");
+            return HS_GAME_STATE_MAIN_OBJECT_POINT;
+        default:
+            break;
+    }
+    return HS_GAME_STATE_MAIN_OBJECT_POINT;
 }
 
 void HSStateMachineProcessInput(SBStateMachine * stateMachine)
@@ -68,9 +89,8 @@ void HSStateMachineProcessInput(SBStateMachine * stateMachine)
 
 void HSStateMachineMouseCB(jint x, jint y, void * owner)
 {
-    // SBStateMachine * stateMachine = owner;
-
-    printf("mouse cb received by hs state machine\n\n");
+    SBStateMachine * stateMachine = owner;
+    SBStateMachineProcessInput(stateMachine, HS_GAME_STATE_TOKEN_L_CLICK, NULL);
 }
 
 SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
@@ -141,8 +161,19 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret =  SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_MAIN_OBJECT_POINT, 1,
+            HS_GAME_STATE_MAIN_OBJECT_POINT, 2,
+            HS_GAME_STATE_TOKEN_L_CLICK, goToChooseVelocityMainObject,
             HS_GAME_STATE_TOKEN_ESC, returnToMainState);
+    if (ret != SB_STATE_MACHINE_OK)
+    {
+        printf("Failure after attempting to set up main state machine\n\n");
+        exit(1);
+    }
+
+    ret = SBStateMachineAddState(
+            stateMachine,
+            HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY, 1,
+            HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
     if (ret != SB_STATE_MACHINE_OK)
     {
         printf("Failure after attempting to set up main state machine\n\n");

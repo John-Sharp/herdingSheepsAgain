@@ -198,3 +198,8 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_T
         }
     }
 }
+
+MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng)
+{
+    return eng->mainActor.type;
+}

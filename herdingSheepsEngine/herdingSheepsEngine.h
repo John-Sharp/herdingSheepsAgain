@@ -31,6 +31,7 @@ typedef struct herdingSheepsEngine {
 
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng);
 void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_TYPE type);
+MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng);
 
 // TODO this doesn't need to be here, can be moved once inputProcessor has
 // getFreeState implemented
