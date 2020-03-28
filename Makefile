@@ -43,7 +43,7 @@ generateHerdingSheepsEngineListCode: dataStructures/templates/listTemplate.h dat
 	dataStructures/generateList.py herdingSheepsEngine/listHeaders herdingSheepsEngine/listCode wallActor:wallActor
 
 movingPointActor: actors/movingPointActor/movingPointActor.h actors/movingPointActor/movingPointActor.c
-	$(CC) -IjTypes -IcollDetect actors/movingPointActor/movingPointActor.c $(CFLAGS) -c
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/movingPointActor/movingPointActor.c $(CFLAGS) -c
 
 studiousBroccoliT: studiousBroccoli/studiousBroccoli.c studiousBroccoli/studiousBroccoli.h dataStructures/templates/listTemplate.h dataStructures/templates/listTemplate.inc
 	./dataStructures/generateList.py studiousBroccoli/listHeaders studiousBroccoli/listCode transitionFnNode:transitionFnNode state:state

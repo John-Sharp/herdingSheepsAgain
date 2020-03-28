@@ -1,14 +1,6 @@
 #include "HSStateMachine.h"
 #include "../actors/textBoxActor/infoBox/infoBox.h"
 
-typedef enum HS_GAME_STATE {
-    HS_GAME_STATE_CHOOSE_MAIN_OBJECT,
-    HS_GAME_STATE_MAIN_OBJECT_H_LINE,
-    HS_GAME_STATE_MAIN_OBJECT_V_LINE,
-    HS_GAME_STATE_MAIN_OBJECT_POINT,
-    HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY
-} HS_GAME_STATE;
-
 typedef enum HS_GAME_STATE_TOKEN {
     HS_GAME_STATE_TOKEN_P,
     HS_GAME_STATE_TOKEN_V,
@@ -40,6 +32,7 @@ juint hLineObjectChosen(SBStateMachine * stateMachine, juint token)
 juint goToChooseVelocityMainObject(SBStateMachine * stateMachine, juint token)
 {
     printf("choose velocity main object\n\n");
+    // herdingSheepsEngineMainObjectGoToChooseVelocityMode(stateMachine->context);
     return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY;
 }
 

@@ -33,6 +33,14 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng);
 void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_TYPE type);
 MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng);
 
+typedef enum HS_GAME_STATE {
+    HS_GAME_STATE_CHOOSE_MAIN_OBJECT,
+    HS_GAME_STATE_MAIN_OBJECT_H_LINE,
+    HS_GAME_STATE_MAIN_OBJECT_V_LINE,
+    HS_GAME_STATE_MAIN_OBJECT_POINT,
+    HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY
+} HS_GAME_STATE;
+
 // TODO this doesn't need to be here, can be moved once inputProcessor has
 // getFreeState implemented
 typedef enum KEYPRESS_STATE {

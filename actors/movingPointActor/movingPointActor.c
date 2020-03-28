@@ -4,6 +4,8 @@
 
 #include <cairo.h>
 
+#include "../../herdingSheepsEngine/herdingSheepsEngine.h"
+
 movingPointActor * createMovingPointActor(engine * eng)
 {
     movingPointActor * ret;
@@ -21,12 +23,28 @@ movingPointActor * createMovingPointActor(engine * eng)
 void movingPointActorLogicHandler(actor * a)
 {
     movingPointActor * m = a->owner;
+    herdingSheepsEngine * hsEng = a->eng->owner;
+    
+    HS_GAME_STATE currentState;
+    SBStateMachineGetCurrentState(
+        hsEng->mainStateMachine, &currentState);
+    switch (currentState)
+    {
+        case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY:
+        {
+            // TODO
+            break;
+        }
+        default:
+        {
+            int mouse_x, mouse_y;
 
-    int mouse_x, mouse_y;
-
-    SDL_GetMouseState(&mouse_x, &mouse_y);
-    m->ca.shape.point.v[0] = mouse_x;
-    m->ca.shape.point.v[1] = a->eng->h - mouse_y;
+            SDL_GetMouseState(&mouse_x, &mouse_y);
+            m->ca.shape.point.v[0] = mouse_x;
+            m->ca.shape.point.v[1] = a->eng->h - mouse_y;
+            break;
+        }
+    }
 }
 
 void initMovingPointActor(engine * eng, movingPointActor * a)
