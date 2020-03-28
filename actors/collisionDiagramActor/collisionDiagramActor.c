@@ -8,6 +8,9 @@
 #include "../../herdingSheepsEngine/herdingSheepsEngine.h"
 #include <jTypes.h>
 
+static void drawVelocityVector(
+        cairo_t * cr, const jintVec * start, const jintVec * end);
+
 void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 {
     herdingSheepsEngine * e = ((engine *)ctx)->owner;
@@ -46,6 +49,38 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             // TODO
             break;
         }
+    }
+
+    HS_GAME_STATE currentState;
+    SBStateMachineGetCurrentState(e->mainStateMachine, &currentState);
+    if (currentState == HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY)
+    {
+        jintVec lStart, lEnd;
+        SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
+        lEnd.v[1] = lEnd.v[1] - 50;
+        switch(e->mainActor.type)
+        {
+            case MAIN_ACTOR_TYPE_UNSET:
+            {
+                // do nothing
+                break;
+            }
+            case MAIN_ACTOR_TYPE_POINT:
+            {
+                movingPointActor * mpa = e->mainActor.ptr.pt;
+                movingPointActorGetPosition(
+                        mpa, &lStart.v[0], &lStart.v[1], e->engine->currentFrame);
+                lStart.v[1] = (600-50) - lStart.v[1];
+
+                break;
+            }
+            case MAIN_ACTOR_TYPE_WALL:
+            {
+                // TODO
+                break;
+            }
+        }
+        drawVelocityVector(cr, &lStart, &lEnd);
     }
 
     // draw walls
@@ -173,6 +208,13 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     //         cairo_fill (cr);
     //     }
     // }
+}
+
+static void drawVelocityVector(
+        cairo_t * cr, const jintVec * start, const jintVec * end)
+{
+    cairo_move_to(cr, start->v[0], start->v[1]);
+    cairo_line_to(cr, end->v[0], end->v[1]);
 }
 
 void collisionDiagramRenderer(actor * a)
