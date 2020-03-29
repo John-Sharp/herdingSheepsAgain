@@ -40,7 +40,7 @@ collDetectT: collDetect/collDetect.h collDetect/collDetect.c
 	$(CC) -IjTypes collDetect/collDetect.c $(CFLAGS) -c
 
 generateHerdingSheepsEngineListCode: dataStructures/templates/listTemplate.h dataStructures/templates/listTemplate.inc
-	dataStructures/generateList.py herdingSheepsEngine/listHeaders herdingSheepsEngine/listCode wallActor:wallActor
+	dataStructures/generateList.py herdingSheepsEngine/listHeaders herdingSheepsEngine/listCode lineActor:lineActor
 
 movingPointActor: actors/movingPointActor/movingPointActor.h actors/movingPointActor/movingPointActor.c
 	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/movingPointActor/movingPointActor.c $(CFLAGS) -c
@@ -55,8 +55,8 @@ hsStateMachine: herdingSheepsEngine/HSStateMachine/HSStateMachine.h herdingSheep
 herdingSheepsEngineT: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEngine/herdingSheepsEngine.c generateHerdingSheepsEngineListCode
 	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli herdingSheepsEngine/herdingSheepsEngine.c $(CFLAGS) -c
 
-wallActor: actors/wallActor/wallActor.h actors/wallActor/wallActor.c
-	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/wallActor/wallActor.c $(CFLAGS) -c
+lineActor: actors/lineActor/lineActor.h actors/lineActor/lineActor.c
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/lineActor/lineActor.c $(CFLAGS) -c
 
-all: engine herdingSheepsEngineT textBoxActor frameRateBar infoBox collisionDiagramActor movingPointActor wallActor collDetectT studiousBroccoliT hsStateMachine main.c 
-	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o textBoxActor.o frameRateBar.o infoBox.o collisionDiagramActor.o movingPointActor.o wallActor.o collDetect.o studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps
+all: engine herdingSheepsEngineT textBoxActor frameRateBar infoBox collisionDiagramActor movingPointActor lineActor collDetectT studiousBroccoliT hsStateMachine main.c 
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o textBoxActor.o frameRateBar.o infoBox.o collisionDiagramActor.o movingPointActor.o lineActor.o collDetect.o studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps

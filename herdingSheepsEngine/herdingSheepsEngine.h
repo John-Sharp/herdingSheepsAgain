@@ -9,7 +9,7 @@
 #include "../actors/textBoxActor/textBoxActor.h"
 #include "../actors/mainActor/mainActor.h"
 
-#include "listHeaders/wallActorList.h"
+#include "listHeaders/lineActorList.h"
 
 #include <studiousBroccoli.h>
 
@@ -22,7 +22,7 @@ typedef struct herdingSheepsEngine {
 
     struct mainActor mainActor;
 
-    wallActorList * walls;
+    lineActorList * walls;
 
     jintRect mainWindow;
 

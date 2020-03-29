@@ -132,9 +132,6 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     // setup main actor
     eng->mainActor.type = MAIN_ACTOR_TYPE_UNSET;
 
-    // setup wallActors
-    initWallActors(eng);
-
     mouseCallbackBinding mouseBinding = {
         .type = SDL_MOUSEBUTTONDOWN,
         .button = SDL_BUTTON_LEFT,
@@ -177,9 +174,10 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_T
             free(eng->mainActor.ptr.pt);
             break;
         }
-        case MAIN_ACTOR_TYPE_WALL:
+        case MAIN_ACTOR_TYPE_V_LINE:
         {
-            free(eng->mainActor.ptr.wa);
+            lineActorDeinit(eng->mainActor.ptr.la);
+            free(eng->mainActor.ptr.la);
             break;
         }
         case MAIN_ACTOR_TYPE_UNSET:
@@ -196,6 +194,22 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_T
             movingPointActor ** mpa = &eng->mainActor.ptr.pt;
             *mpa = createMovingPointActor(eng->engine);
             assert(*mpa);
+
+            break;
+        }
+        case MAIN_ACTOR_TYPE_V_LINE:
+        {
+            lineActorParams params = {
+                .line = {
+                    .direction = AX_PL_DIR_Y,
+                    .rStart = {.v = {10, 10}},
+                    .length = 25
+                }
+            };
+
+            lineActor ** la = &eng->mainActor.ptr.la;
+            *la = createLineActor(eng->engine, &params);
+            assert(*la);
 
             break;
         }

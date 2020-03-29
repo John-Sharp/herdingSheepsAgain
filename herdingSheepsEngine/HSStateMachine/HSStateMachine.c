@@ -20,8 +20,7 @@ juint pointObjectChosen(SBStateMachine * stateMachine, juint token)
 juint vLineObjectChosen(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddMainObjectVLine();
-    // TODO
-    // herdingSheepsEngineSwitchMainObject(stateMachine->context, MAIN_ACTOR_TYPE_V_LINE);
+    herdingSheepsEngineSwitchMainObject(stateMachine->context, MAIN_ACTOR_TYPE_V_LINE);
     return HS_GAME_STATE_MAIN_OBJECT_V_LINE;
 }
 

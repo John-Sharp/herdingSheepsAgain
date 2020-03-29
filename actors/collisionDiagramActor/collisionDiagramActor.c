@@ -50,9 +50,14 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             cairo_fill (cr);
             break;
         }
-        case MAIN_ACTOR_TYPE_WALL:
+        case MAIN_ACTOR_TYPE_V_LINE:
         {
-            // TODO
+            jintAxPlLine ln;
+            lineActor * la = e->mainActor.ptr.la;
+            lineActorGetLine(la, e->engine->currentFrame, &ln);
+            cairo_move_to(cr, ln.rStart.v[0], ln.rStart.v[1]);
+            cairo_rel_line_to(cr, 0, ln.length);
+            cairo_stroke(cr);
             break;
         }
     }
@@ -80,7 +85,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 
                 break;
             }
-            case MAIN_ACTOR_TYPE_WALL:
+            case MAIN_ACTOR_TYPE_V_LINE:
             {
                 // TODO
                 break;
@@ -90,24 +95,24 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     }
 
     // draw walls
-    {
-    wallActorList * wallActorNode = NULL;
-    for (wallActorNode = e->walls; wallActorNode != NULL; wallActorNode = wallActorNode->next)
-    {
-        wallActor * wall = wallActorNode->val;
-        cairo_set_source_rgb (cr, 1, 0, 1);
-        cairo_move_to(cr, wall->line->rStart.v[0], wall->line->rStart.v[1]);
-        if (wall->line->direction == AX_PL_DIR_Y)
-        {
-            cairo_rel_line_to (cr, 0, wall->line->length);
-        }
-        else
-        {
-            cairo_rel_line_to (cr, wall->line->length, 0);
-        }
-        cairo_stroke(cr);
-    }
-    }
+    // {
+    // wallActorList * wallActorNode = NULL;
+    // for (wallActorNode = e->walls; wallActorNode != NULL; wallActorNode = wallActorNode->next)
+    // {
+    //     wallActor * wall = wallActorNode->val;
+    //     cairo_set_source_rgb (cr, 1, 0, 1);
+    //     cairo_move_to(cr, wall->line->rStart.v[0], wall->line->rStart.v[1]);
+    //     if (wall->line->direction == AX_PL_DIR_Y)
+    //     {
+    //         cairo_rel_line_to (cr, 0, wall->line->length);
+    //     }
+    //     else
+    //     {
+    //         cairo_rel_line_to (cr, wall->line->length, 0);
+    //     }
+    //     cairo_stroke(cr);
+    // }
+    // }
 
     //     // draw collision point(s)
     //     {
