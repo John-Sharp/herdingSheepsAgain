@@ -9,34 +9,29 @@ static const char * chooseVelocityText = "click to choose velocity";
 static const char * contentText = addMainObjectText;
 static bool needsRefresh = true;
 
-void setTextToAddMainObject()
+static void setText(const char * text)
 {
-    if (contentText == addMainObjectText)
+    if (contentText == text)
     {
         return;
     }
     needsRefresh = true;
-    contentText = addMainObjectText;
+    contentText = text;
+}
+
+void setTextToAddMainObject()
+{
+    setText(addMainObjectText);
 }
 
 void setTextToAddMainObjectPoint()
 {
-    if (contentText == addMainObjectPointText)
-    {
-        return;
-    }
-    needsRefresh = true;
-    contentText = addMainObjectPointText;
+    setText(addMainObjectPointText);
 }
 
 void setTextToChooseVelocity()
 {
-    if (contentText == chooseVelocityText)
-    {
-        return;
-    }
-    needsRefresh = true;
-    contentText = chooseVelocityText;
+    setText(chooseVelocityText);
 }
 
 void getInfoBoxText(textBoxActor * t, textReceiver tr)
@@ -54,4 +49,3 @@ textProvider hasRefreshedInfoBoxText(textBoxActor * t)
     needsRefresh = false;
     return getInfoBoxText;
 }
-
