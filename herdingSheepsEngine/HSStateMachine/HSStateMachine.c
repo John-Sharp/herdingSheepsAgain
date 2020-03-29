@@ -26,7 +26,8 @@ juint vLineObjectChosen(SBStateMachine * stateMachine, juint token)
 
 juint hLineObjectChosen(SBStateMachine * stateMachine, juint token)
 {
-    printf("add main h-line object\n\n");
+    setTextToAddMainObjectHLine();
+    herdingSheepsEngineSwitchMainObject(stateMachine->context, MAIN_ACTOR_TYPE_H_LINE);
     return HS_GAME_STATE_MAIN_OBJECT_H_LINE;
 }
 

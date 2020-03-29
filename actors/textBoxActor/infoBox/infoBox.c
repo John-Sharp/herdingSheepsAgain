@@ -6,6 +6,8 @@ static const char * addMainObjectPointText = "adding main point object, "
 "click to place";
 static const char * addMainObjectVLineText = "adding main vertical line"
 " object, click to place";
+static const char * addMainObjectHLineText = "adding main horizontal line"
+" object, click to place";
 static const char * chooseVelocityText = "click to choose velocity";
 
 static const char * contentText = addMainObjectText;
@@ -34,6 +36,11 @@ void setTextToAddMainObjectPoint()
 void setTextToAddMainObjectVLine()
 {
     setText(addMainObjectVLineText);
+}
+
+void setTextToAddMainObjectHLine()
+{
+    setText(addMainObjectHLineText);
 }
 
 void setTextToChooseVelocity()

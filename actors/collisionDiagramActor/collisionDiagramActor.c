@@ -60,6 +60,16 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             cairo_stroke(cr);
             break;
         }
+        case MAIN_ACTOR_TYPE_H_LINE:
+        {
+            jintAxPlLine ln;
+            lineActor * la = e->mainActor.ptr.la;
+            lineActorGetLine(la, e->engine->currentFrame, &ln);
+            cairo_move_to(cr, ln.rStart.v[0], ln.rStart.v[1]);
+            cairo_rel_line_to(cr, ln.length, 0);
+            cairo_stroke(cr);
+            break;
+        }
     }
 
     HS_GAME_STATE currentState;
@@ -86,6 +96,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
                 break;
             }
             case MAIN_ACTOR_TYPE_V_LINE:
+            case MAIN_ACTOR_TYPE_H_LINE:
             {
                 // TODO
                 break;

@@ -175,6 +175,7 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_T
             break;
         }
         case MAIN_ACTOR_TYPE_V_LINE:
+        case MAIN_ACTOR_TYPE_H_LINE:
         {
             lineActorDeinit(eng->mainActor.ptr.la);
             free(eng->mainActor.ptr.la);
@@ -194,6 +195,22 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_T
             movingPointActor ** mpa = &eng->mainActor.ptr.pt;
             *mpa = createMovingPointActor(eng->engine);
             assert(*mpa);
+
+            break;
+        }
+        case MAIN_ACTOR_TYPE_H_LINE:
+        {
+            lineActorParams params = {
+                .line = {
+                    .direction = AX_PL_DIR_X,
+                    .rStart = {.v = {10, 10}},
+                    .length = 25
+                }
+            };
+
+            lineActor ** la = &eng->mainActor.ptr.la;
+            *la = createLineActor(eng->engine, &params);
+            assert(*la);
 
             break;
         }
