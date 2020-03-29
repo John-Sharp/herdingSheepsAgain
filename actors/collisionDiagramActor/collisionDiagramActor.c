@@ -77,8 +77,6 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     if (currentState == HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY)
     {
         jintVec lStart, lEnd;
-        SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
-        lEnd.v[1] = c->a.eng->h - lEnd.v[1];
         switch(e->mainActor.type)
         {
             case MAIN_ACTOR_TYPE_UNSET:
@@ -90,7 +88,8 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             {
                 movingPointActor * mpa = e->mainActor.ptr.pt;
                 movingPointActorGetPosition(
-                        mpa, &lStart.v[0], &lStart.v[1], e->engine->currentFrame);
+                        mpa, &lStart.v[0], &lStart.v[1], 0);
+                lEnd = jintVecAdd(lStart, mpa->ca.vel);
                 break;
             }
             case MAIN_ACTOR_TYPE_V_LINE:
@@ -104,6 +103,44 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
                     index = 1; 
                 lStart = ln.rStart;
                 lStart.v[index] += ln.length/2;
+                lEnd = jintVecAdd(lStart, la->ca.vel);
+                break;
+            }
+        }
+        drawVelocityVector(cr, c, &lStart, &lEnd);
+    }
+
+    if (currentState == HS_GAME_STATE_CHOOSE_OTHER_OBJECT)
+    {
+        jintVec lStart, lEnd;
+        switch(e->mainActor.type)
+        {
+            case MAIN_ACTOR_TYPE_UNSET:
+            {
+                // do nothing
+                break;
+            }
+            case MAIN_ACTOR_TYPE_POINT:
+            {
+                movingPointActor * mpa = e->mainActor.ptr.pt;
+                movingPointActorGetPosition(
+                        mpa, &lStart.v[0], &lStart.v[1], e->engine->currentFrame);
+
+                lEnd = jintVecAdd(lStart, mpa->ca.vel);
+                break;
+            }
+            case MAIN_ACTOR_TYPE_V_LINE:
+            case MAIN_ACTOR_TYPE_H_LINE:
+            {
+                jintAxPlLine ln;
+                lineActor * la = e->mainActor.ptr.la;
+                lineActorGetLine(la, e->engine->currentFrame, &ln);
+                int index = 0;
+                if (e->mainActor.type == MAIN_ACTOR_TYPE_V_LINE)
+                    index = 1; 
+                lStart = ln.rStart;
+                lStart.v[index] += ln.length/2;
+                lEnd = jintVecAdd(lStart, la->ca.vel);
                 break;
             }
         }

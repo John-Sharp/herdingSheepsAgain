@@ -72,6 +72,11 @@ juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
                 break;
         }
     }
+    else if (currentState == HS_GAME_STATE_CHOOSE_OTHER_OBJECT)
+    {
+        setTextToChooseVelocity();
+        return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY;
+    }
 
     switch (herdingSheepsEngineGetMainObjectType(stateMachine->context))
     {
@@ -87,6 +92,12 @@ juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
     }
 
     return HS_GAME_STATE_MAIN_OBJECT_POINT;
+}
+
+static juint goToChooseOtherObject(SBStateMachine * stateMachine, juint token)
+{
+    setTextToChooseOtherObject();
+    return HS_GAME_STATE_CHOOSE_OTHER_OBJECT;
 }
 
 void HSStateMachineProcessInput(SBStateMachine * stateMachine)
@@ -200,7 +211,8 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret = SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY, 1,
+            HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY, 2,
+            HS_GAME_STATE_TOKEN_L_CLICK, goToChooseOtherObject,
             HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
     if (ret != SB_STATE_MACHINE_OK)
     {
@@ -218,6 +230,11 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
         printf("Failure after attempting to set up main state machine\n\n");
         exit(1);
     }
+
+    ret = SBStateMachineAddState(
+            stateMachine,
+            HS_GAME_STATE_CHOOSE_OTHER_OBJECT, 1,
+            HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
 
     SBStateMachineSetCurrentState(stateMachine, HS_GAME_STATE_CHOOSE_MAIN_OBJECT);
     return stateMachine;

@@ -32,7 +32,14 @@ void lineActorLogicHandler(actor * a)
     {
         case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY:
         {
-            // TODO
+            jintVec lStart, lEnd;
+            SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
+            lEnd.v[1] = a->eng->h - lEnd.v[1];
+
+            lStart = la->ca.shape.line.rStart;
+            jint coordIndex = la->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
+            lStart.v[coordIndex] += la->ca.shape.line.length/2;
+            la->ca.vel = jintVecSub(lEnd, lStart);
             break;
         }
         case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION:
@@ -58,7 +65,8 @@ void lineActorLogicHandler(actor * a)
 
             break;
         }
-        default:
+        case HS_GAME_STATE_MAIN_OBJECT_H_LINE:
+        case HS_GAME_STATE_MAIN_OBJECT_V_LINE:
         {
             int mouse_x, mouse_y;
 
@@ -68,6 +76,8 @@ void lineActorLogicHandler(actor * a)
             la->lineAnchorPoint = la->ca.shape.line.rStart;
             break;
         }
+        default:
+            break;
     }
 }
 

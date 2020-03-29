@@ -2,6 +2,10 @@
 
 static const char * const addMainObjectText = "press key and choose object,"
 " 'p' : point, 'v' : vertical line, 'h' : horizontal line";
+static const char * const chooseOtherObjectText = "press key and choose "
+"another object, 'p' : point, 'v' : vertical line, 'h' : "
+"horizontal line, '<space>' : run";
+
 static const char * addMainObjectPointText = "adding main point object, "
 "click to place";
 static const char * addMainObjectVLineText = "adding main vertical line"
@@ -52,6 +56,11 @@ void setTextToChooseVelocity()
 void setTextToChooseDimensions()
 {
     setText(chooseDimensionText);
+}
+
+void setTextToChooseOtherObject()
+{
+    setText(chooseOtherObjectText);
 }
 
 void getInfoBoxText(textBoxActor * t, textReceiver tr)

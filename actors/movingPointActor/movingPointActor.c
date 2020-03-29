@@ -32,10 +32,15 @@ void movingPointActorLogicHandler(actor * a)
     {
         case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY:
         {
-            // TODO
+            jintVec lStart, lEnd;
+            SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
+            lEnd.v[1] = a->eng->h - lEnd.v[1];
+
+            lStart = m->ca.shape.point;
+            m->ca.vel = jintVecSub(lEnd, lStart);
             break;
         }
-        default:
+        case HS_GAME_STATE_MAIN_OBJECT_POINT:
         {
             int mouse_x, mouse_y;
 
@@ -44,6 +49,8 @@ void movingPointActorLogicHandler(actor * a)
             m->ca.shape.point.v[1] = a->eng->h - mouse_y;
             break;
         }
+        default:
+            break;
     }
 }
 
