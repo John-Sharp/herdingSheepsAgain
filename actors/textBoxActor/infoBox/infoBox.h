@@ -6,6 +6,7 @@
 textProvider hasRefreshedInfoBoxText(textBoxActor * t);
 void setTextToAddMainObject();
 void setTextToAddMainObjectPoint();
+void setTextToAddMainObjectVLine();
 void setTextToChooseVelocity();
 #endif
 
