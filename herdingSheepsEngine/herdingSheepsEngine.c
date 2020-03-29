@@ -173,6 +173,7 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_T
     {
         case MAIN_ACTOR_TYPE_POINT:
         {
+            movingPointActorDeinit(eng->mainActor.ptr.pt);
             free(eng->mainActor.ptr.pt);
             break;
         }

@@ -72,6 +72,11 @@ void initMovingPointActor(engine * eng, movingPointActor * a)
     engineActorReg(eng, &a->a);
 }
 
+void movingPointActorDeinit(movingPointActor * a)
+{
+    actorEngineDereg(&a->a);
+}
+
 void movingPointActorGetPosition(movingPointActor * a, jint * rx, jint * ry, juint frame)
 {
     jintLine l = {
