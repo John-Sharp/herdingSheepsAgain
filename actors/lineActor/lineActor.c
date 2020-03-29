@@ -20,6 +20,33 @@ lineActor * createLineActor(
     return ret;
 }
 
+void lineActorLogicHandler(actor * a)
+{
+    lineActor * la = a->owner;
+    herdingSheepsEngine * hsEng = a->eng->owner;
+
+    HS_GAME_STATE currentState;
+    SBStateMachineGetCurrentState(
+        hsEng->mainStateMachine, &currentState);
+    switch (currentState)
+    {
+        case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY:
+        {
+            // TODO
+            break;
+        }
+        default:
+        {
+            int mouse_x, mouse_y;
+
+            SDL_GetMouseState(&mouse_x, &mouse_y);
+            la->ca.shape.line.rStart.v[0] = mouse_x;
+            la->ca.shape.line.rStart.v[1] = a->eng->h - mouse_y;
+            break;
+        }
+    }
+}
+
 void lineActorInit(
         lineActor * this,
         engine * eng,
@@ -27,7 +54,7 @@ void lineActorInit(
 {
     this->a.owner = this;
     this->a.renderHandler = NULL;
-    this->a.logicHandler = NULL;
+    this->a.logicHandler = lineActorLogicHandler;
 
     this->frameStart = 0;
 
@@ -40,10 +67,13 @@ void lineActorInit(
     };
     this->ca = ca;
     this->line = &this->ca.shape.line;
+
+    engineActorReg(eng, &this->a);
 }
 
-void lineActorDeinit()
+void lineActorDeinit(lineActor * this)
 {
+    actorEngineDereg(&this->a);
 }
 
 void lineActorGetLine(

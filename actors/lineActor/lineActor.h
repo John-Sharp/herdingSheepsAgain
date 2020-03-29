@@ -29,7 +29,7 @@ void lineActorInit(
         engine * eng,
         const lineActorParams * params);
 
-void lineActorDeinit();
+void lineActorDeinit(lineActor * this);
 
 void lineActorGetLine(
         const lineActor * this,
