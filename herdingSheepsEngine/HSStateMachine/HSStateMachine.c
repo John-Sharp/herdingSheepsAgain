@@ -52,23 +52,40 @@ juint returnToMainState(SBStateMachine * stateMachine, juint token)
 
 juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
 {
-    herdingSheepsEngineSwitchMainObject(
-        stateMachine->context,
-        herdingSheepsEngineGetMainObjectType(stateMachine->context));
+    HS_GAME_STATE currentState;
+    SBStateMachineGetCurrentState(stateMachine, &currentState);
+
+    if (currentState == HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION)
+    {
+        herdingSheepsEngineSwitchMainObject(
+                stateMachine->context,
+                herdingSheepsEngineGetMainObjectType(stateMachine->context));
+        switch (herdingSheepsEngineGetMainObjectType(stateMachine->context))
+        {
+            case MAIN_ACTOR_TYPE_V_LINE:
+                setTextToAddMainObjectVLine();
+                return HS_GAME_STATE_MAIN_OBJECT_V_LINE;
+            case MAIN_ACTOR_TYPE_H_LINE:
+                setTextToAddMainObjectHLine();
+                return HS_GAME_STATE_MAIN_OBJECT_H_LINE;
+            default:
+                break;
+        }
+    }
+
     switch (herdingSheepsEngineGetMainObjectType(stateMachine->context))
     {
         case MAIN_ACTOR_TYPE_POINT:
             setTextToAddMainObjectPoint();
             return HS_GAME_STATE_MAIN_OBJECT_POINT;
         case MAIN_ACTOR_TYPE_V_LINE:
-            setTextToAddMainObjectVLine();
-            return HS_GAME_STATE_MAIN_OBJECT_V_LINE;
         case MAIN_ACTOR_TYPE_H_LINE:
-            setTextToAddMainObjectHLine();
-            return HS_GAME_STATE_MAIN_OBJECT_H_LINE;
+            setTextToChooseDimensions();
+            return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION;
         default:
             break;
     }
+
     return HS_GAME_STATE_MAIN_OBJECT_POINT;
 }
 
@@ -193,7 +210,8 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret = SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION, 1,
+            HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION, 2,
+            HS_GAME_STATE_TOKEN_L_CLICK, goToChooseVelocityMainObject,
             HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
     if (ret != SB_STATE_MACHINE_OK)
     {

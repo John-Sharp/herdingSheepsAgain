@@ -91,14 +91,19 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
                 movingPointActor * mpa = e->mainActor.ptr.pt;
                 movingPointActorGetPosition(
                         mpa, &lStart.v[0], &lStart.v[1], e->engine->currentFrame);
-                lStart.v[1] = lStart.v[1];
-
                 break;
             }
             case MAIN_ACTOR_TYPE_V_LINE:
             case MAIN_ACTOR_TYPE_H_LINE:
             {
-                // TODO
+                jintAxPlLine ln;
+                lineActor * la = e->mainActor.ptr.la;
+                lineActorGetLine(la, e->engine->currentFrame, &ln);
+                int index = 0;
+                if (e->mainActor.type == MAIN_ACTOR_TYPE_V_LINE)
+                    index = 1; 
+                lStart = ln.rStart;
+                lStart.v[index] += ln.length/2;
                 break;
             }
         }
