@@ -198,10 +198,10 @@ static void drawVelocityVector(
         int tickx = i * vel.v[0] / (jint)eng->fps + end->v[0];
         int ticky = i * vel.v[1] / (jint)eng->fps + end->v[1];
 
-        if (tickx > jintRectGetHeight(&cdActor->d.rect)+5 || tickx < 0)
+        if (tickx > jintRectGetWidth(&cdActor->d.rect)+5 || tickx < 0)
             break;
 
-        if (ticky > jintRectGetWidth(&cdActor->d.rect)+5 || ticky < 0)
+        if (ticky > jintRectGetHeight(&cdActor->d.rect)+5 || ticky < 0)
             break;
 
         cairo_arc (cr, tickx, ticky, 5, 0, 2 * M_PI);
