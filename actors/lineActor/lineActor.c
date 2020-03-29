@@ -35,6 +35,29 @@ void lineActorLogicHandler(actor * a)
             // TODO
             break;
         }
+        case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION:
+        {
+            jint mouseCoords[2];
+
+            SDL_GetMouseState(&mouseCoords[0], &mouseCoords[1]);
+            mouseCoords[1] = a->eng->h - mouseCoords[1];
+
+            jint coord = la->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
+
+            jint length = mouseCoords[coord] - la->lineAnchorPoint.v[coord];
+
+            if (length < 0)
+            {
+                la->ca.shape.line.rStart.v[coord] = mouseCoords[coord];
+                la->ca.shape.line.length = -length;
+            }
+            else
+            {
+                la->ca.shape.line.length = length;
+            }
+
+            break;
+        }
         default:
         {
             int mouse_x, mouse_y;
@@ -42,6 +65,7 @@ void lineActorLogicHandler(actor * a)
             SDL_GetMouseState(&mouse_x, &mouse_y);
             la->ca.shape.line.rStart.v[0] = mouse_x;
             la->ca.shape.line.rStart.v[1] = a->eng->h - mouse_y;
+            la->lineAnchorPoint = la->ca.shape.line.rStart;
             break;
         }
     }

@@ -17,6 +17,7 @@ typedef struct lineActor {
     collActor ca;
     const jintAxPlLine * line;
 
+    jintVec lineAnchorPoint;
     juint frameStart;
 } lineActor;
 

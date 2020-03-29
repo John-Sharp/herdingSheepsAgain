@@ -165,7 +165,14 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_TYPE type)
 {
     if (eng->mainActor.type == type)
+    {
+        if (eng->mainActor.type == MAIN_ACTOR_TYPE_V_LINE ||
+                eng->mainActor.type == MAIN_ACTOR_TYPE_H_LINE)
+        {
+            eng->mainActor.ptr.la->ca.shape.line.length = 30;
+        }
         return;
+    }
     switch (eng->mainActor.type)
     {
         case MAIN_ACTOR_TYPE_POINT:
