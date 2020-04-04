@@ -41,6 +41,7 @@ void lineActorLogicHandler(actor * a)
             lStart.v[coordIndex] += la->ca.shape.line.length/2;
             la->ca.vel.v = jintVecSub(lEnd, lStart);
             la->ca.vel.s = 80;
+            la->ca.frameStart = a->eng->currentFrame;
             break;
         }
         case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION:
@@ -63,6 +64,7 @@ void lineActorLogicHandler(actor * a)
             {
                 la->ca.shape.line.length = length;
             }
+            la->ca.frameStart = a->eng->currentFrame;
 
             break;
         }
@@ -75,6 +77,11 @@ void lineActorLogicHandler(actor * a)
             la->ca.shape.line.rStart.v[0] = mouse_x;
             la->ca.shape.line.rStart.v[1] = a->eng->h - mouse_y;
             la->lineAnchorPoint = la->ca.shape.line.rStart;
+            break;
+        }
+        case HS_GAME_STATE_CHOOSE_OTHER_OBJECT:
+        {
+            la->ca.frameStart = a->eng->currentFrame;
             break;
         }
         default:
@@ -121,5 +128,5 @@ void lineActorGetLine(
         .sTarg = this->ca.vel,
     };
 
-    ln->rStart = jintLineGetPosition(&l, 0);
+    ln->rStart = jintLineGetPosition(&l, (jint)this->a.eng->currentFrame - this->ca.frameStart);
 }
