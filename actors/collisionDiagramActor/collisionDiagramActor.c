@@ -48,10 +48,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         {
             jintVec r;
             movingPointActor * mpa = e->mainActor.ptr.pt;
-            if (currentState == HS_GAME_STATE_RUNNING)
-                movingPointActorGetPosition(mpa, &r);
-            else
-                movingPointActorGetPosition(mpa, &r);
+            movingPointActorGetPosition(mpa, &r);
             cairo_arc (cr, r.v[0], r.v[1], 30, 0, 2 * M_PI);
             cairo_fill (cr);
             break;

@@ -104,7 +104,6 @@ static juint goToChooseOtherObject(SBStateMachine * stateMachine, juint token)
 static juint goToRunning(SBStateMachine * stateMachine, juint token)
 {
     setTextToRunning();
-    herdingSheepsEngineSetObjectsMoving(stateMachine->context);
     return HS_GAME_STATE_RUNNING;
 }
 

@@ -32,7 +32,6 @@ typedef struct herdingSheepsEngine {
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng);
 void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_TYPE type);
 MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng);
-void herdingSheepsEngineSetObjectsMoving();
 
 typedef enum HS_GAME_STATE {
     HS_GAME_STATE_CHOOSE_MAIN_OBJECT,

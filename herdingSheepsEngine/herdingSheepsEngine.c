@@ -248,29 +248,3 @@ MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng)
 {
     return eng->mainActor.type;
 }
-
-void herdingSheepsEngineSetObjectsMoving(herdingSheepsEngine * eng)
-{
-    printf("hi type %u\n\n", eng->mainActor.type);
-    switch (eng->mainActor.type)
-    {
-        case MAIN_ACTOR_TYPE_POINT:
-        {
-            movingPointActor * mpa = eng->mainActor.ptr.pt;
-            mpa->frameStart = eng->engine->currentFrame;
-            printf("just set rame start to %u\n\n", mpa->frameStart);
-            break;
-        }
-        case MAIN_ACTOR_TYPE_H_LINE:
-        case MAIN_ACTOR_TYPE_V_LINE:
-        {
-            lineActor * la = eng->mainActor.ptr.la;
-            la->frameStart = eng->engine->currentFrame;
-            break;
-        }
-        default:
-        {
-            break;
-        }
-    }
-}

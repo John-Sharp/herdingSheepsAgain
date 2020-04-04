@@ -39,6 +39,7 @@ void movingPointActorLogicHandler(actor * a)
             lStart = m->ca.shape.point;
             m->ca.vel.v = jintVecSub(lEnd, lStart);
             m->ca.vel.s = 80;
+            m->ca.frameStart = a->eng->currentFrame;
             break;
         }
         case HS_GAME_STATE_MAIN_OBJECT_POINT:
@@ -48,6 +49,11 @@ void movingPointActorLogicHandler(actor * a)
             SDL_GetMouseState(&mouse_x, &mouse_y);
             m->ca.shape.point.v[0] = mouse_x;
             m->ca.shape.point.v[1] = a->eng->h - mouse_y;
+            break;
+        }
+        case HS_GAME_STATE_CHOOSE_OTHER_OBJECT:
+        {
+            m->ca.frameStart = a->eng->currentFrame;
             break;
         }
         default:
@@ -84,14 +90,9 @@ void movingPointActorDeinit(movingPointActor * a)
 
 void movingPointActorGetPosition(movingPointActor * a, jintVec * r)
 {
-    *r = a->ca.shape.point;
-    // jintLine l = {
-    //     .rStart = a->ca.shape.point,
-    //     .sTarg = a->ca.vel,
-    //     .tScale = a->ca.vel.scale
-    // };
-    // // printf("velocity is %d %d scale %d frame %u frame start %u\n\n", a->ca.vel.v[0], a->ca.vel.v[1], a->ca.vel.scale, frame, a->frameStart);
-    // jintVec r = jintLineGetPosition(&l, (jint)frame - (jint)a->frameStart);
-    // *rx = r.v[0];
-    // *ry = r.v[1];
+    jintLine l = {
+        .rStart = a->ca.shape.point,
+        .sTarg = a->ca.vel
+    };
+    *r = jintLineGetPosition(&l, (jint)a->a.eng->currentFrame - a->ca.frameStart);
 }
