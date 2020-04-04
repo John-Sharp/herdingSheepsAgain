@@ -32,6 +32,7 @@ typedef struct herdingSheepsEngine {
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng);
 void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_TYPE type);
 MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng);
+void herdingSheepsEngineSetObjectsMoving();
 
 typedef enum HS_GAME_STATE {
     HS_GAME_STATE_CHOOSE_MAIN_OBJECT,
@@ -40,7 +41,8 @@ typedef enum HS_GAME_STATE {
     HS_GAME_STATE_MAIN_OBJECT_POINT,
     HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY,
     HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION,
-    HS_GAME_STATE_CHOOSE_OTHER_OBJECT
+    HS_GAME_STATE_CHOOSE_OTHER_OBJECT,
+    HS_GAME_STATE_RUNNING
 } HS_GAME_STATE;
 
 // TODO this doesn't need to be here, can be moved once inputProcessor has
@@ -59,7 +61,8 @@ typedef enum KEYPRESS_STATE {
     KEYPRESS_STATE_P,
     KEYPRESS_STATE_V,
     KEYPRESS_STATE_H,
-    KEYPRESS_STATE_ESC
+    KEYPRESS_STATE_ESC,
+    KEYPRESS_STATE_SPACE
 } KEYPRESS_STATE;
 
 #endif

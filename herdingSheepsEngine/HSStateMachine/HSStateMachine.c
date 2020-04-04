@@ -6,7 +6,8 @@ typedef enum HS_GAME_STATE_TOKEN {
     HS_GAME_STATE_TOKEN_V,
     HS_GAME_STATE_TOKEN_H,
     HS_GAME_STATE_TOKEN_L_CLICK,
-    HS_GAME_STATE_TOKEN_ESC
+    HS_GAME_STATE_TOKEN_ESC,
+    HS_GAME_STATE_TOKEN_SPACE
 } HS_GAME_STATE_TOKEN;
 
 
@@ -100,6 +101,13 @@ static juint goToChooseOtherObject(SBStateMachine * stateMachine, juint token)
     return HS_GAME_STATE_CHOOSE_OTHER_OBJECT;
 }
 
+static juint goToRunning(SBStateMachine * stateMachine, juint token)
+{
+    setTextToRunning();
+    herdingSheepsEngineSetObjectsMoving(stateMachine->context);
+    return HS_GAME_STATE_RUNNING;
+}
+
 void HSStateMachineProcessInput(SBStateMachine * stateMachine)
 {
     if (isStateActive(KEYPRESS_STATE_P))
@@ -121,6 +129,11 @@ void HSStateMachineProcessInput(SBStateMachine * stateMachine)
     {
         SBStateMachineProcessInput(stateMachine, HS_GAME_STATE_TOKEN_ESC, NULL);
         deactivateState(KEYPRESS_STATE_ESC);
+    }
+    else if (isStateActive(KEYPRESS_STATE_SPACE))
+    {
+        SBStateMachineProcessInput(stateMachine, HS_GAME_STATE_TOKEN_SPACE, NULL);
+        deactivateState(KEYPRESS_STATE_SPACE);
     }
 }
 
@@ -153,6 +166,11 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ksb.k = SDLK_ESCAPE;
     ksb.s = KEYPRESS_STATE_ESC;
+    ksb.t = BINDING_ONE_TIME;
+    addBinding(&ksb);
+
+    ksb.k = SDLK_SPACE;
+    ksb.s = KEYPRESS_STATE_SPACE;
     ksb.t = BINDING_ONE_TIME;
     addBinding(&ksb);
 
@@ -233,8 +251,24 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret = SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_CHOOSE_OTHER_OBJECT, 1,
+            HS_GAME_STATE_CHOOSE_OTHER_OBJECT, 2,
+            HS_GAME_STATE_TOKEN_SPACE, goToRunning,
             HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
+    if (ret != SB_STATE_MACHINE_OK)
+    {
+        printf("Failure after attempting to set up main state machine\n\n");
+        exit(1);
+    }
+
+    ret = SBStateMachineAddState(
+            stateMachine,
+            HS_GAME_STATE_RUNNING, 1,
+            HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
+    if (ret != SB_STATE_MACHINE_OK)
+    {
+        printf("Failure after attempting to set up main state machine\n\n");
+        exit(1);
+    }
 
     SBStateMachineSetCurrentState(stateMachine, HS_GAME_STATE_CHOOSE_MAIN_OBJECT);
     return stateMachine;

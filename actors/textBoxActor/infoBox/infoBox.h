@@ -11,5 +11,6 @@ void setTextToAddMainObjectHLine();
 void setTextToChooseVelocity();
 void setTextToChooseDimensions();
 void setTextToChooseOtherObject();
+void setTextToRunning();
 #endif
 

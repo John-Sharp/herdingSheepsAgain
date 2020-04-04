@@ -16,39 +16,39 @@ void herdingSheepsPreRender(engine * e)
     herdingSheepsEngine * hsEng = e->owner;
     HSStateMachineProcessInput(hsEng->mainStateMachine);
 
-    if (isStateActive(KEYPRESS_STATE_FRAME_PAUSE))
-    {
-        engineIsPaused(e) ? engineUnpause(e) : enginePause(e);
-        deactivateState(KEYPRESS_STATE_FRAME_PAUSE);
-    }
-    if (engineIsPaused(e))
-    {
-        Uint32 time = SDL_GetTicks();
-        static Uint32 lastTime = 0;
-        if (isStateActive(KEYPRESS_STATE_FORWARD_FRAME))
-        {
-            if (isStateActive(KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER))
-            {
-                if (time - lastTime > KEYPRESS_REFRESH_MS)
-                {
-                    lastTime = time;
-                    engineAdvanceFrames(e, 10);
-                }
-            }
-            else
-            {
-                if (time - lastTime > KEYPRESS_REFRESH_MS)
-                {
-                    lastTime = time;
-                    engineAdvanceFrames(e, 1);
-                }
-            }
-        }
-        else
-        {
-            lastTime = 0;
-        }
-    }
+    // if (isStateActive(KEYPRESS_STATE_FRAME_PAUSE))
+    // {
+    //     engineIsPaused(e) ? engineUnpause(e) : enginePause(e);
+    //     deactivateState(KEYPRESS_STATE_FRAME_PAUSE);
+    // }
+    // if (engineIsPaused(e))
+    // {
+    //     Uint32 time = SDL_GetTicks();
+    //     static Uint32 lastTime = 0;
+    //     if (isStateActive(KEYPRESS_STATE_FORWARD_FRAME))
+    //     {
+    //         if (isStateActive(KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER))
+    //         {
+    //             if (time - lastTime > KEYPRESS_REFRESH_MS)
+    //             {
+    //                 lastTime = time;
+    //                 engineAdvanceFrames(e, 10);
+    //             }
+    //         }
+    //         else
+    //         {
+    //             if (time - lastTime > KEYPRESS_REFRESH_MS)
+    //             {
+    //                 lastTime = time;
+    //                 engineAdvanceFrames(e, 1);
+    //             }
+    //         }
+    //     }
+    //     else
+    //     {
+    //         lastTime = 0;
+    //     }
+    // }
 }
 
 STARTUP_CLICK_STATE startupClickState;
@@ -132,30 +132,30 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     // setup main actor
     eng->mainActor.type = MAIN_ACTOR_TYPE_UNSET;
 
-    mouseCallbackBinding mouseBinding = {
-        .type = SDL_MOUSEBUTTONDOWN,
-        .button = SDL_BUTTON_LEFT,
-        .callback = startUpClicksCB,
-        .owner = eng
-    };
-    addMouseCallback(&mouseBinding);
+    // mouseCallbackBinding mouseBinding = {
+    //     .type = SDL_MOUSEBUTTONDOWN,
+    //     .button = SDL_BUTTON_LEFT,
+    //     .callback = startUpClicksCB,
+    //     .owner = eng
+    // };
+    // addMouseCallback(&mouseBinding);
 
-    keyStateBinding ksb = {
-        .k = SDLK_SPACE,
-        .s = KEYPRESS_STATE_FRAME_PAUSE,
-        .t = BINDING_ONE_TIME
-    };
-    addBinding(&ksb);
+    // keyStateBinding ksb = {
+    //     .k = SDLK_SPACE,
+    //     .s = KEYPRESS_STATE_FRAME_PAUSE,
+    //     .t = BINDING_ONE_TIME
+    // };
+    // addBinding(&ksb);
 
-    ksb.k = SDLK_RIGHT;
-    ksb.s = KEYPRESS_STATE_FORWARD_FRAME;
-    ksb.t = BINDING_CONTINUOUS;
-    addBinding(&ksb);
+    // ksb.k = SDLK_RIGHT;
+    // ksb.s = KEYPRESS_STATE_FORWARD_FRAME;
+    // ksb.t = BINDING_CONTINUOUS;
+    // addBinding(&ksb);
 
-    ksb.k = SDLK_LCTRL;
-    ksb.s = KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER;
-    ksb.t = BINDING_CONTINUOUS;
-    addBinding(&ksb);
+    // ksb.k = SDLK_LCTRL;
+    // ksb.s = KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER;
+    // ksb.t = BINDING_CONTINUOUS;
+    // addBinding(&ksb);
 
     eng->mainStateMachine = createHSStateMachine(eng);
 
@@ -247,4 +247,30 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_T
 MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng)
 {
     return eng->mainActor.type;
+}
+
+void herdingSheepsEngineSetObjectsMoving(herdingSheepsEngine * eng)
+{
+    printf("hi type %u\n\n", eng->mainActor.type);
+    switch (eng->mainActor.type)
+    {
+        case MAIN_ACTOR_TYPE_POINT:
+        {
+            movingPointActor * mpa = eng->mainActor.ptr.pt;
+            mpa->frameStart = eng->engine->currentFrame;
+            printf("just set rame start to %u\n\n", mpa->frameStart);
+            break;
+        }
+        case MAIN_ACTOR_TYPE_H_LINE:
+        case MAIN_ACTOR_TYPE_V_LINE:
+        {
+            lineActor * la = eng->mainActor.ptr.la;
+            la->frameStart = eng->engine->currentFrame;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
 }

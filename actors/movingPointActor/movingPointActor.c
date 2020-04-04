@@ -37,7 +37,8 @@ void movingPointActorLogicHandler(actor * a)
             lEnd.v[1] = a->eng->h - lEnd.v[1];
 
             lStart = m->ca.shape.point;
-            m->ca.vel = jintVecSub(lEnd, lStart);
+            m->ca.vel.v = jintVecSub(lEnd, lStart);
+            m->ca.vel.s = 80;
             break;
         }
         case HS_GAME_STATE_MAIN_OBJECT_POINT:
@@ -63,14 +64,11 @@ void initMovingPointActor(engine * eng, movingPointActor * a)
     collActor ca = { 
         .type = COLL_ACTOR_TYPE_POINT,
         .shape = {
-            .point = {
-                .v = {50,50},
-                .scale = 1 
-            }
+            .point = {{50,50}}
         },
         .vel = {
-            .v = {0,0},
-            .scale = 80
+            .v = {{0,0}},
+            .s = 80
         }
     };
     a->ca = ca;
@@ -84,14 +82,16 @@ void movingPointActorDeinit(movingPointActor * a)
     actorEngineDereg(&a->a);
 }
 
-void movingPointActorGetPosition(movingPointActor * a, jint * rx, jint * ry, juint frame)
+void movingPointActorGetPosition(movingPointActor * a, jintVec * r)
 {
-    jintLine l = {
-        .rStart = a->ca.shape.point,
-        .sTarg = a->ca.vel,
-        .tScale = a->ca.vel.scale
-    };
-    jintVec r = jintLineGetPosition(&l, (jint)frame - (jint)a->frameStart);
-    *rx = r.v[0];
-    *ry = r.v[1];
+    *r = a->ca.shape.point;
+    // jintLine l = {
+    //     .rStart = a->ca.shape.point,
+    //     .sTarg = a->ca.vel,
+    //     .tScale = a->ca.vel.scale
+    // };
+    // // printf("velocity is %d %d scale %d frame %u frame start %u\n\n", a->ca.vel.v[0], a->ca.vel.v[1], a->ca.vel.scale, frame, a->frameStart);
+    // jintVec r = jintLineGetPosition(&l, (jint)frame - (jint)a->frameStart);
+    // *rx = r.v[0];
+    // *ry = r.v[1];
 }

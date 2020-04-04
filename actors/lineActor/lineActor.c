@@ -39,7 +39,8 @@ void lineActorLogicHandler(actor * a)
             lStart = la->ca.shape.line.rStart;
             jint coordIndex = la->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
             lStart.v[coordIndex] += la->ca.shape.line.length/2;
-            la->ca.vel = jintVecSub(lEnd, lStart);
+            la->ca.vel.v = jintVecSub(lEnd, lStart);
+            la->ca.vel.s = 80;
             break;
         }
         case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION:
@@ -97,7 +98,7 @@ void lineActorInit(
         .shape = {
             .line = params->line 
         },
-        .vel = {.v = {0, 0}, .scale = 1}
+        .vel = {.v = {{0, 0}}, .s = 80}
     };
     this->ca = ca;
     this->line = &this->ca.shape.line;
@@ -112,15 +113,13 @@ void lineActorDeinit(lineActor * this)
 
 void lineActorGetLine(
         const lineActor * this,
-        juint frame,
         jintAxPlLine * ln)
 {
     *ln = this->ca.shape.line;
     jintLine l = {
         .rStart = this->ca.shape.line.rStart,
         .sTarg = this->ca.vel,
-        .tScale = this->ca.vel.scale
     };
 
-    ln->rStart = jintLineGetPosition(&l, (jint)frame - (jint)this->frameStart);
+    ln->rStart = jintLineGetPosition(&l, 0);
 }

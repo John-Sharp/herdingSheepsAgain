@@ -14,6 +14,7 @@ static const char * addMainObjectHLineText = "adding main horizontal line"
 " object, click to place";
 static const char * chooseVelocityText = "click to choose velocity";
 static const char * chooseDimensionText = "click to choose dimension";
+static const char * runningText = "running, press <space> to pause";
 
 static const char * contentText = addMainObjectText;
 static bool needsRefresh = true;
@@ -61,6 +62,11 @@ void setTextToChooseDimensions()
 void setTextToChooseOtherObject()
 {
     setText(chooseOtherObjectText);
+}
+
+void setTextToRunning()
+{
+    setText(runningText);
 }
 
 void getInfoBoxText(textBoxActor * t, textReceiver tr)

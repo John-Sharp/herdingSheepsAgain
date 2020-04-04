@@ -33,6 +33,9 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     cairo_scale(cr, 1, -1);
     cairo_translate(cr, 0, -jintRectGetHeight(&c->d.rect));
 
+    HS_GAME_STATE currentState;
+    SBStateMachineGetCurrentState(e->mainStateMachine, &currentState);
+
     // draw mainActor
     switch(e->mainActor.type)
     {
@@ -45,7 +48,10 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         {
             jintVec r;
             movingPointActor * mpa = e->mainActor.ptr.pt;
-            movingPointActorGetPosition(mpa, &r.v[0], &r.v[1], e->engine->currentFrame);
+            if (currentState == HS_GAME_STATE_RUNNING)
+                movingPointActorGetPosition(mpa, &r);
+            else
+                movingPointActorGetPosition(mpa, &r);
             cairo_arc (cr, r.v[0], r.v[1], 30, 0, 2 * M_PI);
             cairo_fill (cr);
             break;
@@ -54,7 +60,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         {
             jintAxPlLine ln;
             lineActor * la = e->mainActor.ptr.la;
-            lineActorGetLine(la, e->engine->currentFrame, &ln);
+            lineActorGetLine(la, &ln);
             cairo_move_to(cr, ln.rStart.v[0], ln.rStart.v[1]);
             cairo_rel_line_to(cr, 0, ln.length);
             cairo_stroke(cr);
@@ -64,7 +70,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         {
             jintAxPlLine ln;
             lineActor * la = e->mainActor.ptr.la;
-            lineActorGetLine(la, e->engine->currentFrame, &ln);
+            lineActorGetLine(la, &ln);
             cairo_move_to(cr, ln.rStart.v[0], ln.rStart.v[1]);
             cairo_rel_line_to(cr, ln.length, 0);
             cairo_stroke(cr);
@@ -72,8 +78,6 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         }
     }
 
-    HS_GAME_STATE currentState;
-    SBStateMachineGetCurrentState(e->mainStateMachine, &currentState);
     if (currentState == HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY)
     {
         jintVec lStart, lEnd;
@@ -88,8 +92,8 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             {
                 movingPointActor * mpa = e->mainActor.ptr.pt;
                 movingPointActorGetPosition(
-                        mpa, &lStart.v[0], &lStart.v[1], 0);
-                lEnd = jintVecAdd(lStart, mpa->ca.vel);
+                        mpa, &lStart);
+                lEnd = jintVecAdd(lStart, mpa->ca.vel.v);
                 break;
             }
             case MAIN_ACTOR_TYPE_V_LINE:
@@ -97,13 +101,13 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             {
                 jintAxPlLine ln;
                 lineActor * la = e->mainActor.ptr.la;
-                lineActorGetLine(la, e->engine->currentFrame, &ln);
+                lineActorGetLine(la, &ln);
                 int index = 0;
                 if (e->mainActor.type == MAIN_ACTOR_TYPE_V_LINE)
                     index = 1; 
                 lStart = ln.rStart;
                 lStart.v[index] += ln.length/2;
-                lEnd = jintVecAdd(lStart, la->ca.vel);
+                lEnd = jintVecAdd(lStart, la->ca.vel.v);
                 break;
             }
         }
@@ -124,9 +128,9 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             {
                 movingPointActor * mpa = e->mainActor.ptr.pt;
                 movingPointActorGetPosition(
-                        mpa, &lStart.v[0], &lStart.v[1], e->engine->currentFrame);
+                        mpa, &lStart);
 
-                lEnd = jintVecAdd(lStart, mpa->ca.vel);
+                lEnd = jintVecAdd(lStart, mpa->ca.vel.v);
                 break;
             }
             case MAIN_ACTOR_TYPE_V_LINE:
@@ -134,13 +138,13 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             {
                 jintAxPlLine ln;
                 lineActor * la = e->mainActor.ptr.la;
-                lineActorGetLine(la, e->engine->currentFrame, &ln);
+                lineActorGetLine(la, &ln);
                 int index = 0;
                 if (e->mainActor.type == MAIN_ACTOR_TYPE_V_LINE)
                     index = 1; 
                 lStart = ln.rStart;
                 lStart.v[index] += ln.length/2;
-                lEnd = jintVecAdd(lStart, la->ca.vel);
+                lEnd = jintVecAdd(lStart, la->ca.vel.v);
                 break;
             }
         }
