@@ -269,7 +269,8 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret = SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED, 1,
+            HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED, 2,
+            HS_GAME_STATE_TOKEN_L_CLICK, goToChooseOtherObject,
             HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
     if (ret != SB_STATE_MACHINE_OK)
     {
