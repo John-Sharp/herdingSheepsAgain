@@ -1,12 +1,12 @@
 #ifndef OBJECT_ACTOR_H
 #define OBJECT_ACTOR_H
 
-typedef struct movingPointActor movingPointActor;
+typedef struct pointActor pointActor;
 typedef struct lineActor lineActor;
 
 typedef union objectActorPtr
 {
-    movingPointActor * pt;
+    pointActor * pa;
     lineActor * la;
 } objectActorPtr;
 

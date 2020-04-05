@@ -47,8 +47,8 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         case OBJECT_ACTOR_TYPE_POINT:
         {
             jintVec r;
-            movingPointActor * mpa = e->mainActor.ptr.pt;
-            movingPointActorGetPosition(mpa, &r);
+            pointActor * pa = e->mainActor.ptr.pa;
+            pointActorGetPosition(pa, &r);
             cairo_arc (cr, r.v[0], r.v[1], 30, 0, 2 * M_PI);
             cairo_fill (cr);
             break;
@@ -87,10 +87,10 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             }
             case OBJECT_ACTOR_TYPE_POINT:
             {
-                movingPointActor * mpa = e->mainActor.ptr.pt;
-                movingPointActorGetPosition(
-                        mpa, &lStart);
-                lEnd = jintVecAdd(lStart, mpa->ca.vel.v);
+                pointActor * pa = e->mainActor.ptr.pa;
+                pointActorGetPosition(
+                        pa, &lStart);
+                lEnd = jintVecAdd(lStart, pa->ca.vel.v);
                 break;
             }
             case OBJECT_ACTOR_TYPE_V_LINE:
@@ -123,11 +123,11 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             }
             case OBJECT_ACTOR_TYPE_POINT:
             {
-                movingPointActor * mpa = e->mainActor.ptr.pt;
-                movingPointActorGetPosition(
-                        mpa, &lStart);
+                pointActor * pa = e->mainActor.ptr.pa;
+                pointActorGetPosition(
+                        pa, &lStart);
 
-                lEnd = jintVecAdd(lStart, mpa->ca.vel.v);
+                lEnd = jintVecAdd(lStart, pa->ca.vel.v);
                 break;
             }
             case OBJECT_ACTOR_TYPE_V_LINE:
@@ -161,11 +161,11 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             }
             case OBJECT_ACTOR_TYPE_POINT:
             {
-                movingPointActor * mpa = e->mainActor.ptr.pt;
-                movingPointActorGetPositionAtFrame(
-                        mpa, mpa->ca.frameStart, &lStart);
+                pointActor * pa = e->mainActor.ptr.pa;
+                pointActorGetPositionAtFrame(
+                        pa, pa->ca.frameStart, &lStart);
 
-                lEnd = jintVecAdd(lStart, mpa->ca.vel.v);
+                lEnd = jintVecAdd(lStart, pa->ca.vel.v);
                 break;
             }
             case OBJECT_ACTOR_TYPE_V_LINE:

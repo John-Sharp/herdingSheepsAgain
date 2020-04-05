@@ -168,9 +168,9 @@ static objectActor herdingSheepsEngineCreateObjectActor(herdingSheepsEngine * th
     {
         case OBJECT_ACTOR_TYPE_POINT:
         {
-            movingPointActor * mpa = createMovingPointActor(this->engine);
-            assert(mpa);
-            return mpa->oa;
+            pointActor * pa = createPointActor(this->engine);
+            assert(pa);
+            return pa->oa;
         }
         case OBJECT_ACTOR_TYPE_H_LINE:
         {
@@ -225,8 +225,8 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, OBJECT_ACTOR
     {
         case OBJECT_ACTOR_TYPE_POINT:
         {
-            movingPointActorDeinit(eng->mainActor.ptr.pt);
-            free(eng->mainActor.ptr.pt);
+            pointActorDeinit(eng->mainActor.ptr.pa);
+            free(eng->mainActor.ptr.pa);
             break;
         }
         case OBJECT_ACTOR_TYPE_V_LINE:
