@@ -11,6 +11,8 @@
 static void drawVelocityVector(
         cairo_t * cr, const collisionDiagramActor * cdActor,
         const jintVec * start, const jintVec * end);
+static void drawActorCollisionDiagram(
+        cairo_t * cr, const objectActor * oActor);
 
 void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 {
@@ -37,42 +39,13 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     SBStateMachineGetCurrentState(e->mainStateMachine, &currentState);
 
     // draw mainActor
-    switch(e->mainActor.type)
+    drawActorCollisionDiagram(cr, &e->mainActor);
+
+    // draw other actors
+    const objectActorList * oActorLs;
+    for (oActorLs = e->otherActorList; oActorLs; oActorLs = oActorLs->next)
     {
-        case OBJECT_ACTOR_TYPE_UNSET:
-        {
-            // do nothing
-            break;
-        }
-        case OBJECT_ACTOR_TYPE_POINT:
-        {
-            jintVec r;
-            pointActor * pa = e->mainActor.ptr.pa;
-            pointActorGetPosition(pa, &r);
-            cairo_arc (cr, r.v[0], r.v[1], 30, 0, 2 * M_PI);
-            cairo_fill (cr);
-            break;
-        }
-        case OBJECT_ACTOR_TYPE_V_LINE:
-        {
-            jintAxPlLine ln;
-            lineActor * la = e->mainActor.ptr.la;
-            lineActorGetLine(la, &ln);
-            cairo_move_to(cr, ln.rStart.v[0], ln.rStart.v[1]);
-            cairo_rel_line_to(cr, 0, ln.length);
-            cairo_stroke(cr);
-            break;
-        }
-        case OBJECT_ACTOR_TYPE_H_LINE:
-        {
-            jintAxPlLine ln;
-            lineActor * la = e->mainActor.ptr.la;
-            lineActorGetLine(la, &ln);
-            cairo_move_to(cr, ln.rStart.v[0], ln.rStart.v[1]);
-            cairo_rel_line_to(cr, ln.length, 0);
-            cairo_stroke(cr);
-            break;
-        }
+        drawActorCollisionDiagram(cr, oActorLs->val);
     }
 
     if (currentState == HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY)
@@ -146,11 +119,6 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             }
         }
         drawVelocityVector(cr, c, &lStart, &lEnd);
-    }
-
-    if (currentState == HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED)
-    {
-        printf("TODO: paint the objects here\n\n");
     }
 
     if (currentState == HS_GAME_STATE_RUNNING)
@@ -328,6 +296,48 @@ static void drawVelocityVector(
 
         cairo_arc (cr, tickx, ticky, 5, 0, 2 * M_PI);
         cairo_fill (cr);
+    }
+}
+
+static void drawActorCollisionDiagram(
+        cairo_t * cr, const objectActor * oActor)
+{
+    switch(oActor->type)
+    {
+        case OBJECT_ACTOR_TYPE_UNSET:
+        {
+            // do nothing
+            break;
+        }
+        case OBJECT_ACTOR_TYPE_POINT:
+        {
+            jintVec r;
+            pointActor * pa = oActor->ptr.pa;
+            pointActorGetPosition(pa, &r);
+            cairo_arc (cr, r.v[0], r.v[1], 30, 0, 2 * M_PI);
+            cairo_fill (cr);
+            break;
+        }
+        case OBJECT_ACTOR_TYPE_V_LINE:
+        {
+            jintAxPlLine ln;
+            lineActor * la = oActor->ptr.la;
+            lineActorGetLine(la, &ln);
+            cairo_move_to(cr, ln.rStart.v[0], ln.rStart.v[1]);
+            cairo_rel_line_to(cr, 0, ln.length);
+            cairo_stroke(cr);
+            break;
+        }
+        case OBJECT_ACTOR_TYPE_H_LINE:
+        {
+            jintAxPlLine ln;
+            lineActor * la = oActor->ptr.la;
+            lineActorGetLine(la, &ln);
+            cairo_move_to(cr, ln.rStart.v[0], ln.rStart.v[1]);
+            cairo_rel_line_to(cr, ln.length, 0);
+            cairo_stroke(cr);
+            break;
+        }
     }
 }
 

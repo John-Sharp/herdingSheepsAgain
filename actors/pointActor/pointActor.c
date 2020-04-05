@@ -20,6 +20,31 @@ pointActor * createPointActor(engine * eng)
     return ret;
 }
 
+static void pointActorSetPositionToMouseLocation(
+        pointActor * this)
+{
+    int mouse_x, mouse_y;
+
+    SDL_GetMouseState(&mouse_x, &mouse_y);
+    this->ca.shape.point.v[0] = mouse_x;
+    this->ca.shape.point.v[1] = this->a.eng->h - mouse_y;
+}
+
+static bool pointActorIsFocussedActor(
+        pointActor * this)
+{
+    herdingSheepsEngine * hsEng = this->a.eng->owner;
+    objectActor * focussedActor = hsEng->otherActorList->val;
+
+    if (focussedActor->type != OBJECT_ACTOR_TYPE_POINT)
+        return false;
+
+    if (focussedActor->ptr.pa == this)
+        return true;
+
+    return false;
+}
+
 void pointActorLogicHandler(actor * a)
 {
     pointActor * this = a->owner;
@@ -44,17 +69,21 @@ void pointActorLogicHandler(actor * a)
         }
         case HS_GAME_STATE_MAIN_OBJECT_POINT:
         {
-            int mouse_x, mouse_y;
-
-            SDL_GetMouseState(&mouse_x, &mouse_y);
-            this->ca.shape.point.v[0] = mouse_x;
-            this->ca.shape.point.v[1] = a->eng->h - mouse_y;
+            pointActorSetPositionToMouseLocation(this);
             break;
         }
         case HS_GAME_STATE_CHOOSE_OTHER_OBJECT:
+        {
+            this->ca.frameStart = a->eng->currentFrame;
+            break;
+        }
         case HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED:
         {
             this->ca.frameStart = a->eng->currentFrame;
+            if (pointActorIsFocussedActor(this))
+            {
+                pointActorSetPositionToMouseLocation(this);
+            }
             break;
         }
         default:
