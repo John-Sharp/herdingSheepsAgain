@@ -36,7 +36,7 @@ static juint otherPointObjectChosen(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddOtherObjectPoint();
     herdingSheepsEnginePushOtherObject(stateMachine->context, OBJECT_ACTOR_TYPE_POINT);
-    return HS_GAME_STATE_CHOOSE_OTHER_OBJECT;
+    return HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED;
 }
 
 juint goToChooseVelocityMainObject(SBStateMachine * stateMachine, juint token)
@@ -260,6 +260,16 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
             HS_GAME_STATE_CHOOSE_OTHER_OBJECT, 3,
             HS_GAME_STATE_TOKEN_P, otherPointObjectChosen,
             HS_GAME_STATE_TOKEN_SPACE, goToRunning,
+            HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
+    if (ret != SB_STATE_MACHINE_OK)
+    {
+        printf("Failure after attempting to set up main state machine\n\n");
+        exit(1);
+    }
+
+    ret = SBStateMachineAddState(
+            stateMachine,
+            HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED, 1,
             HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
     if (ret != SB_STATE_MACHINE_OK)
     {

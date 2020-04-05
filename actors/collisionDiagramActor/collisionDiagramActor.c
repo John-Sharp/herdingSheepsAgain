@@ -148,6 +148,11 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         drawVelocityVector(cr, c, &lStart, &lEnd);
     }
 
+    if (currentState == HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED)
+    {
+        printf("TODO: paint the objects here\n\n");
+    }
+
     if (currentState == HS_GAME_STATE_RUNNING)
     {
         // TODO draw (non moving) velocity vector

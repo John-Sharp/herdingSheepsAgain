@@ -4,6 +4,8 @@
 #include "../actors/textBoxActor/infoBox/infoBox.h"
 #include <assert.h>
 
+#include "listCode/objectActorList.inc"
+
 typedef enum STARTUP_CLICK_STATE {
     STARTUP_CLICK_STATE_POSITION_SELECT,
     STARTUP_CLICK_STATE_VELOCITY_SELECT,
@@ -132,6 +134,9 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     // setup main actor
     eng->mainActor.type = OBJECT_ACTOR_TYPE_UNSET;
 
+    // setup other actor list
+    eng->otherActorList = NULL;
+
     // mouseCallbackBinding mouseBinding = {
     //     .type = SDL_MOUSEBUTTONDOWN,
     //     .button = SDL_BUTTON_LEFT,
@@ -252,5 +257,10 @@ OBJECT_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng
 
 void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type)
 {
-
+    objectActor * oa = malloc(sizeof(*oa));
+    assert(oa);
+    *oa = herdingSheepsEngineCreateObjectActor(this, type);
+    this->otherActorList = objectActorListAdd(
+            this->otherActorList,
+            oa);
 }

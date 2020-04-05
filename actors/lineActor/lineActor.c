@@ -2,8 +2,6 @@
 
 #include "../../herdingSheepsEngine/herdingSheepsEngine.h"
 
-#include "../../herdingSheepsEngine/listCode/lineActorList.inc"
-
 lineActor * createLineActor(
         engine * eng,
         const lineActorParams * params)

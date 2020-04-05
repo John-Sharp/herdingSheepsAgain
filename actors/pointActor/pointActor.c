@@ -80,7 +80,7 @@ void initPointActor(engine * eng, pointActor * this)
     this->ca = ca;
 
     this->oa.type = OBJECT_ACTOR_TYPE_POINT;
-    this->oa.ptr.pt = a;
+    this->oa.ptr.pa = this;
 
     engineActorReg(eng, &this->a);
 }

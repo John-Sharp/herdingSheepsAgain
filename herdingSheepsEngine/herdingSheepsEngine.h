@@ -10,7 +10,7 @@
 #include "../actors/pointActor/pointActor.h"
 #include "../actors/lineActor/lineActor.h"
 
-#include "listHeaders/lineActorList.h"
+#include "listHeaders/objectActorList.h"
 
 #include <studiousBroccoli.h>
 
@@ -22,8 +22,7 @@ typedef struct herdingSheepsEngine {
     textBoxActor infoBar;
 
     objectActor mainActor;
-
-    lineActorList * walls;
+    objectActorList * otherActorList;
 
     jintRect mainWindow;
 
@@ -44,6 +43,7 @@ typedef enum HS_GAME_STATE {
     HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY,
     HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION,
     HS_GAME_STATE_CHOOSE_OTHER_OBJECT,
+    HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED,
     HS_GAME_STATE_RUNNING
 } HS_GAME_STATE;
 
