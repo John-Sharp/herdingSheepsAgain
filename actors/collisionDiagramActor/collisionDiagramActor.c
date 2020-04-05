@@ -13,6 +13,9 @@ static void drawVelocityVector(
         const jintVec * start, const jintVec * end);
 static void drawActorCollisionDiagram(
         cairo_t * cr, const objectActor * oActor);
+static void collisionDiagramDrawActorVelocity(
+        collisionDiagramActor * this, cairo_t * cr,
+        const objectActor * oa);
 
 void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 {
@@ -40,127 +43,14 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 
     // draw mainActor
     drawActorCollisionDiagram(cr, &e->mainActor);
+    collisionDiagramDrawActorVelocity(c, cr, &e->mainActor);
 
     // draw other actors
     const objectActorList * oActorLs;
+	cairo_set_source_rgb (cr, 0, 1, 1);
     for (oActorLs = e->otherActorList; oActorLs; oActorLs = oActorLs->next)
     {
         drawActorCollisionDiagram(cr, oActorLs->val);
-    }
-
-    if (currentState == HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY)
-    {
-        jintVec lStart, lEnd;
-        switch(e->mainActor.type)
-        {
-            case OBJECT_ACTOR_TYPE_UNSET:
-            {
-                // do nothing
-                break;
-            }
-            case OBJECT_ACTOR_TYPE_POINT:
-            {
-                pointActor * pa = e->mainActor.ptr.pa;
-                pointActorGetPosition(
-                        pa, &lStart);
-                lEnd = jintVecAdd(lStart, pa->ca.vel.v);
-                break;
-            }
-            case OBJECT_ACTOR_TYPE_V_LINE:
-            case OBJECT_ACTOR_TYPE_H_LINE:
-            {
-                jintAxPlLine ln;
-                lineActor * la = e->mainActor.ptr.la;
-                lineActorGetLine(la, &ln);
-                int index = 0;
-                if (e->mainActor.type == OBJECT_ACTOR_TYPE_V_LINE)
-                    index = 1; 
-                lStart = ln.rStart;
-                lStart.v[index] += ln.length/2;
-                lEnd = jintVecAdd(lStart, la->ca.vel.v);
-                break;
-            }
-        }
-        drawVelocityVector(cr, c, &lStart, &lEnd);
-    }
-
-    if (currentState == HS_GAME_STATE_CHOOSE_OTHER_OBJECT)
-    {
-        jintVec lStart, lEnd;
-        switch(e->mainActor.type)
-        {
-            case OBJECT_ACTOR_TYPE_UNSET:
-            {
-                // do nothing
-                break;
-            }
-            case OBJECT_ACTOR_TYPE_POINT:
-            {
-                pointActor * pa = e->mainActor.ptr.pa;
-                pointActorGetPosition(
-                        pa, &lStart);
-
-                lEnd = jintVecAdd(lStart, pa->ca.vel.v);
-                break;
-            }
-            case OBJECT_ACTOR_TYPE_V_LINE:
-            case OBJECT_ACTOR_TYPE_H_LINE:
-            {
-                jintAxPlLine ln;
-                lineActor * la = e->mainActor.ptr.la;
-                lineActorGetLine(la, &ln);
-                int index = 0;
-                if (e->mainActor.type == OBJECT_ACTOR_TYPE_V_LINE)
-                    index = 1; 
-                lStart = ln.rStart;
-                lStart.v[index] += ln.length/2;
-                lEnd = jintVecAdd(lStart, la->ca.vel.v);
-                break;
-            }
-        }
-        drawVelocityVector(cr, c, &lStart, &lEnd);
-    }
-
-    if (currentState == HS_GAME_STATE_RUNNING)
-    {
-        // TODO draw (non moving) velocity vector
-        jintVec lStart, lEnd;
-        switch(e->mainActor.type)
-        {
-            case OBJECT_ACTOR_TYPE_UNSET:
-            {
-                // do nothing
-                break;
-            }
-            case OBJECT_ACTOR_TYPE_POINT:
-            {
-                pointActor * pa = e->mainActor.ptr.pa;
-                pointActorGetPositionAtFrame(
-                        pa, pa->ca.frameStart, &lStart);
-
-                lEnd = jintVecAdd(lStart, pa->ca.vel.v);
-                break;
-            }
-            case OBJECT_ACTOR_TYPE_V_LINE:
-            case OBJECT_ACTOR_TYPE_H_LINE:
-            {
-                jintAxPlLine ln;
-                lineActor * la = e->mainActor.ptr.la;
-                lineActorGetLineAtFrame(la, la->ca.frameStart, &ln);
-                int index = 0;
-                if (e->mainActor.type == OBJECT_ACTOR_TYPE_V_LINE)
-                    index = 1; 
-                lStart = ln.rStart;
-                lStart.v[index] += ln.length/2;
-                lEnd = jintVecAdd(lStart, la->ca.vel.v);
-                break;
-            }
-            default:
-            {
-                break;
-            }
-        }
-        drawVelocityVector(cr, c, &lStart, &lEnd);
     }
 
     // draw walls
@@ -339,6 +229,45 @@ static void drawActorCollisionDiagram(
             break;
         }
     }
+}
+
+static void collisionDiagramDrawActorVelocity(
+        collisionDiagramActor * this, cairo_t * cr,
+        const objectActor * oa)
+{
+    jintVec lStart, lEnd;
+    switch(oa->type)
+    {
+        case OBJECT_ACTOR_TYPE_UNSET:
+            {
+                // do nothing
+                break;
+            }
+        case OBJECT_ACTOR_TYPE_POINT:
+            {
+                pointActor * pa = oa->ptr.pa;
+                pointActorGetPositionAtFrame(
+                        pa, pa->ca.frameStart, &lStart);
+                lEnd = jintVecAdd(lStart, pa->ca.vel.v);
+                break;
+            }
+        case OBJECT_ACTOR_TYPE_V_LINE:
+        case OBJECT_ACTOR_TYPE_H_LINE:
+            {
+                jintAxPlLine ln;
+                lineActor * la = oa->ptr.la;
+                lineActorGetLineAtFrame(
+                        la, la->ca.frameStart, &ln);
+                int index = 0;
+                if (oa->type == OBJECT_ACTOR_TYPE_V_LINE)
+                    index = 1; 
+                lStart = ln.rStart;
+                lStart.v[index] += ln.length/2;
+                lEnd = jintVecAdd(lStart, la->ca.vel.v);
+                break;
+            }
+    }
+    drawVelocityVector(cr, this, &lStart, &lEnd);
 }
 
 void collisionDiagramRenderer(actor * a)
