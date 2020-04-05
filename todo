@@ -11,3 +11,6 @@
 * on frame of collision mark tick point red DONE
 * add vertical line DONE
 * enable adding of multiple vertical and horizontal lines
+* rename mainActor to objectActor
+* rename movingPointActor to pointActor
+* add other object point

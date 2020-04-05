@@ -14,28 +14,28 @@ typedef enum HS_GAME_STATE_TOKEN {
 juint pointObjectChosen(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddMainObjectPoint();
-    herdingSheepsEngineSwitchMainObject(stateMachine->context, MAIN_ACTOR_TYPE_POINT);
+    herdingSheepsEngineSwitchMainObject(stateMachine->context, OBJECT_ACTOR_TYPE_POINT);
     return HS_GAME_STATE_MAIN_OBJECT_POINT;
 }
 
 juint vLineObjectChosen(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddMainObjectVLine();
-    herdingSheepsEngineSwitchMainObject(stateMachine->context, MAIN_ACTOR_TYPE_V_LINE);
+    herdingSheepsEngineSwitchMainObject(stateMachine->context, OBJECT_ACTOR_TYPE_V_LINE);
     return HS_GAME_STATE_MAIN_OBJECT_V_LINE;
 }
 
 juint hLineObjectChosen(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddMainObjectHLine();
-    herdingSheepsEngineSwitchMainObject(stateMachine->context, MAIN_ACTOR_TYPE_H_LINE);
+    herdingSheepsEngineSwitchMainObject(stateMachine->context, OBJECT_ACTOR_TYPE_H_LINE);
     return HS_GAME_STATE_MAIN_OBJECT_H_LINE;
 }
 
 static juint otherPointObjectChosen(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddOtherObjectPoint();
-    herdingSheepsEnginePushOtherObject(stateMachine->context, MAIN_ACTOR_TYPE_POINT);
+    herdingSheepsEnginePushOtherObject(stateMachine->context, OBJECT_ACTOR_TYPE_POINT);
     return HS_GAME_STATE_CHOOSE_OTHER_OBJECT;
 }
 
@@ -54,7 +54,7 @@ static juint goToChooseDimensionsMainObject(SBStateMachine * stateMachine, juint
 juint returnToMainState(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddMainObject();
-    herdingSheepsEngineSwitchMainObject(stateMachine->context, MAIN_ACTOR_TYPE_UNSET);
+    herdingSheepsEngineSwitchMainObject(stateMachine->context, OBJECT_ACTOR_TYPE_UNSET);
     return HS_GAME_STATE_CHOOSE_MAIN_OBJECT;
 }
 
@@ -70,10 +70,10 @@ juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
                 herdingSheepsEngineGetMainObjectType(stateMachine->context));
         switch (herdingSheepsEngineGetMainObjectType(stateMachine->context))
         {
-            case MAIN_ACTOR_TYPE_V_LINE:
+            case OBJECT_ACTOR_TYPE_V_LINE:
                 setTextToAddMainObjectVLine();
                 return HS_GAME_STATE_MAIN_OBJECT_V_LINE;
-            case MAIN_ACTOR_TYPE_H_LINE:
+            case OBJECT_ACTOR_TYPE_H_LINE:
                 setTextToAddMainObjectHLine();
                 return HS_GAME_STATE_MAIN_OBJECT_H_LINE;
             default:
@@ -88,11 +88,11 @@ juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
 
     switch (herdingSheepsEngineGetMainObjectType(stateMachine->context))
     {
-        case MAIN_ACTOR_TYPE_POINT:
+        case OBJECT_ACTOR_TYPE_POINT:
             setTextToAddMainObjectPoint();
             return HS_GAME_STATE_MAIN_OBJECT_POINT;
-        case MAIN_ACTOR_TYPE_V_LINE:
-        case MAIN_ACTOR_TYPE_H_LINE:
+        case OBJECT_ACTOR_TYPE_V_LINE:
+        case OBJECT_ACTOR_TYPE_H_LINE:
             setTextToChooseDimensions();
             return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION;
         default:

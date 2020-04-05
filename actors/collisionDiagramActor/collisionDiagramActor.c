@@ -39,12 +39,12 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     // draw mainActor
     switch(e->mainActor.type)
     {
-        case MAIN_ACTOR_TYPE_UNSET:
+        case OBJECT_ACTOR_TYPE_UNSET:
         {
             // do nothing
             break;
         }
-        case MAIN_ACTOR_TYPE_POINT:
+        case OBJECT_ACTOR_TYPE_POINT:
         {
             jintVec r;
             movingPointActor * mpa = e->mainActor.ptr.pt;
@@ -53,7 +53,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             cairo_fill (cr);
             break;
         }
-        case MAIN_ACTOR_TYPE_V_LINE:
+        case OBJECT_ACTOR_TYPE_V_LINE:
         {
             jintAxPlLine ln;
             lineActor * la = e->mainActor.ptr.la;
@@ -63,7 +63,7 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
             cairo_stroke(cr);
             break;
         }
-        case MAIN_ACTOR_TYPE_H_LINE:
+        case OBJECT_ACTOR_TYPE_H_LINE:
         {
             jintAxPlLine ln;
             lineActor * la = e->mainActor.ptr.la;
@@ -80,12 +80,12 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         jintVec lStart, lEnd;
         switch(e->mainActor.type)
         {
-            case MAIN_ACTOR_TYPE_UNSET:
+            case OBJECT_ACTOR_TYPE_UNSET:
             {
                 // do nothing
                 break;
             }
-            case MAIN_ACTOR_TYPE_POINT:
+            case OBJECT_ACTOR_TYPE_POINT:
             {
                 movingPointActor * mpa = e->mainActor.ptr.pt;
                 movingPointActorGetPosition(
@@ -93,14 +93,14 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
                 lEnd = jintVecAdd(lStart, mpa->ca.vel.v);
                 break;
             }
-            case MAIN_ACTOR_TYPE_V_LINE:
-            case MAIN_ACTOR_TYPE_H_LINE:
+            case OBJECT_ACTOR_TYPE_V_LINE:
+            case OBJECT_ACTOR_TYPE_H_LINE:
             {
                 jintAxPlLine ln;
                 lineActor * la = e->mainActor.ptr.la;
                 lineActorGetLine(la, &ln);
                 int index = 0;
-                if (e->mainActor.type == MAIN_ACTOR_TYPE_V_LINE)
+                if (e->mainActor.type == OBJECT_ACTOR_TYPE_V_LINE)
                     index = 1; 
                 lStart = ln.rStart;
                 lStart.v[index] += ln.length/2;
@@ -116,12 +116,12 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         jintVec lStart, lEnd;
         switch(e->mainActor.type)
         {
-            case MAIN_ACTOR_TYPE_UNSET:
+            case OBJECT_ACTOR_TYPE_UNSET:
             {
                 // do nothing
                 break;
             }
-            case MAIN_ACTOR_TYPE_POINT:
+            case OBJECT_ACTOR_TYPE_POINT:
             {
                 movingPointActor * mpa = e->mainActor.ptr.pt;
                 movingPointActorGetPosition(
@@ -130,14 +130,14 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
                 lEnd = jintVecAdd(lStart, mpa->ca.vel.v);
                 break;
             }
-            case MAIN_ACTOR_TYPE_V_LINE:
-            case MAIN_ACTOR_TYPE_H_LINE:
+            case OBJECT_ACTOR_TYPE_V_LINE:
+            case OBJECT_ACTOR_TYPE_H_LINE:
             {
                 jintAxPlLine ln;
                 lineActor * la = e->mainActor.ptr.la;
                 lineActorGetLine(la, &ln);
                 int index = 0;
-                if (e->mainActor.type == MAIN_ACTOR_TYPE_V_LINE)
+                if (e->mainActor.type == OBJECT_ACTOR_TYPE_V_LINE)
                     index = 1; 
                 lStart = ln.rStart;
                 lStart.v[index] += ln.length/2;
@@ -154,12 +154,12 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         jintVec lStart, lEnd;
         switch(e->mainActor.type)
         {
-            case MAIN_ACTOR_TYPE_UNSET:
+            case OBJECT_ACTOR_TYPE_UNSET:
             {
                 // do nothing
                 break;
             }
-            case MAIN_ACTOR_TYPE_POINT:
+            case OBJECT_ACTOR_TYPE_POINT:
             {
                 movingPointActor * mpa = e->mainActor.ptr.pt;
                 movingPointActorGetPositionAtFrame(
@@ -168,14 +168,14 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
                 lEnd = jintVecAdd(lStart, mpa->ca.vel.v);
                 break;
             }
-            case MAIN_ACTOR_TYPE_V_LINE:
-            case MAIN_ACTOR_TYPE_H_LINE:
+            case OBJECT_ACTOR_TYPE_V_LINE:
+            case OBJECT_ACTOR_TYPE_H_LINE:
             {
                 jintAxPlLine ln;
                 lineActor * la = e->mainActor.ptr.la;
                 lineActorGetLineAtFrame(la, la->ca.frameStart, &ln);
                 int index = 0;
-                if (e->mainActor.type == MAIN_ACTOR_TYPE_V_LINE)
+                if (e->mainActor.type == OBJECT_ACTOR_TYPE_V_LINE)
                     index = 1; 
                 lStart = ln.rStart;
                 lStart.v[index] += ln.length/2;

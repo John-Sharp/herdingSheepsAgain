@@ -130,7 +130,7 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     }
 
     // setup main actor
-    eng->mainActor.type = MAIN_ACTOR_TYPE_UNSET;
+    eng->mainActor.type = OBJECT_ACTOR_TYPE_UNSET;
 
     // mouseCallbackBinding mouseBinding = {
     //     .type = SDL_MOUSEBUTTONDOWN,
@@ -162,17 +162,17 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     return eng;
 }
 
-static mainActor herdingSheepsEngineCreateMainActor(herdingSheepsEngine * this, MAIN_ACTOR_TYPE type)
+static objectActor herdingSheepsEngineCreateObjectActor(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type)
 {
     switch (type)
     {
-        case MAIN_ACTOR_TYPE_POINT:
+        case OBJECT_ACTOR_TYPE_POINT:
         {
             movingPointActor * mpa = createMovingPointActor(this->engine);
             assert(mpa);
-            return mpa->ma;
+            return mpa->oa;
         }
-        case MAIN_ACTOR_TYPE_H_LINE:
+        case OBJECT_ACTOR_TYPE_H_LINE:
         {
             lineActorParams params = {
                 .line = {
@@ -184,9 +184,9 @@ static mainActor herdingSheepsEngineCreateMainActor(herdingSheepsEngine * this, 
 
             lineActor * la = createLineActor(this->engine, &params);
             assert(la);
-            return la->ma;
+            return la->oa;
         }
-        case MAIN_ACTOR_TYPE_V_LINE:
+        case OBJECT_ACTOR_TYPE_V_LINE:
         {
             lineActorParams params = {
                 .line = {
@@ -198,24 +198,24 @@ static mainActor herdingSheepsEngineCreateMainActor(herdingSheepsEngine * this, 
 
             lineActor *la = createLineActor(this->engine, &params);
             assert(la);
-            return la->ma;
+            return la->oa;
         }
         default:
         {
-            mainActor ret = {.type=MAIN_ACTOR_TYPE_UNSET};
+            objectActor ret = {.type=OBJECT_ACTOR_TYPE_UNSET};
             return  ret;
         }
     }
-    mainActor ret = {.type=MAIN_ACTOR_TYPE_UNSET};
+    objectActor ret = {.type=OBJECT_ACTOR_TYPE_UNSET};
     return  ret;
 }
 
-void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_TYPE type)
+void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, OBJECT_ACTOR_TYPE type)
 {
     if (eng->mainActor.type == type)
     {
-        if (eng->mainActor.type == MAIN_ACTOR_TYPE_V_LINE ||
-                eng->mainActor.type == MAIN_ACTOR_TYPE_H_LINE)
+        if (eng->mainActor.type == OBJECT_ACTOR_TYPE_V_LINE ||
+                eng->mainActor.type == OBJECT_ACTOR_TYPE_H_LINE)
         {
             eng->mainActor.ptr.la->ca.shape.line.length = 30;
         }
@@ -223,34 +223,34 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_T
     }
     switch (eng->mainActor.type)
     {
-        case MAIN_ACTOR_TYPE_POINT:
+        case OBJECT_ACTOR_TYPE_POINT:
         {
             movingPointActorDeinit(eng->mainActor.ptr.pt);
             free(eng->mainActor.ptr.pt);
             break;
         }
-        case MAIN_ACTOR_TYPE_V_LINE:
-        case MAIN_ACTOR_TYPE_H_LINE:
+        case OBJECT_ACTOR_TYPE_V_LINE:
+        case OBJECT_ACTOR_TYPE_H_LINE:
         {
             lineActorDeinit(eng->mainActor.ptr.la);
             free(eng->mainActor.ptr.la);
             break;
         }
-        case MAIN_ACTOR_TYPE_UNSET:
+        case OBJECT_ACTOR_TYPE_UNSET:
         {
             break;
         }
     }
 
-    eng->mainActor = herdingSheepsEngineCreateMainActor(eng, type);
+    eng->mainActor = herdingSheepsEngineCreateObjectActor(eng, type);
 }
 
-MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng)
+OBJECT_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng)
 {
     return eng->mainActor.type;
 }
 
-void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, MAIN_ACTOR_TYPE type)
+void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type)
 {
 
 }

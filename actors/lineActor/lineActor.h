@@ -2,7 +2,7 @@
 #define LINE_ACTOR_H
 
 #include "../../engine/engine.h"
-#include "../mainActor/mainActor.h"
+#include "../objectActor/objectActor.h"
 #include <jTypes.h>
 #include <collDetect.h>
 
@@ -18,7 +18,7 @@ typedef struct lineActor {
     collActor ca;
     const jintAxPlLine * line;
 
-    mainActor ma;
+    objectActor oa;
 
     jintVec lineAnchorPoint;
 } lineActor;

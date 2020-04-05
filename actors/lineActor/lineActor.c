@@ -108,9 +108,9 @@ void lineActorInit(
     this->ca = ca;
     this->line = &this->ca.shape.line;
 
-    this->ma.type = params->line.direction == AX_PL_DIR_Y ? \
-                    MAIN_ACTOR_TYPE_V_LINE : MAIN_ACTOR_TYPE_H_LINE;
-    this->ma.ptr.la = this;
+    this->oa.type = params->line.direction == AX_PL_DIR_Y ? \
+                    OBJECT_ACTOR_TYPE_V_LINE : OBJECT_ACTOR_TYPE_H_LINE;
+    this->oa.ptr.la = this;
 
     engineActorReg(eng, &this->a);
 }

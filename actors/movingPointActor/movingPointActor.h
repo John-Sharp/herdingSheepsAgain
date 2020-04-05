@@ -5,7 +5,7 @@
 #include <jTypes.h>
 #include <collDetect.h>
 
-#include "../mainActor/mainActor.h"
+#include "../objectActor/objectActor.h"
 
 typedef struct movingPointActor {
     actor a;
@@ -14,7 +14,7 @@ typedef struct movingPointActor {
 
     collActor ca;
 
-    mainActor ma;
+    objectActor oa;
 } movingPointActor;
 
 movingPointActor * createMovingPointActor(engine * eng);

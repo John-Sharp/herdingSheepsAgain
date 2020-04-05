@@ -21,7 +21,7 @@ typedef struct herdingSheepsEngine {
     textBoxActor frameRateBar;
     textBoxActor infoBar;
 
-    struct mainActor mainActor;
+    objectActor mainActor;
 
     lineActorList * walls;
 
@@ -31,10 +31,10 @@ typedef struct herdingSheepsEngine {
 } herdingSheepsEngine;
 
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng);
-void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_TYPE type);
-MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng);
+void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, OBJECT_ACTOR_TYPE type);
+OBJECT_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng);
 
-void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, MAIN_ACTOR_TYPE type);
+void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type);
 
 typedef enum HS_GAME_STATE {
     HS_GAME_STATE_CHOOSE_MAIN_OBJECT,
