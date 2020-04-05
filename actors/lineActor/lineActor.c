@@ -130,3 +130,17 @@ void lineActorGetLine(
 
     ln->rStart = jintLineGetPosition(&l, (jint)this->a.eng->currentFrame - this->ca.frameStart);
 }
+
+void lineActorGetLineAtFrame(
+        const lineActor * this,
+        jint frame, 
+        jintAxPlLine * ln)
+{
+    *ln = this->ca.shape.line;
+    jintLine l = {
+        .rStart = this->ca.shape.line.rStart,
+        .sTarg = this->ca.vel,
+    };
+
+    ln->rStart = jintLineGetPosition(&l, frame - this->ca.frameStart);
+}

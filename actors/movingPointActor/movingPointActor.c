@@ -96,3 +96,12 @@ void movingPointActorGetPosition(movingPointActor * a, jintVec * r)
     };
     *r = jintLineGetPosition(&l, (jint)a->a.eng->currentFrame - a->ca.frameStart);
 }
+
+void movingPointActorGetPositionAtFrame(movingPointActor * this, jint frame, jintVec * r)
+{
+    jintLine l = {
+        .rStart = this->ca.shape.point,
+        .sTarg = this->ca.vel
+    };
+    *r = jintLineGetPosition(&l, frame - this->ca.frameStart);
+}

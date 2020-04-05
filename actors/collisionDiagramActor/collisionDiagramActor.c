@@ -148,6 +148,48 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
         drawVelocityVector(cr, c, &lStart, &lEnd);
     }
 
+    if (currentState == HS_GAME_STATE_RUNNING)
+    {
+        // TODO draw (non moving) velocity vector
+        jintVec lStart, lEnd;
+        switch(e->mainActor.type)
+        {
+            case MAIN_ACTOR_TYPE_UNSET:
+            {
+                // do nothing
+                break;
+            }
+            case MAIN_ACTOR_TYPE_POINT:
+            {
+                movingPointActor * mpa = e->mainActor.ptr.pt;
+                movingPointActorGetPositionAtFrame(
+                        mpa, mpa->ca.frameStart, &lStart);
+
+                lEnd = jintVecAdd(lStart, mpa->ca.vel.v);
+                break;
+            }
+            case MAIN_ACTOR_TYPE_V_LINE:
+            case MAIN_ACTOR_TYPE_H_LINE:
+            {
+                jintAxPlLine ln;
+                lineActor * la = e->mainActor.ptr.la;
+                lineActorGetLineAtFrame(la, la->ca.frameStart, &ln);
+                int index = 0;
+                if (e->mainActor.type == MAIN_ACTOR_TYPE_V_LINE)
+                    index = 1; 
+                lStart = ln.rStart;
+                lStart.v[index] += ln.length/2;
+                lEnd = jintVecAdd(lStart, la->ca.vel.v);
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        drawVelocityVector(cr, c, &lStart, &lEnd);
+    }
+
     // draw walls
     // {
     // wallActorList * wallActorNode = NULL;

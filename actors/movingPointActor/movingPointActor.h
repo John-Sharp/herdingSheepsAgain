@@ -19,5 +19,7 @@ movingPointActor * createMovingPointActor(engine * eng);
 void initMovingPointActor(engine * eng, movingPointActor * a);
 void movingPointActorDeinit(movingPointActor * a);
 void movingPointActorGetPosition(movingPointActor * a, jintVec * r);
+void movingPointActorGetPositionAtFrame(
+        movingPointActor * a, jint frame, jintVec * r);
 
 #endif

@@ -36,4 +36,8 @@ void lineActorGetLine(
         const lineActor * this,
         jintAxPlLine * ln);
 
+void lineActorGetLineAtFrame(
+        const lineActor * this,
+        jint frame, 
+        jintAxPlLine * ln);
 #endif
