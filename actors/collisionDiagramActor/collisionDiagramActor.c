@@ -52,63 +52,6 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     {
         drawActorCollisionDiagram(cr, oActorLs->val);
     }
-
-    // draw walls
-    // {
-    // wallActorList * wallActorNode = NULL;
-    // for (wallActorNode = e->walls; wallActorNode != NULL; wallActorNode = wallActorNode->next)
-    // {
-    //     wallActor * wall = wallActorNode->val;
-    //     cairo_set_source_rgb (cr, 1, 0, 1);
-    //     cairo_move_to(cr, wall->line->rStart.v[0], wall->line->rStart.v[1]);
-    //     if (wall->line->direction == AX_PL_DIR_Y)
-    //     {
-    //         cairo_rel_line_to (cr, 0, wall->line->length);
-    //     }
-    //     else
-    //     {
-    //         cairo_rel_line_to (cr, wall->line->length, 0);
-    //     }
-    //     cairo_stroke(cr);
-    // }
-    // }
-
-    //     // draw collision point(s)
-    //     {
-    //         wallActorList * wallActorNode = NULL;
-    //         for (wallActorNode = e->walls; wallActorNode != NULL; wallActorNode = wallActorNode->next)
-    //         {
-    //             wallActor * wall = wallActorNode->val;
-    //             if (e->engine->currentFrame < wall->ca.collFrame + e->bluePoint.frameStart)
-    //             {
-    //                 cairo_set_source_rgb (cr, 1, 0.6, 0);
-    //             }
-    //             else
-    //             {
-    //                 cairo_set_source_rgb (cr, 1, 0.0, 0);
-    //             }
-    //             jintVec collision_point = jintLineGetPosition(&bluePointVelLine, wall->ca.collFrame);
-    //             cairo_arc (cr, collision_point.v[0], (600-25) - collision_point.v[1], 3, 0, 2 * M_PI);
-    //             cairo_fill (cr);
-
-    //         }
-    //     }
-
-    //     if (e->bluePoint.ca.collFrame >= 0)
-    //     {
-    //         if (e->engine->currentFrame < e->bluePoint.ca.collFrame + e->bluePoint.frameStart)
-    //         {
-    //             cairo_set_source_rgb (cr, 1, 0.6, 0);
-    //         }
-    //         else
-    //         {
-    //             cairo_set_source_rgb (cr, 1, 0.0, 0);
-    //         }
-    //         jintVec collision_point = jintLineGetPosition(&bluePointVelLine, e->bluePoint.ca.collFrame);
-    //         cairo_arc (cr, collision_point.v[0], (600-25) - collision_point.v[1], 3, 0, 2 * M_PI);
-    //         cairo_fill (cr);
-    //     }
-    // }
 }
 
 static void drawVelocityVector(
