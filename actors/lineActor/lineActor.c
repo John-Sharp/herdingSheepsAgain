@@ -98,8 +98,6 @@ void lineActorInit(
     this->a.renderHandler = NULL;
     this->a.logicHandler = lineActorLogicHandler;
 
-    this->frameStart = 0;
-
     collActor ca = {
         .type = params->line.direction == AX_PL_DIR_Y ? COLL_ACTOR_TYPE_V_LINE : COLL_ACTOR_TYPE_H_LINE,
         .shape = {

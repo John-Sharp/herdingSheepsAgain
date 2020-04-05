@@ -18,7 +18,6 @@ typedef struct lineActor {
     const jintAxPlLine * line;
 
     jintVec lineAnchorPoint;
-    juint frameStart;
 } lineActor;
 
 lineActor * createLineActor(

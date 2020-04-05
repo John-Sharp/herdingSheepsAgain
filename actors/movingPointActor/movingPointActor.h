@@ -11,8 +11,6 @@ typedef struct movingPointActor {
     decal d;
 
     collActor ca;
-
-    juint frameStart;
 } movingPointActor;
 
 movingPointActor * createMovingPointActor(engine * eng);

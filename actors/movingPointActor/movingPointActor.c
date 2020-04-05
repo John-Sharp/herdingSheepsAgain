@@ -78,7 +78,6 @@ void initMovingPointActor(engine * eng, movingPointActor * a)
         }
     };
     a->ca = ca;
-    a->frameStart = 0;
 
     engineActorReg(eng, &a->a);
 }
