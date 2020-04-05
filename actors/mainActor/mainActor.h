@@ -1,8 +1,11 @@
 #ifndef MAIN_ACTOR_H
 #define MAIN_ACTOR_H
 
-#include "../movingPointActor/movingPointActor.h"
-#include "../lineActor/lineActor.h"
+// #include "../movingPointActor/movingPointActor.h"
+// #include "../lineActor/lineActor.h"
+
+typedef struct movingPointActor movingPointActor;
+typedef struct lineActor lineActor;
 
 typedef union mainActorPtr
 {

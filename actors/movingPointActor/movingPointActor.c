@@ -79,6 +79,9 @@ void initMovingPointActor(engine * eng, movingPointActor * a)
     };
     a->ca = ca;
 
+    a->ma.type = MAIN_ACTOR_TYPE_POINT;
+    a->ma.ptr.pt = a;
+
     engineActorReg(eng, &a->a);
 }
 

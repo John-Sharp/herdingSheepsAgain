@@ -5,12 +5,16 @@
 #include <jTypes.h>
 #include <collDetect.h>
 
+#include "../mainActor/mainActor.h"
+
 typedef struct movingPointActor {
     actor a;
     sprite s;
     decal d;
 
     collActor ca;
+
+    mainActor ma;
 } movingPointActor;
 
 movingPointActor * createMovingPointActor(engine * eng);

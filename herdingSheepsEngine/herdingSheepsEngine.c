@@ -162,6 +162,54 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
     return eng;
 }
 
+static mainActor herdingSheepsEngineCreateMainActor(herdingSheepsEngine * this, MAIN_ACTOR_TYPE type)
+{
+    switch (type)
+    {
+        case MAIN_ACTOR_TYPE_POINT:
+        {
+            movingPointActor * mpa = createMovingPointActor(this->engine);
+            assert(mpa);
+            return mpa->ma;
+        }
+        case MAIN_ACTOR_TYPE_H_LINE:
+        {
+            lineActorParams params = {
+                .line = {
+                    .direction = AX_PL_DIR_X,
+                    .rStart = {.v = {10, 10}},
+                    .length = 25
+                }
+            };
+
+            lineActor * la = createLineActor(this->engine, &params);
+            assert(la);
+            return la->ma;
+        }
+        case MAIN_ACTOR_TYPE_V_LINE:
+        {
+            lineActorParams params = {
+                .line = {
+                    .direction = AX_PL_DIR_Y,
+                    .rStart = {.v = {10, 10}},
+                    .length = 25
+                }
+            };
+
+            lineActor *la = createLineActor(this->engine, &params);
+            assert(la);
+            return la->ma;
+        }
+        default:
+        {
+            mainActor ret = {.type=MAIN_ACTOR_TYPE_UNSET};
+            return  ret;
+        }
+    }
+    mainActor ret = {.type=MAIN_ACTOR_TYPE_UNSET};
+    return  ret;
+}
+
 void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_TYPE type)
 {
     if (eng->mainActor.type == type)
@@ -194,54 +242,7 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, MAIN_ACTOR_T
         }
     }
 
-    eng->mainActor.type = type;
-    switch (type)
-    {
-        case MAIN_ACTOR_TYPE_POINT:
-        {
-            movingPointActor ** mpa = &eng->mainActor.ptr.pt;
-            *mpa = createMovingPointActor(eng->engine);
-            assert(*mpa);
-
-            break;
-        }
-        case MAIN_ACTOR_TYPE_H_LINE:
-        {
-            lineActorParams params = {
-                .line = {
-                    .direction = AX_PL_DIR_X,
-                    .rStart = {.v = {10, 10}},
-                    .length = 25
-                }
-            };
-
-            lineActor ** la = &eng->mainActor.ptr.la;
-            *la = createLineActor(eng->engine, &params);
-            assert(*la);
-
-            break;
-        }
-        case MAIN_ACTOR_TYPE_V_LINE:
-        {
-            lineActorParams params = {
-                .line = {
-                    .direction = AX_PL_DIR_Y,
-                    .rStart = {.v = {10, 10}},
-                    .length = 25
-                }
-            };
-
-            lineActor ** la = &eng->mainActor.ptr.la;
-            *la = createLineActor(eng->engine, &params);
-            assert(*la);
-
-            break;
-        }
-        default:
-        {
-            break;
-        }
-    }
+    eng->mainActor = herdingSheepsEngineCreateMainActor(eng, type);
 }
 
 MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng)

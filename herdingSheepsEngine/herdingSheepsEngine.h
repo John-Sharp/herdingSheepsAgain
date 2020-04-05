@@ -7,7 +7,8 @@
 
 #include "../actors/collisionDiagramActor/collisionDiagramActor.h"
 #include "../actors/textBoxActor/textBoxActor.h"
-#include "../actors/mainActor/mainActor.h"
+#include "../actors/movingPointActor/movingPointActor.h"
+#include "../actors/lineActor/lineActor.h"
 
 #include "listHeaders/lineActorList.h"
 
