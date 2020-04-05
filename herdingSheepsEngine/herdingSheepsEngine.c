@@ -248,3 +248,8 @@ MAIN_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng)
 {
     return eng->mainActor.type;
 }
+
+void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, MAIN_ACTOR_TYPE type)
+{
+
+}

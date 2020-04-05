@@ -24,5 +24,4 @@ typedef struct mainActor
     mainActorPtr ptr;
 } mainActor;
 
-
 #endif

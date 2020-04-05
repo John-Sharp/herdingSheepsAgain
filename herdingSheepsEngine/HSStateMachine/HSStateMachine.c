@@ -32,6 +32,13 @@ juint hLineObjectChosen(SBStateMachine * stateMachine, juint token)
     return HS_GAME_STATE_MAIN_OBJECT_H_LINE;
 }
 
+static juint otherPointObjectChosen(SBStateMachine * stateMachine, juint token)
+{
+    setTextToAddOtherObjectPoint();
+    herdingSheepsEnginePushOtherObject(stateMachine->context, MAIN_ACTOR_TYPE_POINT);
+    return HS_GAME_STATE_CHOOSE_OTHER_OBJECT;
+}
+
 juint goToChooseVelocityMainObject(SBStateMachine * stateMachine, juint token)
 {
     setTextToChooseVelocity();
@@ -250,7 +257,8 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret = SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_CHOOSE_OTHER_OBJECT, 2,
+            HS_GAME_STATE_CHOOSE_OTHER_OBJECT, 3,
+            HS_GAME_STATE_TOKEN_P, otherPointObjectChosen,
             HS_GAME_STATE_TOKEN_SPACE, goToRunning,
             HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
     if (ret != SB_STATE_MACHINE_OK)

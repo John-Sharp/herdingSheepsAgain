@@ -8,6 +8,7 @@ void setTextToAddMainObject();
 void setTextToAddMainObjectPoint();
 void setTextToAddMainObjectVLine();
 void setTextToAddMainObjectHLine();
+void setTextToAddOtherObjectPoint();
 void setTextToChooseVelocity();
 void setTextToChooseDimensions();
 void setTextToChooseOtherObject();
