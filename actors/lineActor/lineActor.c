@@ -29,6 +29,29 @@ static void lineActorSetPositionToMouseLocation(
     this->lineAnchorPoint = this->ca.shape.line.rStart;
 }
 
+static void lineActorSetDimensionToMouseLocation(
+        lineActor * this)
+{
+    jint mouseCoords[2];
+
+    SDL_GetMouseState(&mouseCoords[0], &mouseCoords[1]);
+    mouseCoords[1] = this->a.eng->h - mouseCoords[1];
+
+    jint coord = this->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
+
+    jint length = mouseCoords[coord] - this->lineAnchorPoint.v[coord];
+
+    if (length < 0)
+    {
+        this->ca.shape.line.rStart.v[coord] = mouseCoords[coord];
+        this->ca.shape.line.length = -length;
+    }
+    else
+    {
+        this->ca.shape.line.length = length;
+    }
+}
+
 static bool lineActorIsFocussedActor(
         const lineActor * this)
 {
@@ -71,26 +94,8 @@ void lineActorLogicHandler(actor * a)
         }
         case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION:
         {
-            jint mouseCoords[2];
-
-            SDL_GetMouseState(&mouseCoords[0], &mouseCoords[1]);
-            mouseCoords[1] = a->eng->h - mouseCoords[1];
-
-            jint coord = this->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
-
-            jint length = mouseCoords[coord] - this->lineAnchorPoint.v[coord];
-
-            if (length < 0)
-            {
-                this->ca.shape.line.rStart.v[coord] = mouseCoords[coord];
-                this->ca.shape.line.length = -length;
-            }
-            else
-            {
-                this->ca.shape.line.length = length;
-            }
             this->ca.frameStart = a->eng->currentFrame;
-
+            lineActorSetDimensionToMouseLocation(this);
             break;
         }
         case HS_GAME_STATE_MAIN_OBJECT_H_LINE:
@@ -110,6 +115,15 @@ void lineActorLogicHandler(actor * a)
             if (lineActorIsFocussedActor(this))
             {
                 lineActorSetPositionToMouseLocation(this);
+            }
+            break;
+        }
+        case HS_GAME_STATE_OTHER_OBJECT_CHOOSE_DIMENSION:
+        {
+            this->ca.frameStart = a->eng->currentFrame;
+            if (lineActorIsFocussedActor(this))
+            {
+                lineActorSetDimensionToMouseLocation(this);
             }
             break;
         }

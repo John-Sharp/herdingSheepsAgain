@@ -255,6 +255,14 @@ OBJECT_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng
     return eng->mainActor.type;
 }
 
+OBJECT_ACTOR_TYPE herdingSheepsEngineGetFocussedObjectType(
+        herdingSheepsEngine * eng)
+{
+    if (!eng->otherActorList)
+        return OBJECT_ACTOR_TYPE_UNSET;
+    return eng->otherActorList->val->type;
+}
+
 void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type)
 {
     objectActor * oa = malloc(sizeof(*oa));

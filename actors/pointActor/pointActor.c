@@ -73,6 +73,7 @@ void pointActorLogicHandler(actor * a)
             break;
         }
         case HS_GAME_STATE_CHOOSE_OTHER_OBJECT:
+        case HS_GAME_STATE_OTHER_OBJECT_CHOOSE_DIMENSION:
         {
             this->ca.frameStart = a->eng->currentFrame;
             break;

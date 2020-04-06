@@ -122,6 +122,30 @@ static juint goToChooseOtherObject(SBStateMachine * stateMachine, juint token)
     return HS_GAME_STATE_CHOOSE_OTHER_OBJECT;
 }
 
+static juint goToOtherObjectChooseDimensions(
+        SBStateMachine * stateMachine, juint token)
+{
+    setTextToChooseDimensions();
+    return HS_GAME_STATE_OTHER_OBJECT_CHOOSE_DIMENSION;
+}
+
+static juint otherObjectBeenPositioned(SBStateMachine * stateMachine, juint token)
+{
+    switch (herdingSheepsEngineGetFocussedObjectType(
+                stateMachine->context))
+    {
+        case OBJECT_ACTOR_TYPE_POINT:
+            return goToChooseOtherObject(stateMachine, token);
+        case OBJECT_ACTOR_TYPE_V_LINE:
+        case OBJECT_ACTOR_TYPE_H_LINE:
+            return goToOtherObjectChooseDimensions(
+                    stateMachine, token);
+        default:
+            break;
+    }
+    return HS_GAME_STATE_ERROR;
+}
+
 static juint goToRunning(SBStateMachine * stateMachine, juint token)
 {
     setTextToRunning();
@@ -286,6 +310,17 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
     ret = SBStateMachineAddState(
             stateMachine,
             HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED, 2,
+            HS_GAME_STATE_TOKEN_L_CLICK, otherObjectBeenPositioned,
+            HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
+    if (ret != SB_STATE_MACHINE_OK)
+    {
+        printf("Failure after attempting to set up main state machine\n\n");
+        exit(1);
+    }
+
+    ret = SBStateMachineAddState(
+            stateMachine,
+            HS_GAME_STATE_OTHER_OBJECT_CHOOSE_DIMENSION, 2,
             HS_GAME_STATE_TOKEN_L_CLICK, goToChooseOtherObject,
             HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
     if (ret != SB_STATE_MACHINE_OK)

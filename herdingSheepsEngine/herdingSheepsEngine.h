@@ -32,10 +32,13 @@ typedef struct herdingSheepsEngine {
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng);
 void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, OBJECT_ACTOR_TYPE type);
 OBJECT_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng);
+OBJECT_ACTOR_TYPE herdingSheepsEngineGetFocussedObjectType(
+        herdingSheepsEngine * eng);
 
 void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type);
 
 typedef enum HS_GAME_STATE {
+    HS_GAME_STATE_ERROR,
     HS_GAME_STATE_CHOOSE_MAIN_OBJECT,
     HS_GAME_STATE_MAIN_OBJECT_H_LINE,
     HS_GAME_STATE_MAIN_OBJECT_V_LINE,
@@ -43,6 +46,7 @@ typedef enum HS_GAME_STATE {
     HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY,
     HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION,
     HS_GAME_STATE_CHOOSE_OTHER_OBJECT,
+    HS_GAME_STATE_OTHER_OBJECT_CHOOSE_DIMENSION,
     HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED,
     HS_GAME_STATE_RUNNING
 } HS_GAME_STATE;

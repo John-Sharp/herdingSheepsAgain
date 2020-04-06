@@ -14,10 +14,11 @@
 * rename mainActor to objectActor DONE
 * rename movingPointActor to pointActor DONE
 * add other object point DONE
-* add other line objects
+* add other line objects DONE
 * implement return to previous state for other objects
 * reimplement space-bar pauses when running
 * re implement right cursor going forward, ctrl+right forward 10 
 * draw collision points
 * choose velocity for other objects
 * switch focus ability
+* add get mouse position function for game coordinates
