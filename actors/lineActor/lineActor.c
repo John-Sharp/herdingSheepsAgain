@@ -18,9 +18,36 @@ lineActor * createLineActor(
     return ret;
 }
 
+static void lineActorSetPositionToMouseLocation(
+        lineActor * this)
+{
+    int mouse_x, mouse_y;
+
+    SDL_GetMouseState(&mouse_x, &mouse_y);
+    this->ca.shape.line.rStart.v[0] = mouse_x;
+    this->ca.shape.line.rStart.v[1] = this->a.eng->h - mouse_y;
+    this->lineAnchorPoint = this->ca.shape.line.rStart;
+}
+
+static bool lineActorIsFocussedActor(
+        const lineActor * this)
+{
+    herdingSheepsEngine * hsEng = this->a.eng->owner;
+    objectActor * focussedActor = hsEng->otherActorList->val;
+
+    if (focussedActor->type != OBJECT_ACTOR_TYPE_V_LINE 
+            && focussedActor->type != OBJECT_ACTOR_TYPE_H_LINE)
+        return false;
+
+    if (focussedActor->ptr.la == this)
+        return true;
+
+    return false;
+}
+   
 void lineActorLogicHandler(actor * a)
 {
-    lineActor * la = a->owner;
+    lineActor * this = a->owner;
     herdingSheepsEngine * hsEng = a->eng->owner;
 
     HS_GAME_STATE currentState;
@@ -34,12 +61,12 @@ void lineActorLogicHandler(actor * a)
             SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
             lEnd.v[1] = a->eng->h - lEnd.v[1];
 
-            lStart = la->ca.shape.line.rStart;
-            jint coordIndex = la->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
-            lStart.v[coordIndex] += la->ca.shape.line.length/2;
-            la->ca.vel.v = jintVecSub(lEnd, lStart);
-            la->ca.vel.s = 80;
-            la->ca.frameStart = a->eng->currentFrame;
+            lStart = this->ca.shape.line.rStart;
+            jint coordIndex = this->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
+            lStart.v[coordIndex] += this->ca.shape.line.length/2;
+            this->ca.vel.v = jintVecSub(lEnd, lStart);
+            this->ca.vel.s = 80;
+            this->ca.frameStart = a->eng->currentFrame;
             break;
         }
         case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION:
@@ -49,37 +76,41 @@ void lineActorLogicHandler(actor * a)
             SDL_GetMouseState(&mouseCoords[0], &mouseCoords[1]);
             mouseCoords[1] = a->eng->h - mouseCoords[1];
 
-            jint coord = la->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
+            jint coord = this->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
 
-            jint length = mouseCoords[coord] - la->lineAnchorPoint.v[coord];
+            jint length = mouseCoords[coord] - this->lineAnchorPoint.v[coord];
 
             if (length < 0)
             {
-                la->ca.shape.line.rStart.v[coord] = mouseCoords[coord];
-                la->ca.shape.line.length = -length;
+                this->ca.shape.line.rStart.v[coord] = mouseCoords[coord];
+                this->ca.shape.line.length = -length;
             }
             else
             {
-                la->ca.shape.line.length = length;
+                this->ca.shape.line.length = length;
             }
-            la->ca.frameStart = a->eng->currentFrame;
+            this->ca.frameStart = a->eng->currentFrame;
 
             break;
         }
         case HS_GAME_STATE_MAIN_OBJECT_H_LINE:
         case HS_GAME_STATE_MAIN_OBJECT_V_LINE:
         {
-            int mouse_x, mouse_y;
-
-            SDL_GetMouseState(&mouse_x, &mouse_y);
-            la->ca.shape.line.rStart.v[0] = mouse_x;
-            la->ca.shape.line.rStart.v[1] = a->eng->h - mouse_y;
-            la->lineAnchorPoint = la->ca.shape.line.rStart;
+            lineActorSetPositionToMouseLocation(this);
             break;
         }
         case HS_GAME_STATE_CHOOSE_OTHER_OBJECT:
         {
-            la->ca.frameStart = a->eng->currentFrame;
+            this->ca.frameStart = a->eng->currentFrame;
+            break;
+        }
+        case HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED:
+        {
+            this->ca.frameStart = a->eng->currentFrame;
+            if (lineActorIsFocussedActor(this))
+            {
+                lineActorSetPositionToMouseLocation(this);
+            }
             break;
         }
         default:

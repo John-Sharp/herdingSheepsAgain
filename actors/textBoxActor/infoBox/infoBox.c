@@ -14,6 +14,10 @@ static const char * addMainObjectHLineText = "adding main horizontal line"
 " object, click to place";
 static const char * addOtherObjectPointText = "adding another point object, "
 "click to place";
+static const char * addOtherObjectVLineText = "adding another vertical line"
+" object, click to place";
+static const char * addOtherObjectHLineText = "adding another horizontal line"
+" object, click to place";
 static const char * chooseVelocityText = "click to choose velocity";
 static const char * chooseDimensionText = "click to choose dimension";
 static const char * runningText = "running, press <space> to pause";
@@ -54,6 +58,16 @@ void setTextToAddMainObjectHLine()
 void setTextToAddOtherObjectPoint()
 {
     setText(addOtherObjectPointText);
+}
+
+void setTextToAddOtherObjectVLine()
+{
+    setText(addOtherObjectVLineText);
+}
+
+void setTextToAddOtherObjectHLine()
+{
+    setText(addOtherObjectHLineText);
 }
 
 void setTextToChooseVelocity()
