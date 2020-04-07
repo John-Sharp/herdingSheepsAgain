@@ -36,6 +36,8 @@ OBJECT_ACTOR_TYPE herdingSheepsEngineGetFocussedObjectType(
         herdingSheepsEngine * eng);
 
 void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type);
+bool herdingSheepsEnginePopAndReleaseOtherObject(
+        herdingSheepsEngine * this);
 
 typedef enum HS_GAME_STATE {
     HS_GAME_STATE_ERROR,

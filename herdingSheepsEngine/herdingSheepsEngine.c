@@ -272,3 +272,37 @@ void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR
             this->otherActorList,
             oa);
 }
+
+bool herdingSheepsEnginePopAndReleaseOtherObject(
+        herdingSheepsEngine * this)
+{
+    if (!this->otherActorList)
+        return false;
+
+    objectActor * popped = this->otherActorList->val;
+    this->otherActorList = objectActorListRm(
+            this->otherActorList, popped, objectActorCmp, NULL);
+
+    switch (popped->type)
+    {
+        case OBJECT_ACTOR_TYPE_POINT:
+        {
+            pointActorDeinit(popped->ptr.pa);
+            free(popped->ptr.pa);
+            break;
+        }
+        case OBJECT_ACTOR_TYPE_V_LINE:
+        case OBJECT_ACTOR_TYPE_H_LINE:
+        {
+            lineActorDeinit(popped->ptr.la);
+            free(popped->ptr.la);
+            break;
+        }
+        case OBJECT_ACTOR_TYPE_UNSET:
+        {
+            break;
+        }
+    }
+    free(popped);
+    return true;
+}
