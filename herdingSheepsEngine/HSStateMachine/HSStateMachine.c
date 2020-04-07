@@ -295,7 +295,7 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret = SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_CHOOSE_OTHER_OBJECT, 3,
+            HS_GAME_STATE_CHOOSE_OTHER_OBJECT, 5,
             HS_GAME_STATE_TOKEN_P, otherPointObjectChosen,
             HS_GAME_STATE_TOKEN_V, otherVLineObjectChosen,
             HS_GAME_STATE_TOKEN_H, otherHLineObjectChosen,
