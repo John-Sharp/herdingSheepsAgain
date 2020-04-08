@@ -92,6 +92,13 @@ void pointActorLogicHandler(actor * a)
     }
 }
 
+void pointActorSetVelocity(
+        objectActor * oa, const jintVecScaled * v)
+{
+    pointActor * this = oa->ptr.pa;
+    this->ca.vel = *v;
+}
+
 void initPointActor(engine * eng, pointActor * this)
 {
     this->a.owner = this;
@@ -112,6 +119,7 @@ void initPointActor(engine * eng, pointActor * this)
 
     this->oa.type = OBJECT_ACTOR_TYPE_POINT;
     this->oa.ptr.pa = this;
+    this->oa.objectActorSetVelocity = pointActorSetVelocity;
 
     engineActorReg(eng, &this->a);
 }

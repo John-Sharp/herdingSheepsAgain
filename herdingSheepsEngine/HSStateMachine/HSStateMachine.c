@@ -145,6 +145,37 @@ static juint returnToPreviousStateFromOtherObjectBeingPositioned(
     return HS_GAME_STATE_CHOOSE_OTHER_OBJECT;
 }
 
+static juint returnToPreviousStateFromMainObjectChooseVelocity(
+        SBStateMachine * stateMachine)
+{
+
+    jintVecScaled v = {{{0,0}},80};
+    objectActorSetVelocity(
+            &((herdingSheepsEngine *)stateMachine->context)->mainActor,
+            &v);
+
+    switch (herdingSheepsEngineGetMainObjectType(
+                stateMachine->context))
+    {
+        case OBJECT_ACTOR_TYPE_POINT:
+        {
+            setTextToAddMainObjectPoint();
+            return HS_GAME_STATE_MAIN_OBJECT_POINT;
+        }
+        case OBJECT_ACTOR_TYPE_V_LINE:
+        case OBJECT_ACTOR_TYPE_H_LINE:
+        {
+            setTextToChooseDimensions();
+            return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    return HS_GAME_STATE_ERROR;
+}
+
 juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
 {
     HS_GAME_STATE currentState;
@@ -166,6 +197,11 @@ juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
             default:
                 break;
         }
+    }
+    else if (currentState == HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY)
+    {
+        return returnToPreviousStateFromMainObjectChooseVelocity(
+                stateMachine);
     }
     else if (currentState == HS_GAME_STATE_CHOOSE_OTHER_OBJECT)
     {

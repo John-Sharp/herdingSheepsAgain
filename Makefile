@@ -58,5 +58,8 @@ herdingSheepsEngineT: herdingSheepsEngine/herdingSheepsEngine.h herdingSheepsEng
 lineActor: actors/lineActor/lineActor.h actors/lineActor/lineActor.c
 	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/lineActor/lineActor.c $(CFLAGS) -c
 
-all: engine herdingSheepsEngineT textBoxActor frameRateBar infoBox collisionDiagramActor pointActor lineActor collDetectT studiousBroccoliT hsStateMachine main.c 
-	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o textBoxActor.o frameRateBar.o infoBox.o collisionDiagramActor.o pointActor.o lineActor.o collDetect.o studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps
+objectActor: actors/objectActor/objectActor.h actors/objectActor/objectActor.c
+	$(CC) -IjTypes actors/objectActor/objectActor.c $(CFLAGS) -c
+
+all: engine herdingSheepsEngineT textBoxActor frameRateBar infoBox collisionDiagramActor pointActor lineActor objectActor collDetectT studiousBroccoliT hsStateMachine main.c 
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o textBoxActor.o frameRateBar.o infoBox.o collisionDiagramActor.o pointActor.o lineActor.o objectActor.o collDetect.o studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps

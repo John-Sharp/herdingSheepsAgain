@@ -132,6 +132,13 @@ void lineActorLogicHandler(actor * a)
     }
 }
 
+void lineActorSetVelocity(
+        objectActor * oa, const jintVecScaled * v)
+{
+    lineActor * this = oa->ptr.la;
+    this->ca.vel = *v;
+}
+
 void lineActorInit(
         lineActor * this,
         engine * eng,
@@ -154,6 +161,7 @@ void lineActorInit(
     this->oa.type = params->line.direction == AX_PL_DIR_Y ? \
                     OBJECT_ACTOR_TYPE_V_LINE : OBJECT_ACTOR_TYPE_H_LINE;
     this->oa.ptr.la = this;
+    this->oa.objectActorSetVelocity = lineActorSetVelocity;
 
     engineActorReg(eng, &this->a);
 }
