@@ -15,5 +15,6 @@ void setTextToChooseVelocity();
 void setTextToChooseDimensions();
 void setTextToChooseOtherObject();
 void setTextToRunning();
+void setTextToPaused();
 #endif
 

@@ -268,7 +268,17 @@ static juint otherObjectBeenPositioned(SBStateMachine * stateMachine, juint toke
 static juint goToRunning(SBStateMachine * stateMachine, juint token)
 {
     setTextToRunning();
+    engineUnpause(
+            ((herdingSheepsEngine *)stateMachine->context)->engine);
     return HS_GAME_STATE_RUNNING;
+}
+
+static juint goToPaused(SBStateMachine * stateMachine, juint token)
+{
+    setTextToPaused();
+    enginePause(
+            ((herdingSheepsEngine *)stateMachine->context)->engine);
+    return HS_GAME_STATE_PAUSED;
 }
 
 void HSStateMachineProcessInput(SBStateMachine * stateMachine)
@@ -450,13 +460,25 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret = SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_RUNNING, 1,
+            HS_GAME_STATE_RUNNING, 2,
+            HS_GAME_STATE_TOKEN_SPACE, goToPaused,
             HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
     if (ret != SB_STATE_MACHINE_OK)
     {
         printf("Failure after attempting to set up main state machine\n\n");
         exit(1);
     }
+
+    ret = SBStateMachineAddState(
+            stateMachine,
+            HS_GAME_STATE_PAUSED, 1,
+            HS_GAME_STATE_TOKEN_SPACE, goToRunning);
+    if (ret != SB_STATE_MACHINE_OK)
+    {
+        printf("Failure after attempting to set up main state machine\n\n");
+        exit(1);
+    }
+
 
     SBStateMachineSetCurrentState(stateMachine, HS_GAME_STATE_CHOOSE_MAIN_OBJECT);
     return stateMachine;
