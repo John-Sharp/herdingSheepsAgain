@@ -18,7 +18,7 @@
 * implement return to previous state for other objects DONE
 * fix bug when return to previous state from choosing velocity DONE
 * reimplement space-bar pauses when running DONE
-* re implement right cursor going forward, ctrl+right forward 10 
+* re implement right cursor going forward, ctrl+right forward 10 DONE
 * draw collision points
 * choose velocity for other objects
 * switch focus ability

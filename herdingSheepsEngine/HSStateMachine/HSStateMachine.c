@@ -7,7 +7,9 @@ typedef enum HS_GAME_STATE_TOKEN {
     HS_GAME_STATE_TOKEN_H,
     HS_GAME_STATE_TOKEN_L_CLICK,
     HS_GAME_STATE_TOKEN_ESC,
-    HS_GAME_STATE_TOKEN_SPACE
+    HS_GAME_STATE_TOKEN_SPACE,
+    HS_GAME_STATE_TOKEN_RIGHT,
+    HS_GAME_STATE_TOKEN_RIGHT_MODIFIED
 } HS_GAME_STATE_TOKEN;
 
 
@@ -281,6 +283,26 @@ static juint goToPaused(SBStateMachine * stateMachine, juint token)
     return HS_GAME_STATE_PAUSED;
 }
 
+static juint skipForward(SBStateMachine * stateMachine, juint token)
+{
+    HS_GAME_STATE currentState;
+    SBStateMachineGetCurrentState(stateMachine, &currentState);
+
+    engineAdvanceFrames(
+        ((herdingSheepsEngine *)stateMachine->context)->engine, 1);
+    return currentState;
+}
+
+static juint skipForward10(SBStateMachine * stateMachine, juint token)
+{
+    HS_GAME_STATE currentState;
+    SBStateMachineGetCurrentState(stateMachine, &currentState);
+
+    engineAdvanceFrames(
+        ((herdingSheepsEngine *)stateMachine->context)->engine, 10);
+    return currentState;
+}
+
 void HSStateMachineProcessInput(SBStateMachine * stateMachine)
 {
     if (isStateActive(KEYPRESS_STATE_P))
@@ -305,9 +327,26 @@ void HSStateMachineProcessInput(SBStateMachine * stateMachine)
     }
     else if (isStateActive(KEYPRESS_STATE_SPACE))
     {
-        SBStateMachineProcessInput(stateMachine, HS_GAME_STATE_TOKEN_SPACE, NULL);
+        SBStateMachineProcessInput(
+                stateMachine, HS_GAME_STATE_TOKEN_SPACE, NULL);
         deactivateState(KEYPRESS_STATE_SPACE);
     }
+    else if (isStateActive(KEYPRESS_STATE_RIGHT))
+    {
+        if (isStateActive(KEYPRESS_STATE_CTRL))
+        {
+            SBStateMachineProcessInput(
+                    stateMachine,
+                    HS_GAME_STATE_TOKEN_RIGHT_MODIFIED, NULL);
+        }
+        else
+        {
+            SBStateMachineProcessInput(
+                    stateMachine, HS_GAME_STATE_TOKEN_RIGHT, NULL);
+        }
+        deactivateState(KEYPRESS_STATE_RIGHT);
+    }
+    
 }
 
 void HSStateMachineMouseCB(jint x, jint y, void * owner)
@@ -347,8 +386,17 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
     ksb.t = BINDING_ONE_TIME;
     addBinding(&ksb);
 
-    SBStateMachine * stateMachine = createSBStateMachine(eng);
+    ksb.k = SDLK_RIGHT;
+    ksb.s = KEYPRESS_STATE_RIGHT;
+    ksb.t = BINDING_ONE_TIME;
+    addBinding(&ksb);
 
+    ksb.k = SDLK_LCTRL;
+    ksb.s = KEYPRESS_STATE_CTRL;
+    ksb.t = BINDING_CONTINUOUS;
+    addBinding(&ksb);
+
+    SBStateMachine * stateMachine = createSBStateMachine(eng);
     mouseCallbackBinding mcb;
     mcb.type = SDL_MOUSEBUTTONDOWN;
     mcb.button = SDL_BUTTON_LEFT;
@@ -471,8 +519,10 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret = SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_PAUSED, 1,
-            HS_GAME_STATE_TOKEN_SPACE, goToRunning);
+            HS_GAME_STATE_PAUSED, 3,
+            HS_GAME_STATE_TOKEN_SPACE, goToRunning,
+            HS_GAME_STATE_TOKEN_RIGHT, skipForward,
+            HS_GAME_STATE_TOKEN_RIGHT_MODIFIED, skipForward10);
     if (ret != SB_STATE_MACHINE_OK)
     {
         printf("Failure after attempting to set up main state machine\n\n");

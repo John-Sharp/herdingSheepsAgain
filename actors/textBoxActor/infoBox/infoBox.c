@@ -22,8 +22,7 @@ static const char * chooseVelocityText = "click to choose velocity";
 static const char * chooseDimensionText = "click to choose dimension";
 static const char * runningText = "running, press <space> to pause";
 static const char * pausedText = "paused, press <space> to continue, "
-"<right>/<left> to skip forward/backward a frame, <ctrl>+<right>/<left> "
-"for 10 frames";
+"<right> to skip forward a frame, <ctrl>+<right> for 10 frames";
 
 static const char * contentText = addMainObjectText;
 static bool needsRefresh = true;
