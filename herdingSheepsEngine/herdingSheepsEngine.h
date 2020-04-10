@@ -11,6 +11,7 @@
 #include "../actors/lineActor/lineActor.h"
 
 #include "listHeaders/objectActorList.h"
+#include "listHeaders/jintList.h"
 
 #include <studiousBroccoli.h>
 
@@ -23,6 +24,7 @@ typedef struct herdingSheepsEngine {
 
     objectActor mainActor;
     objectActorList * otherActorList;
+    jintList * collFrameList;
 
     jintRect mainWindow;
 
@@ -32,6 +34,8 @@ typedef struct herdingSheepsEngine {
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng);
 void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, OBJECT_ACTOR_TYPE type);
 OBJECT_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng);
+void herdingSheepsEngineCalculateMainObjectCollisionPoints(herdingSheepsEngine * this);
+
 OBJECT_ACTOR_TYPE herdingSheepsEngineGetFocussedObjectType(
         herdingSheepsEngine * eng);
 

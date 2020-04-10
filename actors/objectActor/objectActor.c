@@ -5,3 +5,9 @@ void objectActorSetVelocity(
 {
     this->objectActorSetVelocity(this, v);
 }
+
+collActor * objectActorGetCollActor(
+        const objectActor * this)
+{
+    return this->objectActorGetCollActor(this);
+}

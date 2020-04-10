@@ -16,6 +16,8 @@ static void drawActorCollisionDiagram(
 static void collisionDiagramDrawActorVelocity(
         collisionDiagramActor * this, cairo_t * cr,
         const objectActor * oa);
+static void collisionDiagramDrawCollisionPoints(
+        collisionDiagramActor * this, cairo_t * cr);
 
 void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 {
@@ -51,6 +53,66 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     for (oActorLs = e->otherActorList; oActorLs; oActorLs = oActorLs->next)
     {
         drawActorCollisionDiagram(cr, oActorLs->val);
+    }
+
+    // draw collision points
+    collisionDiagramDrawCollisionPoints(c, cr);
+}
+
+static void drawCollisionPoint(cairo_t * cr, objectActor * actor, jint frame);
+
+static void collisionDiagramDrawCollisionPoints(
+        collisionDiagramActor * this, cairo_t * cr)
+{
+    herdingSheepsEngine * hEng = this->a.eng->owner;
+    objectActor * mainActor = &hEng->mainActor;
+    jintList * collFrameNode;
+    for (collFrameNode = hEng->collFrameList; collFrameNode != NULL; collFrameNode = collFrameNode->next)
+    {
+        drawCollisionPoint(cr, mainActor, *collFrameNode->val);
+    }
+}
+
+static void drawCollisionPoint(cairo_t * cr, objectActor * actor, jint frame)
+{
+	cairo_set_source_rgb (cr, 1, 0.5, 0);
+    switch(actor->type)
+    {
+        case OBJECT_ACTOR_TYPE_UNSET:
+        {
+            // do nothing
+            break;
+        }
+        case OBJECT_ACTOR_TYPE_POINT:
+        {
+            jintVec r;
+            pointActor * pa = actor->ptr.pa;
+            pointActorGetPositionAtFrame(pa, frame, &r);
+            cairo_arc (cr, r.v[0], r.v[1], 5, 0, 2 * M_PI);
+            cairo_fill (cr);
+            break;
+        }
+        case OBJECT_ACTOR_TYPE_V_LINE:
+        case OBJECT_ACTOR_TYPE_H_LINE:
+        {
+            jint axis = 0;
+            if (actor->type == OBJECT_ACTOR_TYPE_V_LINE)
+            {
+                axis = 1;
+            }
+
+            jintAxPlLine ln;
+            lineActor * la = actor->ptr.la;
+            lineActorGetLineAtFrame(la, frame, &ln);
+            cairo_move_to(cr, ln.rStart.v[0], ln.rStart.v[1]);
+            jint lt[2] = {0, 0};
+            lt[axis] = ln.length;
+            cairo_rel_line_to(cr, lt[0], lt[1]);
+            cairo_stroke(cr);
+            break;
+        }
+        default:
+            break;
     }
 }
 
@@ -190,7 +252,7 @@ static void collisionDiagramDrawActorVelocity(
             {
                 pointActor * pa = oa->ptr.pa;
                 pointActorGetPositionAtFrame(
-                        pa, pa->ca.frameStart, &lStart);
+                        pa, 0, &lStart);
                 lEnd = jintVecAdd(lStart, pa->ca.vel.v);
                 break;
             }
@@ -200,7 +262,7 @@ static void collisionDiagramDrawActorVelocity(
                 jintAxPlLine ln;
                 lineActor * la = oa->ptr.la;
                 lineActorGetLineAtFrame(
-                        la, la->ca.frameStart, &ln);
+                        la, 0, &ln);
                 int index = 0;
                 if (oa->type == OBJECT_ACTOR_TYPE_V_LINE)
                     index = 1; 

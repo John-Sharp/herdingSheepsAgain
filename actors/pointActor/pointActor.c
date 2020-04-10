@@ -99,6 +99,14 @@ void pointActorSetVelocity(
     this->ca.vel = *v;
 }
 
+collActor * pointActorGetCollActor(
+        const objectActor * oa)
+{
+    pointActor * this = oa->ptr.pa;
+
+    return &this->ca;
+}
+
 void initPointActor(engine * eng, pointActor * this)
 {
     this->a.owner = this;
@@ -120,6 +128,7 @@ void initPointActor(engine * eng, pointActor * this)
     this->oa.type = OBJECT_ACTOR_TYPE_POINT;
     this->oa.ptr.pa = this;
     this->oa.objectActorSetVelocity = pointActorSetVelocity;
+    this->oa.objectActorGetCollActor = pointActorGetCollActor;
 
     engineActorReg(eng, &this->a);
 }
@@ -144,5 +153,5 @@ void pointActorGetPositionAtFrame(pointActor * this, jint frame, jintVec * r)
         .rStart = this->ca.shape.point,
         .sTarg = this->ca.vel
     };
-    *r = jintLineGetPosition(&l, frame - this->ca.frameStart);
+    *r = jintLineGetPosition(&l, frame);
 }

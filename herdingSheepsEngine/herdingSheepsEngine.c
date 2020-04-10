@@ -5,6 +5,7 @@
 #include <assert.h>
 
 #include "listCode/objectActorList.inc"
+#include "listCode/jintList.inc"
 
 typedef enum STARTUP_CLICK_STATE {
     STARTUP_CLICK_STATE_POSITION_SELECT,
@@ -65,6 +66,9 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 
     // setup other actor list
     eng->otherActorList = NULL;
+
+    // setup coll frame list
+    eng->collFrameList = NULL;
 
     eng->mainStateMachine = createHSStateMachine(eng);
 
@@ -157,6 +161,28 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, OBJECT_ACTOR
 OBJECT_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng)
 {
     return eng->mainActor.type;
+}
+
+void herdingSheepsEngineCalculateMainObjectCollisionPoints(herdingSheepsEngine * this)
+{
+    collActor * mainCollActor = objectActorGetCollActor(&this->mainActor);
+    objectActorList * listNode;
+    for (listNode = this->otherActorList; listNode != NULL; listNode = listNode->next)
+    {
+        collActor * otherCollActor = objectActorGetCollActor(listNode->val);
+        jint collFrame;
+        if (calculateNextCollisionFrame(
+                    &collFrame,
+                    &mainCollActor->vel,
+                    mainCollActor, otherCollActor) == COLL_FRAME_CALC_OK)
+        {
+            jint * collFrameStorage = malloc(sizeof(*collFrameStorage));
+            *collFrameStorage = collFrame;
+            this->collFrameList = jintListAdd(
+                this->collFrameList,
+                collFrameStorage);
+        }
+    }
 }
 
 OBJECT_ACTOR_TYPE herdingSheepsEngineGetFocussedObjectType(

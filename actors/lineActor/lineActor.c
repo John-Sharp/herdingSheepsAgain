@@ -139,6 +139,14 @@ void lineActorSetVelocity(
     this->ca.vel = *v;
 }
 
+collActor * lineActorGetCollActor(
+        const objectActor * oa)
+{
+    lineActor * this = oa->ptr.la;
+
+    return &this->ca;
+}
+
 void lineActorInit(
         lineActor * this,
         engine * eng,
@@ -162,6 +170,7 @@ void lineActorInit(
                     OBJECT_ACTOR_TYPE_V_LINE : OBJECT_ACTOR_TYPE_H_LINE;
     this->oa.ptr.la = this;
     this->oa.objectActorSetVelocity = lineActorSetVelocity;
+    this->oa.objectActorGetCollActor = lineActorGetCollActor;
 
     engineActorReg(eng, &this->a);
 }
@@ -195,5 +204,5 @@ void lineActorGetLineAtFrame(
         .sTarg = this->ca.vel,
     };
 
-    ln->rStart = jintLineGetPosition(&l, frame - this->ca.frameStart);
+    ln->rStart = jintLineGetPosition(&l, frame);
 }

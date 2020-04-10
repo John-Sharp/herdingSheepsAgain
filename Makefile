@@ -40,7 +40,7 @@ collDetectT: collDetect/collDetect.h collDetect/collDetect.c
 	$(CC) -IjTypes collDetect/collDetect.c $(CFLAGS) -c
 
 generateHerdingSheepsEngineListCode: dataStructures/templates/listTemplate.h dataStructures/templates/listTemplate.inc
-	dataStructures/generateList.py herdingSheepsEngine/listHeaders herdingSheepsEngine/listCode objectActor:objectActor
+	dataStructures/generateList.py herdingSheepsEngine/listHeaders herdingSheepsEngine/listCode objectActor:objectActor jint:jint
 
 pointActor: actors/pointActor/pointActor.h actors/pointActor/pointActor.c
 	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/pointActor/pointActor.c $(CFLAGS) -c

@@ -275,6 +275,13 @@ static juint goToRunning(SBStateMachine * stateMachine, juint token)
     return HS_GAME_STATE_RUNNING;
 }
 
+static juint goToRunningInitial(SBStateMachine * stateMachine, juint token)
+{
+    herdingSheepsEngineCalculateMainObjectCollisionPoints(
+            stateMachine->context);
+    return goToRunning(stateMachine, token);
+}
+
 static juint goToPaused(SBStateMachine * stateMachine, juint token)
 {
     setTextToPaused();
@@ -476,7 +483,7 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
             HS_GAME_STATE_TOKEN_P, otherPointObjectChosen,
             HS_GAME_STATE_TOKEN_V, otherVLineObjectChosen,
             HS_GAME_STATE_TOKEN_H, otherHLineObjectChosen,
-            HS_GAME_STATE_TOKEN_SPACE, goToRunning,
+            HS_GAME_STATE_TOKEN_SPACE, goToRunningInitial,
             HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
     if (ret != SB_STATE_MACHINE_OK)
     {
