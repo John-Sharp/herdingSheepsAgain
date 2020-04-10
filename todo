@@ -20,7 +20,7 @@
 * reimplement space-bar pauses when running DONE
 * re implement right cursor going forward, ctrl+right forward 10 DONE
 * draw collision points DONE
-* fix that collsions aren't detected between line and point
+* fix that collsions aren't detected between line and point DONE
 * choose velocity for other objects
 * switch focus ability
 * add get mouse position function for game coordinates

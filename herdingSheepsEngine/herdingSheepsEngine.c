@@ -173,7 +173,6 @@ void herdingSheepsEngineCalculateMainObjectCollisionPoints(herdingSheepsEngine *
         jint collFrame;
         if (calculateNextCollisionFrame(
                     &collFrame,
-                    &mainCollActor->vel,
                     mainCollActor, otherCollActor) == COLL_FRAME_CALC_OK)
         {
             jint * collFrameStorage = malloc(sizeof(*collFrameStorage));
