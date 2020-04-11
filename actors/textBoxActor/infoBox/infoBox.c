@@ -1,10 +1,10 @@
 #include "infoBox.h"
 
 static const char * const addMainObjectText = "press key and choose object,"
-" 'p' : point, 'v' : vertical line, 'h' : horizontal line";
+" 'p' : point, 'v' : vertical line, 'h' : horizontal line, 'r' : rectangle";
 static const char * const chooseOtherObjectText = "press key and choose "
 "another object, 'p' : point, 'v' : vertical line, 'h' : "
-"horizontal line, '<space>' : run";
+"horizontal line, 'r' : rectangle '<space>' : run";
 
 static const char * addMainObjectPointText = "adding main point object, "
 "click to place";
@@ -12,11 +12,15 @@ static const char * addMainObjectVLineText = "adding main vertical line"
 " object, click to place";
 static const char * addMainObjectHLineText = "adding main horizontal line"
 " object, click to place";
+static const char * addMainObjectRectText = "adding rectangle"
+" object, click to place";
 static const char * addOtherObjectPointText = "adding another point object, "
 "click to place";
 static const char * addOtherObjectVLineText = "adding another vertical line"
 " object, click to place";
 static const char * addOtherObjectHLineText = "adding another horizontal line"
+" object, click to place";
+static const char * addOtherObjectRectText = "adding another rectangle"
 " object, click to place";
 static const char * chooseVelocityText = "click to choose velocity";
 static const char * chooseDimensionText = "click to choose dimension";
@@ -57,6 +61,11 @@ void setTextToAddMainObjectHLine()
     setText(addMainObjectHLineText);
 }
 
+void setTextToAddMainObjectRect()
+{
+    setText(addMainObjectRectText);
+}
+
 void setTextToAddOtherObjectPoint()
 {
     setText(addOtherObjectPointText);
@@ -70,6 +79,11 @@ void setTextToAddOtherObjectVLine()
 void setTextToAddOtherObjectHLine()
 {
     setText(addOtherObjectHLineText);
+}
+
+void setTextToAddOtherObjectRect()
+{
+    setText(addOtherObjectRectText);
 }
 
 void setTextToChooseVelocity()

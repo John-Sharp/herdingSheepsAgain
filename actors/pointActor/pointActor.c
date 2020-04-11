@@ -107,6 +107,7 @@ collActor * pointActorGetCollActor(
     return &this->ca;
 }
 
+static void pointActorResetAppearence(objectActor * oa){}
 void initPointActor(engine * eng, pointActor * this)
 {
     this->a.owner = this;
@@ -129,6 +130,7 @@ void initPointActor(engine * eng, pointActor * this)
     this->oa.ptr.pa = this;
     this->oa.objectActorSetVelocity = pointActorSetVelocity;
     this->oa.objectActorGetCollActor = pointActorGetCollActor;
+    this->oa.objectActorResetAppearence = pointActorResetAppearence;
 
     engineActorReg(eng, &this->a);
 }

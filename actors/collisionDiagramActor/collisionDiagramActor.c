@@ -111,8 +111,16 @@ static void drawCollisionPoint(cairo_t * cr, objectActor * actor, jint frame)
             cairo_stroke(cr);
             break;
         }
-        default:
+        case OBJECT_ACTOR_TYPE_RECT:
+        {
+            jintRect rect;
+            rectActor * ra = actor->ptr.ra;
+            rectActorGetRectAtFrame(ra, frame, &rect);
+            cairo_rectangle(cr, rect.bl.v[0], rect.bl.v[1], 
+                    jintRectGetWidth(&rect), jintRectGetHeight(&rect));
+            cairo_stroke(cr);
             break;
+        }
     }
 }
 
@@ -233,6 +241,16 @@ static void drawActorCollisionDiagram(
             cairo_stroke(cr);
             break;
         }
+        case OBJECT_ACTOR_TYPE_RECT:
+        {
+            jintRect rect;
+            rectActor * ra = oActor->ptr.ra;
+            rectActorGetRect(ra, &rect);
+            cairo_rectangle(cr, rect.bl.v[0], rect.bl.v[1], 
+                    jintRectGetWidth(&rect), jintRectGetHeight(&rect));
+            cairo_stroke(cr);
+            break;
+        }
     }
 }
 
@@ -244,33 +262,45 @@ static void collisionDiagramDrawActorVelocity(
     switch(oa->type)
     {
         case OBJECT_ACTOR_TYPE_UNSET:
-            {
-                // do nothing
-                break;
-            }
+        {
+            // do nothing
+            break;
+        }
         case OBJECT_ACTOR_TYPE_POINT:
-            {
-                pointActor * pa = oa->ptr.pa;
-                pointActorGetPositionAtFrame(
-                        pa, 0, &lStart);
-                lEnd = jintVecAdd(lStart, pa->ca.vel.v);
-                break;
-            }
+        {
+            pointActor * pa = oa->ptr.pa;
+            pointActorGetPositionAtFrame(
+                    pa, 0, &lStart);
+            lEnd = jintVecAdd(lStart, pa->ca.vel.v);
+            break;
+        }
         case OBJECT_ACTOR_TYPE_V_LINE:
         case OBJECT_ACTOR_TYPE_H_LINE:
-            {
-                jintAxPlLine ln;
-                lineActor * la = oa->ptr.la;
-                lineActorGetLineAtFrame(
-                        la, 0, &ln);
-                int index = 0;
-                if (oa->type == OBJECT_ACTOR_TYPE_V_LINE)
-                    index = 1; 
-                lStart = ln.rStart;
-                lStart.v[index] += ln.length/2;
-                lEnd = jintVecAdd(lStart, la->ca.vel.v);
-                break;
-            }
+        {
+            jintAxPlLine ln;
+            lineActor * la = oa->ptr.la;
+            lineActorGetLineAtFrame(
+                    la, 0, &ln);
+            int index = 0;
+            if (oa->type == OBJECT_ACTOR_TYPE_V_LINE)
+                index = 1; 
+            lStart = ln.rStart;
+            lStart.v[index] += ln.length/2;
+            lEnd = jintVecAdd(lStart, la->ca.vel.v);
+            break;
+        }
+        case OBJECT_ACTOR_TYPE_RECT:
+        {
+            rectActor * ra = oa->ptr.ra;
+            jintRect rect;
+            rectActorGetRectAtFrame(
+                    ra, 0, &rect);
+            lStart = rect.bl;
+            lStart.v[0] += jintRectGetWidth(&rect)/2;
+            lStart.v[1] += jintRectGetHeight(&rect)/2;
+            lEnd = jintVecAdd(lStart, ra->ca.vel.v);
+            break;
+        }
     }
     drawVelocityVector(cr, this, &lStart, &lEnd);
 }

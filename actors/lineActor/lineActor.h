@@ -16,7 +16,7 @@ typedef struct lineActor {
     actor a;
 
     collActor ca;
-    const jintAxPlLine * line;
+    jintAxPlLine originalLine;
 
     objectActor oa;
 

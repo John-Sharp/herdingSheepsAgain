@@ -147,6 +147,7 @@ collActor * lineActorGetCollActor(
     return &this->ca;
 }
 
+static void lineActorResetAppearence(objectActor * oa);
 void lineActorInit(
         lineActor * this,
         engine * eng,
@@ -164,13 +165,14 @@ void lineActorInit(
         .vel = {.v = {{0, 0}}, .s = 80}
     };
     this->ca = ca;
-    this->line = &this->ca.shape.line;
+    this->originalLine = this->ca.shape.line;
 
     this->oa.type = params->line.direction == AX_PL_DIR_Y ? \
                     OBJECT_ACTOR_TYPE_V_LINE : OBJECT_ACTOR_TYPE_H_LINE;
     this->oa.ptr.la = this;
     this->oa.objectActorSetVelocity = lineActorSetVelocity;
     this->oa.objectActorGetCollActor = lineActorGetCollActor;
+    this->oa.objectActorResetAppearence = lineActorResetAppearence;
 
     engineActorReg(eng, &this->a);
 }
@@ -205,4 +207,11 @@ void lineActorGetLineAtFrame(
     };
 
     ln->rStart = jintLineGetPosition(&l, frame);
+}
+
+static void lineActorResetAppearence(objectActor * oa)
+{
+    lineActor * this = oa->ptr.la;
+
+    this->ca.shape.line = this->originalLine;
 }

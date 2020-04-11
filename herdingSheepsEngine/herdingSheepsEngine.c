@@ -113,6 +113,19 @@ static objectActor herdingSheepsEngineCreateObjectActor(herdingSheepsEngine * th
             assert(la);
             return la->oa;
         }
+        case OBJECT_ACTOR_TYPE_RECT:
+        {
+            rectActorParams params = {
+                .rect = {
+                    .bl = {{10,10}},
+                    .tr = {{35,35}}
+                }
+            };
+
+            rectActor *ra = createRectActor(this->engine, &params);
+            assert(ra);
+            return ra->oa;
+        }
         default:
         {
             objectActor ret = {.type=OBJECT_ACTOR_TYPE_UNSET};
@@ -127,11 +140,7 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, OBJECT_ACTOR
 {
     if (eng->mainActor.type == type)
     {
-        if (eng->mainActor.type == OBJECT_ACTOR_TYPE_V_LINE ||
-                eng->mainActor.type == OBJECT_ACTOR_TYPE_H_LINE)
-        {
-            eng->mainActor.ptr.la->ca.shape.line.length = 30;
-        }
+        objectActorResetAppearence(&eng->mainActor);
         return;
     }
     switch (eng->mainActor.type)
@@ -147,6 +156,12 @@ void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, OBJECT_ACTOR
         {
             lineActorDeinit(eng->mainActor.ptr.la);
             free(eng->mainActor.ptr.la);
+            break;
+        }
+        case OBJECT_ACTOR_TYPE_RECT:
+        {
+            rectActorDeinit(eng->mainActor.ptr.ra);
+            free(eng->mainActor.ptr.ra);
             break;
         }
         case OBJECT_ACTOR_TYPE_UNSET:
@@ -227,6 +242,7 @@ bool herdingSheepsEnginePopAndReleaseOtherObject(
             free(popped->ptr.la);
             break;
         }
+        case OBJECT_ACTOR_TYPE_RECT:
         case OBJECT_ACTOR_TYPE_UNSET:
         {
             break;

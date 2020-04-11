@@ -9,6 +9,7 @@
 #include "../actors/textBoxActor/textBoxActor.h"
 #include "../actors/pointActor/pointActor.h"
 #include "../actors/lineActor/lineActor.h"
+#include "../actors/rectActor/rectActor.h"
 
 #include "listHeaders/objectActorList.h"
 #include "listHeaders/jintList.h"
@@ -49,6 +50,7 @@ typedef enum HS_GAME_STATE {
     HS_GAME_STATE_MAIN_OBJECT_H_LINE,
     HS_GAME_STATE_MAIN_OBJECT_V_LINE,
     HS_GAME_STATE_MAIN_OBJECT_POINT,
+    HS_GAME_STATE_MAIN_OBJECT_RECT,
     HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY,
     HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION,
     HS_GAME_STATE_CHOOSE_OTHER_OBJECT,
@@ -74,6 +76,7 @@ typedef enum KEYPRESS_STATE {
     KEYPRESS_STATE_P,
     KEYPRESS_STATE_V,
     KEYPRESS_STATE_H,
+    KEYPRESS_STATE_R,
     KEYPRESS_STATE_ESC,
     KEYPRESS_STATE_SPACE,
     KEYPRESS_STATE_RIGHT,

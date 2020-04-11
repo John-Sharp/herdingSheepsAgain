@@ -6,6 +6,12 @@ void objectActorSetVelocity(
     this->objectActorSetVelocity(this, v);
 }
 
+void objectActorResetAppearence(
+        objectActor * this)
+{
+    this->objectActorResetAppearence(this);
+}
+
 collActor * objectActorGetCollActor(
         const objectActor * this)
 {
