@@ -37,16 +37,16 @@ void herdingSheepsEngineCalculateFocussedObjectCollisionPoints(herdingSheepsEngi
 OBJECT_ACTOR_TYPE herdingSheepsEngineGetFocussedObjectType(
         herdingSheepsEngine * eng);
 
-void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type);
-bool herdingSheepsEnginePopAndReleaseOtherObject(
+void herdingSheepsEnginePushObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type);
+bool herdingSheepsEnginePopAndReleaseObject(
         herdingSheepsEngine * this);
 
 typedef enum HS_GAME_STATE {
     HS_GAME_STATE_ERROR,
-    HS_GAME_STATE_CHOOSE_OTHER_OBJECT,
-    HS_GAME_STATE_OTHER_OBJECT_CHOOSE_DIMENSION,
-    HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED,
-    HS_GAME_STATE_OTHER_OBJECT_CHOOSE_VELOCITY,
+    HS_GAME_STATE_CHOOSE_OBJECT,
+    HS_GAME_STATE_OBJECT_CHOOSE_DIMENSION,
+    HS_GAME_STATE_OBJECT_BEING_POSITIONED,
+    HS_GAME_STATE_OBJECT_CHOOSE_VELOCITY,
     HS_GAME_STATE_RUNNING,
     HS_GAME_STATE_PAUSED
 } HS_GAME_STATE;

@@ -165,7 +165,7 @@ OBJECT_ACTOR_TYPE herdingSheepsEngineGetFocussedObjectType(
     return eng->objectActorList->val->type;
 }
 
-void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type)
+void herdingSheepsEnginePushObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type)
 {
     objectActor * oa = malloc(sizeof(*oa));
     assert(oa);
@@ -175,7 +175,7 @@ void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR
             oa);
 }
 
-bool herdingSheepsEnginePopAndReleaseOtherObject(
+bool herdingSheepsEnginePopAndReleaseObject(
         herdingSheepsEngine * this)
 {
     if (!this->objectActorList)

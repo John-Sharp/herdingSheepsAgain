@@ -1,26 +1,16 @@
 #include "infoBox.h"
 
-static const char * const addMainObjectText = "press key and choose object,"
-" 'p' : point, 'v' : vertical line, 'h' : horizontal line, 'r' : rectangle";
-static const char * const chooseOtherObjectText = "press key and choose "
-"another object, 'p' : point, 'v' : vertical line, 'h' : "
+static const char * const chooseObjectText = "press key and choose "
+"object, 'p' : point, 'v' : vertical line, 'h' : "
 "horizontal line, 'r' : rectangle '<space>' : run";
 
-static const char * addMainObjectPointText = "adding main point object, "
+static const char * addObjectPointText = "adding another point object, "
 "click to place";
-static const char * addMainObjectVLineText = "adding main vertical line"
+static const char * addObjectVLineText = "adding another vertical line"
 " object, click to place";
-static const char * addMainObjectHLineText = "adding main horizontal line"
+static const char * addObjectHLineText = "adding another horizontal line"
 " object, click to place";
-static const char * addMainObjectRectText = "adding rectangle"
-" object, click to place";
-static const char * addOtherObjectPointText = "adding another point object, "
-"click to place";
-static const char * addOtherObjectVLineText = "adding another vertical line"
-" object, click to place";
-static const char * addOtherObjectHLineText = "adding another horizontal line"
-" object, click to place";
-static const char * addOtherObjectRectText = "adding another rectangle"
+static const char * addObjectRectText = "adding another rectangle"
 " object, click to place";
 static const char * chooseVelocityText = "click to choose velocity";
 static const char * chooseDimensionText = "click to choose dimension";
@@ -28,7 +18,7 @@ static const char * runningText = "running, press <space> to pause";
 static const char * pausedText = "paused, press <space> to continue, "
 "<right> to skip forward a frame, <ctrl>+<right> for 10 frames";
 
-static const char * contentText = addMainObjectText;
+static const char * contentText = chooseObjectText;
 static bool needsRefresh = true;
 
 static void setText(const char * text)
@@ -41,49 +31,24 @@ static void setText(const char * text)
     contentText = text;
 }
 
-void setTextToAddMainObject()
+void setTextToAddObjectPoint()
 {
-    setText(addMainObjectText);
+    setText(addObjectPointText);
 }
 
-void setTextToAddMainObjectPoint()
+void setTextToAddObjectVLine()
 {
-    setText(addMainObjectPointText);
+    setText(addObjectVLineText);
 }
 
-void setTextToAddMainObjectVLine()
+void setTextToAddObjectHLine()
 {
-    setText(addMainObjectVLineText);
+    setText(addObjectHLineText);
 }
 
-void setTextToAddMainObjectHLine()
+void setTextToAddObjectRect()
 {
-    setText(addMainObjectHLineText);
-}
-
-void setTextToAddMainObjectRect()
-{
-    setText(addMainObjectRectText);
-}
-
-void setTextToAddOtherObjectPoint()
-{
-    setText(addOtherObjectPointText);
-}
-
-void setTextToAddOtherObjectVLine()
-{
-    setText(addOtherObjectVLineText);
-}
-
-void setTextToAddOtherObjectHLine()
-{
-    setText(addOtherObjectHLineText);
-}
-
-void setTextToAddOtherObjectRect()
-{
-    setText(addOtherObjectRectText);
+    setText(addObjectRectText);
 }
 
 void setTextToChooseVelocity()
@@ -96,9 +61,9 @@ void setTextToChooseDimensions()
     setText(chooseDimensionText);
 }
 
-void setTextToChooseOtherObject()
+void setTextToChooseObject()
 {
-    setText(chooseOtherObjectText);
+    setText(chooseObjectText);
 }
 
 void setTextToRunning()

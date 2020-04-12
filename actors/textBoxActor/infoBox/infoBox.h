@@ -4,18 +4,13 @@
 #include "../textBoxActor.h"
 
 textProvider hasRefreshedInfoBoxText(textBoxActor * t);
-void setTextToAddMainObject();
-void setTextToAddMainObjectPoint();
-void setTextToAddMainObjectVLine();
-void setTextToAddMainObjectHLine();
-void setTextToAddMainObjectRect();
-void setTextToAddOtherObjectPoint();
-void setTextToAddOtherObjectVLine();
-void setTextToAddOtherObjectHLine();
-void setTextToAddOtherObjectRect();
+void setTextToChooseObject();
+void setTextToAddObjectPoint();
+void setTextToAddObjectVLine();
+void setTextToAddObjectHLine();
+void setTextToAddObjectRect();
 void setTextToChooseVelocity();
 void setTextToChooseDimensions();
-void setTextToChooseOtherObject();
 void setTextToRunning();
 void setTextToPaused();
 #endif

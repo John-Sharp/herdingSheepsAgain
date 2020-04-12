@@ -55,13 +55,13 @@ void pointActorLogicHandler(actor * a)
         hsEng->mainStateMachine, &currentState);
     switch (currentState)
     {
-        case HS_GAME_STATE_CHOOSE_OTHER_OBJECT:
-        case HS_GAME_STATE_OTHER_OBJECT_CHOOSE_DIMENSION:
+        case HS_GAME_STATE_CHOOSE_OBJECT:
+        case HS_GAME_STATE_OBJECT_CHOOSE_DIMENSION:
         {
             this->ca.frameStart = a->eng->currentFrame;
             break;
         }
-        case HS_GAME_STATE_OTHER_OBJECT_CHOOSE_VELOCITY:
+        case HS_GAME_STATE_OBJECT_CHOOSE_VELOCITY:
         {
             this->ca.frameStart = a->eng->currentFrame;
             if (pointActorIsFocussedActor(this))
@@ -77,7 +77,7 @@ void pointActorLogicHandler(actor * a)
             }
             break;
         }
-        case HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED:
+        case HS_GAME_STATE_OBJECT_BEING_POSITIONED:
         {
             this->ca.frameStart = a->eng->currentFrame;
             if (pointActorIsFocussedActor(this))
