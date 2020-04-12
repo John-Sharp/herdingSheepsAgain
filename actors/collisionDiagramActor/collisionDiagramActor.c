@@ -45,11 +45,12 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
 
     // draw actors
     const objectActorList * oActorLs;
+	cairo_set_source_rgb (cr, 1, 0, 0);
     for (oActorLs = e->objectActorList; oActorLs; oActorLs = oActorLs->next)
     {
-	    cairo_set_source_rgb (cr, 0, 1, 1);
         drawActorCollisionDiagram(cr, oActorLs->val);
         collisionDiagramDrawActorVelocity(c, cr, oActorLs->val);
+	    cairo_set_source_rgb (cr, 0, 0, 1);
     }
 
     // draw collision points
