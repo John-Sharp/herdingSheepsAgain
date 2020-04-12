@@ -78,6 +78,22 @@ void pointActorLogicHandler(actor * a)
             this->ca.frameStart = a->eng->currentFrame;
             break;
         }
+        case HS_GAME_STATE_OTHER_OBJECT_CHOOSE_VELOCITY:
+        {
+            this->ca.frameStart = a->eng->currentFrame;
+            if (pointActorIsFocussedActor(this))
+            {
+                jintVec lStart, lEnd;
+                SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
+                lEnd.v[1] = a->eng->h - lEnd.v[1];
+
+                lStart = this->ca.shape.point;
+                this->ca.vel.v = jintVecSub(lEnd, lStart);
+                this->ca.vel.s = 80;
+                this->ca.frameStart = a->eng->currentFrame;
+            }
+            break;
+        }
         case HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED:
         {
             this->ca.frameStart = a->eng->currentFrame;

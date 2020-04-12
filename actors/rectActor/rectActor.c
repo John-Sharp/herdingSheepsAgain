@@ -143,6 +143,15 @@ static void rectActorLogicHandler(actor * a)
             }
             break;
         }
+        case HS_GAME_STATE_OTHER_OBJECT_CHOOSE_VELOCITY:
+        {
+            this->ca.frameStart = a->eng->currentFrame;
+            if (rectActorIsFocussedActor(this))
+            {
+                rectActorSetVelocityToMouseLocation(this);
+            }
+            break;
+        }
         case HS_GAME_STATE_CHOOSE_OTHER_OBJECT:
         {
             this->ca.frameStart = a->eng->currentFrame;

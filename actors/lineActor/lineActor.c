@@ -127,6 +127,24 @@ void lineActorLogicHandler(actor * a)
             }
             break;
         }
+        case HS_GAME_STATE_OTHER_OBJECT_CHOOSE_VELOCITY:
+        {
+            this->ca.frameStart = a->eng->currentFrame;
+            if (lineActorIsFocussedActor(this))
+            {
+                jintVec lStart, lEnd;
+                SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
+                lEnd.v[1] = a->eng->h - lEnd.v[1];
+
+                lStart = this->ca.shape.line.rStart;
+                jint coordIndex = this->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
+                lStart.v[coordIndex] += this->ca.shape.line.length/2;
+                this->ca.vel.v = jintVecSub(lEnd, lStart);
+                this->ca.vel.s = 80;
+                this->ca.frameStart = a->eng->currentFrame;
+            }
+            break;
+        }
         default:
             break;
     }

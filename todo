@@ -21,7 +21,7 @@
 * re implement right cursor going forward, ctrl+right forward 10 DONE
 * draw collision points DONE
 * fix that collsions aren't detected between line and point DONE
-* choose velocity for other objects
+* choose velocity for other objects DONE
 * switch focus ability
 * add get mouse position function for game coordinates
 * add <*>ListAddWithStorage function for adding objects and managing memory
