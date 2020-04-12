@@ -13,35 +13,6 @@ typedef enum HS_GAME_STATE_TOKEN {
     HS_GAME_STATE_TOKEN_RIGHT_MODIFIED
 } HS_GAME_STATE_TOKEN;
 
-
-juint pointObjectChosen(SBStateMachine * stateMachine, juint token)
-{
-    setTextToAddMainObjectPoint();
-    herdingSheepsEngineSwitchMainObject(stateMachine->context, OBJECT_ACTOR_TYPE_POINT);
-    return HS_GAME_STATE_MAIN_OBJECT_POINT;
-}
-
-juint vLineObjectChosen(SBStateMachine * stateMachine, juint token)
-{
-    setTextToAddMainObjectVLine();
-    herdingSheepsEngineSwitchMainObject(stateMachine->context, OBJECT_ACTOR_TYPE_V_LINE);
-    return HS_GAME_STATE_MAIN_OBJECT_V_LINE;
-}
-
-juint hLineObjectChosen(SBStateMachine * stateMachine, juint token)
-{
-    setTextToAddMainObjectHLine();
-    herdingSheepsEngineSwitchMainObject(stateMachine->context, OBJECT_ACTOR_TYPE_H_LINE);
-    return HS_GAME_STATE_MAIN_OBJECT_H_LINE;
-}
-
-static juint rectObjectChosen(SBStateMachine * stateMachine, juint token)
-{
-    setTextToAddMainObjectRect();
-    herdingSheepsEngineSwitchMainObject(stateMachine->context, OBJECT_ACTOR_TYPE_RECT);
-    return HS_GAME_STATE_MAIN_OBJECT_RECT;
-}
-
 static juint otherPointObjectChosen(SBStateMachine * stateMachine, juint token)
 {
     setTextToAddOtherObjectPoint();
@@ -70,33 +41,14 @@ static juint otherRectObjectChosen(SBStateMachine * stateMachine, juint token)
     return HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED;
 }
 
-juint goToChooseVelocityMainObject(SBStateMachine * stateMachine, juint token)
-{
-    setTextToChooseVelocity();
-    return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY;
-}
-
-static juint goToChooseDimensionsMainObject(SBStateMachine * stateMachine, juint token)
-{
-    setTextToChooseDimensions();
-    return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION;
-}
-
-juint returnToMainState(SBStateMachine * stateMachine, juint token)
-{
-    setTextToAddMainObject();
-    herdingSheepsEngineSwitchMainObject(stateMachine->context, OBJECT_ACTOR_TYPE_UNSET);
-    return HS_GAME_STATE_CHOOSE_MAIN_OBJECT;
-}
-
 static juint returnToPreviousStateFromChooseOtherObject(
         SBStateMachine * stateMachine)
 {
     herdingSheepsEngine * hEng = stateMachine->context;
-    if (!hEng->otherActorList)
+    if (!hEng->objectActorList)
     {
-        setTextToChooseVelocity();
-        return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY;
+        setTextToChooseOtherObject();
+        return HS_GAME_STATE_CHOOSE_OTHER_OBJECT;
     }
 
     switch (herdingSheepsEngineGetFocussedObjectType(
@@ -122,7 +74,7 @@ static juint returnToPreviousStateFromOtherObjectChooseDimension(
         SBStateMachine * stateMachine)
 {
     herdingSheepsEngine * hEng = stateMachine->context;
-    hEng->otherActorList->val->ptr.la->ca.shape.line.length = 30;
+    hEng->objectActorList->val->ptr.la->ca.shape.line.length = 30;
 
     switch (herdingSheepsEngineGetFocussedObjectType(
                 stateMachine->context))
@@ -157,7 +109,7 @@ static juint returnToPreviousStateFromOtherObjectChooseVelocity(
     herdingSheepsEngine * hEng = stateMachine->context;
     jintVecScaled v = {.v = {{0,0}}, .s = 80};
     objectActorSetVelocity(
-            hEng->otherActorList->val,
+            hEng->objectActorList->val,
             &v);
 
     switch (herdingSheepsEngineGetFocussedObjectType(
@@ -186,47 +138,11 @@ static juint returnToPreviousStateFromOtherObjectChooseVelocity(
 static juint returnToPreviousStateFromOtherObjectBeingPositioned(
         SBStateMachine * stateMachine)
 {
-    if (!herdingSheepsEnginePopAndReleaseOtherObject(
-                stateMachine->context))
-    {
-        setTextToChooseVelocity();
-        return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY;
-    }
+    herdingSheepsEnginePopAndReleaseOtherObject(
+                stateMachine->context);
 
     setTextToChooseOtherObject();
     return HS_GAME_STATE_CHOOSE_OTHER_OBJECT;
-}
-
-static juint returnToPreviousStateFromMainObjectChooseVelocity(
-        SBStateMachine * stateMachine)
-{
-
-    jintVecScaled v = {{{0,0}},80};
-    objectActorSetVelocity(
-            &((herdingSheepsEngine *)stateMachine->context)->mainActor,
-            &v);
-
-    switch (herdingSheepsEngineGetMainObjectType(
-                stateMachine->context))
-    {
-        case OBJECT_ACTOR_TYPE_POINT:
-        {
-            setTextToAddMainObjectPoint();
-            return HS_GAME_STATE_MAIN_OBJECT_POINT;
-        }
-        case OBJECT_ACTOR_TYPE_V_LINE:
-        case OBJECT_ACTOR_TYPE_H_LINE:
-        case OBJECT_ACTOR_TYPE_RECT:
-        {
-            setTextToChooseDimensions();
-            return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION;
-        }
-        default:
-        {
-            break;
-        }
-    }
-    return HS_GAME_STATE_ERROR;
 }
 
 juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
@@ -234,32 +150,7 @@ juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
     HS_GAME_STATE currentState;
     SBStateMachineGetCurrentState(stateMachine, &currentState);
 
-    if (currentState == HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION)
-    {
-        herdingSheepsEngineSwitchMainObject(
-                stateMachine->context,
-                herdingSheepsEngineGetMainObjectType(stateMachine->context));
-        switch (herdingSheepsEngineGetMainObjectType(stateMachine->context))
-        {
-            case OBJECT_ACTOR_TYPE_V_LINE:
-                setTextToAddMainObjectVLine();
-                return HS_GAME_STATE_MAIN_OBJECT_V_LINE;
-            case OBJECT_ACTOR_TYPE_H_LINE:
-                setTextToAddMainObjectHLine();
-                return HS_GAME_STATE_MAIN_OBJECT_H_LINE;
-            case OBJECT_ACTOR_TYPE_RECT:
-                setTextToAddMainObjectRect();
-                return HS_GAME_STATE_MAIN_OBJECT_RECT;
-            default:
-                break;
-        }
-    }
-    else if (currentState == HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY)
-    {
-        return returnToPreviousStateFromMainObjectChooseVelocity(
-                stateMachine);
-    }
-    else if (currentState == HS_GAME_STATE_CHOOSE_OTHER_OBJECT)
+    if (currentState == HS_GAME_STATE_CHOOSE_OTHER_OBJECT)
     {
         return returnToPreviousStateFromChooseOtherObject(
                 stateMachine);
@@ -280,20 +171,7 @@ juint returnToPreviousState(SBStateMachine * stateMachine, juint token)
                 stateMachine);
     }
 
-    switch (herdingSheepsEngineGetMainObjectType(stateMachine->context))
-    {
-        case OBJECT_ACTOR_TYPE_POINT:
-            setTextToAddMainObjectPoint();
-            return HS_GAME_STATE_MAIN_OBJECT_POINT;
-        case OBJECT_ACTOR_TYPE_V_LINE:
-        case OBJECT_ACTOR_TYPE_H_LINE:
-            setTextToChooseDimensions();
-            return HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION;
-        default:
-            break;
-    }
-
-    return HS_GAME_STATE_MAIN_OBJECT_POINT;
+    return HS_GAME_STATE_ERROR;
 }
 
 static juint goToChooseOtherObject(SBStateMachine * stateMachine, juint token)
@@ -344,7 +222,7 @@ static juint goToRunning(SBStateMachine * stateMachine, juint token)
 
 static juint goToRunningInitial(SBStateMachine * stateMachine, juint token)
 {
-    herdingSheepsEngineCalculateMainObjectCollisionPoints(
+    herdingSheepsEngineCalculateFocussedObjectCollisionPoints(
             stateMachine->context);
     return goToRunning(stateMachine, token);
 }
@@ -488,85 +366,7 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
     mcb.owner = stateMachine;
     addMouseCallback(&mcb);
 
-    juint ret =  SBStateMachineAddState(
-            stateMachine,
-            HS_GAME_STATE_CHOOSE_MAIN_OBJECT, 4,
-            HS_GAME_STATE_TOKEN_P, pointObjectChosen,
-            HS_GAME_STATE_TOKEN_V, vLineObjectChosen,
-            HS_GAME_STATE_TOKEN_H, hLineObjectChosen,
-            HS_GAME_STATE_TOKEN_R, rectObjectChosen);
-    if (ret != SB_STATE_MACHINE_OK)
-    {
-        printf("Failure after attempting to set up main state machine\n\n");
-        exit(1);
-    }
-    ret =  SBStateMachineAddState(
-            stateMachine,
-            HS_GAME_STATE_MAIN_OBJECT_H_LINE, 2,
-            HS_GAME_STATE_TOKEN_L_CLICK, goToChooseDimensionsMainObject,
-            HS_GAME_STATE_TOKEN_ESC, returnToMainState);
-    if (ret != SB_STATE_MACHINE_OK)
-    {
-        printf("Failure after attempting to set up main state machine\n\n");
-        exit(1);
-    }
-
-    ret =  SBStateMachineAddState(
-            stateMachine,
-            HS_GAME_STATE_MAIN_OBJECT_V_LINE, 2,
-            HS_GAME_STATE_TOKEN_L_CLICK, goToChooseDimensionsMainObject,
-            HS_GAME_STATE_TOKEN_ESC, returnToMainState);
-    if (ret != SB_STATE_MACHINE_OK)
-    {
-        printf("Failure after attempting to set up main state machine\n\n");
-        exit(1);
-    }
-
-    ret =  SBStateMachineAddState(
-            stateMachine,
-            HS_GAME_STATE_MAIN_OBJECT_POINT, 2,
-            HS_GAME_STATE_TOKEN_L_CLICK, goToChooseVelocityMainObject,
-            HS_GAME_STATE_TOKEN_ESC, returnToMainState);
-    if (ret != SB_STATE_MACHINE_OK)
-    {
-        printf("Failure after attempting to set up main state machine\n\n");
-        exit(1);
-    }
-
-    ret =  SBStateMachineAddState(
-            stateMachine,
-            HS_GAME_STATE_MAIN_OBJECT_RECT, 2,
-            HS_GAME_STATE_TOKEN_L_CLICK, goToChooseDimensionsMainObject,
-            HS_GAME_STATE_TOKEN_ESC, returnToMainState);
-    if (ret != SB_STATE_MACHINE_OK)
-    {
-        printf("Failure after attempting to set up main state machine\n\n");
-        exit(1);
-    }
-
-    ret = SBStateMachineAddState(
-            stateMachine,
-            HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY, 2,
-            HS_GAME_STATE_TOKEN_L_CLICK, goToChooseOtherObject,
-            HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
-    if (ret != SB_STATE_MACHINE_OK)
-    {
-        printf("Failure after attempting to set up main state machine\n\n");
-        exit(1);
-    }
-
-    ret = SBStateMachineAddState(
-            stateMachine,
-            HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION, 2,
-            HS_GAME_STATE_TOKEN_L_CLICK, goToChooseVelocityMainObject,
-            HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
-    if (ret != SB_STATE_MACHINE_OK)
-    {
-        printf("Failure after attempting to set up main state machine\n\n");
-        exit(1);
-    }
-
-    ret = SBStateMachineAddState(
+    juint ret = SBStateMachineAddState(
             stateMachine,
             HS_GAME_STATE_CHOOSE_OTHER_OBJECT, 6,
             HS_GAME_STATE_TOKEN_P, otherPointObjectChosen,
@@ -638,6 +438,6 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
     }
 
 
-    SBStateMachineSetCurrentState(stateMachine, HS_GAME_STATE_CHOOSE_MAIN_OBJECT);
+    SBStateMachineSetCurrentState(stateMachine, HS_GAME_STATE_CHOOSE_OTHER_OBJECT);
     return stateMachine;
 }

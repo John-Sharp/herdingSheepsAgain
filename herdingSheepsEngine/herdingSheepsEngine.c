@@ -61,11 +61,8 @@ herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
             &params);
     }
 
-    // setup main actor
-    eng->mainActor.type = OBJECT_ACTOR_TYPE_UNSET;
-
-    // setup other actor list
-    eng->otherActorList = NULL;
+    // setup object actor list
+    eng->objectActorList = NULL;
 
     // setup coll frame list
     eng->collFrameList = NULL;
@@ -136,59 +133,20 @@ static objectActor herdingSheepsEngineCreateObjectActor(herdingSheepsEngine * th
     return  ret;
 }
 
-void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, OBJECT_ACTOR_TYPE type)
+void herdingSheepsEngineCalculateFocussedObjectCollisionPoints(herdingSheepsEngine * this)
 {
-    if (eng->mainActor.type == type)
-    {
-        objectActorResetAppearence(&eng->mainActor);
+    if (!this->objectActorList)
         return;
-    }
-    switch (eng->mainActor.type)
-    {
-        case OBJECT_ACTOR_TYPE_POINT:
-        {
-            pointActorDeinit(eng->mainActor.ptr.pa);
-            free(eng->mainActor.ptr.pa);
-            break;
-        }
-        case OBJECT_ACTOR_TYPE_V_LINE:
-        case OBJECT_ACTOR_TYPE_H_LINE:
-        {
-            lineActorDeinit(eng->mainActor.ptr.la);
-            free(eng->mainActor.ptr.la);
-            break;
-        }
-        case OBJECT_ACTOR_TYPE_RECT:
-        {
-            rectActorDeinit(eng->mainActor.ptr.ra);
-            free(eng->mainActor.ptr.ra);
-            break;
-        }
-        case OBJECT_ACTOR_TYPE_UNSET:
-        {
-            break;
-        }
-    }
 
-    eng->mainActor = herdingSheepsEngineCreateObjectActor(eng, type);
-}
-
-OBJECT_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng)
-{
-    return eng->mainActor.type;
-}
-
-void herdingSheepsEngineCalculateMainObjectCollisionPoints(herdingSheepsEngine * this)
-{
-    collActor * mainCollActor = objectActorGetCollActor(&this->mainActor);
+    collActor * focussedCollActor = objectActorGetCollActor(this->objectActorList->val);
     objectActorList * listNode;
-    for (listNode = this->otherActorList; listNode != NULL; listNode = listNode->next)
+    for (listNode = this->objectActorList->next; listNode != NULL; listNode = listNode->next)
     {
         collActor * otherCollActor = objectActorGetCollActor(listNode->val);
         jint collFrame;
         if (calculateNextCollisionFrame(
                     &collFrame,
-                    mainCollActor, otherCollActor) == COLL_FRAME_CALC_OK)
+                    focussedCollActor, otherCollActor) == COLL_FRAME_CALC_OK)
         {
             jint * collFrameStorage = malloc(sizeof(*collFrameStorage));
             *collFrameStorage = collFrame;
@@ -202,9 +160,9 @@ void herdingSheepsEngineCalculateMainObjectCollisionPoints(herdingSheepsEngine *
 OBJECT_ACTOR_TYPE herdingSheepsEngineGetFocussedObjectType(
         herdingSheepsEngine * eng)
 {
-    if (!eng->otherActorList)
+    if (!eng->objectActorList)
         return OBJECT_ACTOR_TYPE_UNSET;
-    return eng->otherActorList->val->type;
+    return eng->objectActorList->val->type;
 }
 
 void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type)
@@ -212,20 +170,20 @@ void herdingSheepsEnginePushOtherObject(herdingSheepsEngine * this, OBJECT_ACTOR
     objectActor * oa = malloc(sizeof(*oa));
     assert(oa);
     *oa = herdingSheepsEngineCreateObjectActor(this, type);
-    this->otherActorList = objectActorListAdd(
-            this->otherActorList,
+    this->objectActorList = objectActorListAdd(
+            this->objectActorList,
             oa);
 }
 
 bool herdingSheepsEnginePopAndReleaseOtherObject(
         herdingSheepsEngine * this)
 {
-    if (!this->otherActorList)
+    if (!this->objectActorList)
         return false;
 
-    objectActor * popped = this->otherActorList->val;
-    this->otherActorList = objectActorListRm(
-            this->otherActorList, popped, objectActorCmp, NULL);
+    objectActor * popped = this->objectActorList->val;
+    this->objectActorList = objectActorListRm(
+            this->objectActorList, popped, objectActorCmp, NULL);
 
     switch (popped->type)
     {

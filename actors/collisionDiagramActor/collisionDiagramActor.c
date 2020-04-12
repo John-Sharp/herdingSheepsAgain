@@ -43,13 +43,9 @@ void drawCollisionDiagram(void * pixels, int pitch, void * ctx)
     HS_GAME_STATE currentState;
     SBStateMachineGetCurrentState(e->mainStateMachine, &currentState);
 
-    // draw mainActor
-    drawActorCollisionDiagram(cr, &e->mainActor);
-    collisionDiagramDrawActorVelocity(c, cr, &e->mainActor);
-
-    // draw other actors
+    // draw actors
     const objectActorList * oActorLs;
-    for (oActorLs = e->otherActorList; oActorLs; oActorLs = oActorLs->next)
+    for (oActorLs = e->objectActorList; oActorLs; oActorLs = oActorLs->next)
     {
 	    cairo_set_source_rgb (cr, 0, 1, 1);
         drawActorCollisionDiagram(cr, oActorLs->val);
@@ -66,11 +62,15 @@ static void collisionDiagramDrawCollisionPoints(
         collisionDiagramActor * this, cairo_t * cr)
 {
     herdingSheepsEngine * hEng = this->a.eng->owner;
-    objectActor * mainActor = &hEng->mainActor;
+
+    if (!hEng->objectActorList)
+        return;
+
+    objectActor * focussedActor = hEng->objectActorList->val;
     jintList * collFrameNode;
     for (collFrameNode = hEng->collFrameList; collFrameNode != NULL; collFrameNode = collFrameNode->next)
     {
-        drawCollisionPoint(cr, mainActor, *collFrameNode->val);
+        drawCollisionPoint(cr, focussedActor, *collFrameNode->val);
     }
 }
 

@@ -56,7 +56,7 @@ static bool lineActorIsFocussedActor(
         const lineActor * this)
 {
     herdingSheepsEngine * hsEng = this->a.eng->owner;
-    objectActor * focussedActor = hsEng->otherActorList->val;
+    objectActor * focussedActor = hsEng->objectActorList->val;
 
     if (focussedActor->type != OBJECT_ACTOR_TYPE_V_LINE 
             && focussedActor->type != OBJECT_ACTOR_TYPE_H_LINE)
@@ -78,32 +78,6 @@ void lineActorLogicHandler(actor * a)
         hsEng->mainStateMachine, &currentState);
     switch (currentState)
     {
-        case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY:
-        {
-            jintVec lStart, lEnd;
-            SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
-            lEnd.v[1] = a->eng->h - lEnd.v[1];
-
-            lStart = this->ca.shape.line.rStart;
-            jint coordIndex = this->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
-            lStart.v[coordIndex] += this->ca.shape.line.length/2;
-            this->ca.vel.v = jintVecSub(lEnd, lStart);
-            this->ca.vel.s = 80;
-            this->ca.frameStart = a->eng->currentFrame;
-            break;
-        }
-        case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION:
-        {
-            this->ca.frameStart = a->eng->currentFrame;
-            lineActorSetDimensionToMouseLocation(this);
-            break;
-        }
-        case HS_GAME_STATE_MAIN_OBJECT_H_LINE:
-        case HS_GAME_STATE_MAIN_OBJECT_V_LINE:
-        {
-            lineActorSetPositionToMouseLocation(this);
-            break;
-        }
         case HS_GAME_STATE_CHOOSE_OTHER_OBJECT:
         {
             this->ca.frameStart = a->eng->currentFrame;

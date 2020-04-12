@@ -108,23 +108,6 @@ static void rectActorLogicHandler(actor * a)
         hsEng->mainStateMachine, &currentState);
     switch (currentState)
     {
-        case HS_GAME_STATE_MAIN_OBJECT_RECT:
-        {
-            rectActorSetPositionToMouseLocation(this);
-            break;
-        }
-        case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION:
-        {
-            this->ca.frameStart = a->eng->currentFrame;
-            rectActorSetDimensionToMouseLocation(this);
-            break;
-        }
-        case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY:
-        {
-            this->ca.frameStart = a->eng->currentFrame;
-            rectActorSetVelocityToMouseLocation(this);
-            break;
-        }
         case HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED:
         {
             this->ca.frameStart = a->eng->currentFrame;
@@ -246,7 +229,7 @@ static bool rectActorIsFocussedActor(
         const rectActor * this)
 {
     herdingSheepsEngine * hsEng = this->a.eng->owner;
-    objectActor * focussedActor = hsEng->otherActorList->val;
+    objectActor * focussedActor = hsEng->objectActorList->val;
 
     if (focussedActor->type != OBJECT_ACTOR_TYPE_RECT)
         return false;

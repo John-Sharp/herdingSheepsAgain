@@ -23,8 +23,7 @@ typedef struct herdingSheepsEngine {
     textBoxActor frameRateBar;
     textBoxActor infoBar;
 
-    objectActor mainActor;
-    objectActorList * otherActorList;
+    objectActorList * objectActorList;
     jintList * collFrameList;
 
     jintRect mainWindow;
@@ -33,9 +32,7 @@ typedef struct herdingSheepsEngine {
 } herdingSheepsEngine;
 
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng);
-void herdingSheepsEngineSwitchMainObject(herdingSheepsEngine * eng, OBJECT_ACTOR_TYPE type);
-OBJECT_ACTOR_TYPE herdingSheepsEngineGetMainObjectType(herdingSheepsEngine * eng);
-void herdingSheepsEngineCalculateMainObjectCollisionPoints(herdingSheepsEngine * this);
+void herdingSheepsEngineCalculateFocussedObjectCollisionPoints(herdingSheepsEngine * this);
 
 OBJECT_ACTOR_TYPE herdingSheepsEngineGetFocussedObjectType(
         herdingSheepsEngine * eng);
@@ -46,13 +43,6 @@ bool herdingSheepsEnginePopAndReleaseOtherObject(
 
 typedef enum HS_GAME_STATE {
     HS_GAME_STATE_ERROR,
-    HS_GAME_STATE_CHOOSE_MAIN_OBJECT,
-    HS_GAME_STATE_MAIN_OBJECT_H_LINE,
-    HS_GAME_STATE_MAIN_OBJECT_V_LINE,
-    HS_GAME_STATE_MAIN_OBJECT_POINT,
-    HS_GAME_STATE_MAIN_OBJECT_RECT,
-    HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY,
-    HS_GAME_STATE_MAIN_OBJECT_CHOOSE_DIMENSION,
     HS_GAME_STATE_CHOOSE_OTHER_OBJECT,
     HS_GAME_STATE_OTHER_OBJECT_CHOOSE_DIMENSION,
     HS_GAME_STATE_OTHER_OBJECT_BEING_POSITIONED,

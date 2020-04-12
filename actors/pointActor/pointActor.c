@@ -34,7 +34,7 @@ static bool pointActorIsFocussedActor(
         pointActor * this)
 {
     herdingSheepsEngine * hsEng = this->a.eng->owner;
-    objectActor * focussedActor = hsEng->otherActorList->val;
+    objectActor * focussedActor = hsEng->objectActorList->val;
 
     if (focussedActor->type != OBJECT_ACTOR_TYPE_POINT)
         return false;
@@ -55,23 +55,6 @@ void pointActorLogicHandler(actor * a)
         hsEng->mainStateMachine, &currentState);
     switch (currentState)
     {
-        case HS_GAME_STATE_MAIN_OBJECT_CHOOSE_VELOCITY:
-        {
-            jintVec lStart, lEnd;
-            SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
-            lEnd.v[1] = a->eng->h - lEnd.v[1];
-
-            lStart = this->ca.shape.point;
-            this->ca.vel.v = jintVecSub(lEnd, lStart);
-            this->ca.vel.s = 80;
-            this->ca.frameStart = a->eng->currentFrame;
-            break;
-        }
-        case HS_GAME_STATE_MAIN_OBJECT_POINT:
-        {
-            pointActorSetPositionToMouseLocation(this);
-            break;
-        }
         case HS_GAME_STATE_CHOOSE_OTHER_OBJECT:
         case HS_GAME_STATE_OTHER_OBJECT_CHOOSE_DIMENSION:
         {
