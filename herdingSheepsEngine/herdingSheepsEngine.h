@@ -40,6 +40,7 @@ OBJECT_ACTOR_TYPE herdingSheepsEngineGetFocussedObjectType(
 void herdingSheepsEnginePushObject(herdingSheepsEngine * this, OBJECT_ACTOR_TYPE type);
 bool herdingSheepsEnginePopAndReleaseObject(
         herdingSheepsEngine * this);
+void herdingSheepsEngineSwitchFocus(herdingSheepsEngine * this);
 
 typedef enum HS_GAME_STATE {
     HS_GAME_STATE_ERROR,
@@ -64,6 +65,7 @@ typedef enum KEYPRESS_STATE {
                                              // rather than one if
                                              // KEYPRESS_STATE_FORWARD_FRAME_MULTIPLIER
                                              // is also active
+    KEYPRESS_STATE_F,
     KEYPRESS_STATE_P,
     KEYPRESS_STATE_V,
     KEYPRESS_STATE_H,

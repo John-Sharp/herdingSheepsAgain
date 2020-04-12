@@ -209,3 +209,17 @@ bool herdingSheepsEnginePopAndReleaseObject(
     free(popped);
     return true;
 }
+
+void herdingSheepsEngineSwitchFocus(herdingSheepsEngine * this)
+{
+    if (!this->objectActorList)
+        return;
+
+    objectActorList * oldHead = this->objectActorList;
+    this->objectActorList = this->objectActorList->next;
+    objectActorList * node;
+    for (node = this->objectActorList; node->next != NULL; node = node->next)
+    {}
+    node->next = oldHead;
+    oldHead->next = NULL;
+}

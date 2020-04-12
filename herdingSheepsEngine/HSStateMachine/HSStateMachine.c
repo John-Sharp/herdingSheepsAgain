@@ -2,6 +2,7 @@
 #include "../actors/textBoxActor/infoBox/infoBox.h"
 
 typedef enum HS_GAME_STATE_TOKEN {
+    HS_GAME_STATE_TOKEN_F,
     HS_GAME_STATE_TOKEN_P,
     HS_GAME_STATE_TOKEN_V,
     HS_GAME_STATE_TOKEN_H,
@@ -235,6 +236,16 @@ static juint goToPaused(SBStateMachine * stateMachine, juint token)
     return HS_GAME_STATE_PAUSED;
 }
 
+static juint switchFocus(SBStateMachine * stateMachine, juint token)
+{
+    herdingSheepsEngineSwitchFocus(stateMachine->context);
+
+    HS_GAME_STATE currentState;
+    SBStateMachineGetCurrentState(stateMachine, &currentState);
+
+    return currentState;
+}
+
 static juint skipForward(SBStateMachine * stateMachine, juint token)
 {
     HS_GAME_STATE currentState;
@@ -303,6 +314,12 @@ void HSStateMachineProcessInput(SBStateMachine * stateMachine)
         }
         deactivateState(KEYPRESS_STATE_RIGHT);
     }
+    else if (isStateActive(KEYPRESS_STATE_F))
+    {
+        SBStateMachineProcessInput(
+                stateMachine, HS_GAME_STATE_TOKEN_F, NULL);
+        deactivateState(KEYPRESS_STATE_F);
+    }
     
 }
 
@@ -318,6 +335,11 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     // TODO add function like 'getFreeState' to get unused state from inputProcessor
     // so then don't need to share keypress states with engine
+    ksb.k = SDLK_f;
+    ksb.s = KEYPRESS_STATE_F;
+    ksb.t = BINDING_ONE_TIME;
+    addBinding(&ksb);
+
     ksb.k = SDLK_p;
     ksb.s = KEYPRESS_STATE_P;
     ksb.t = BINDING_ONE_TIME;
@@ -416,8 +438,9 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret = SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_RUNNING, 2,
+            HS_GAME_STATE_RUNNING, 3,
             HS_GAME_STATE_TOKEN_SPACE, goToPaused,
+            HS_GAME_STATE_TOKEN_F, switchFocus,
             HS_GAME_STATE_TOKEN_ESC, returnToPreviousState);
     if (ret != SB_STATE_MACHINE_OK)
     {
