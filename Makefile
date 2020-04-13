@@ -36,7 +36,11 @@ infoBox: actors/textBoxActor/infoBox/infoBox.h actors/textBoxActor/infoBox/infoB
 collisionDiagramActor: actors/collisionDiagramActor/collisionDiagramActor.h actors/collisionDiagramActor/collisionDiagramActor.c
 	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli actors/collisionDiagramActor/collisionDiagramActor.c $(CFLAGS) -c
 
-collDetectT: collDetect/collDetect.h collDetect/collDetect.c
+generateCollDetectListCode: dataStructures/templates/listTemplate.h dataStructures/templates/listTemplate.inc
+	mkdir -p collDetect/listHeaders collDetect/listCode
+	dataStructures/generateList.py collDetect/listHeaders collDetect/listCode collGroup:collGroup
+
+collDetectT: generateCollDetectListCode collDetect/collDetect.h collDetect/collDetect.c
 	$(CC) -IjTypes collDetect/collDetect.c $(CFLAGS) -c
 
 generateHerdingSheepsEngineListCode: dataStructures/templates/listTemplate.h dataStructures/templates/listTemplate.inc
