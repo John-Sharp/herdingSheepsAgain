@@ -23,11 +23,7 @@ pointActor * createPointActor(engine * eng)
 static void pointActorSetPositionToMouseLocation(
         pointActor * this)
 {
-    int mouse_x, mouse_y;
-
-    SDL_GetMouseState(&mouse_x, &mouse_y);
-    this->ca.shape.point.v[0] = mouse_x;
-    this->ca.shape.point.v[1] = this->a.eng->h - mouse_y;
+    this->ca.shape.point = engineGetMouseLocation(this->a.eng);
 }
 
 static bool pointActorIsFocussedActor(
@@ -66,9 +62,8 @@ void pointActorLogicHandler(actor * a)
             this->ca.frameStart = a->eng->currentFrame;
             if (pointActorIsFocussedActor(this))
             {
-                jintVec lStart, lEnd;
-                SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
-                lEnd.v[1] = a->eng->h - lEnd.v[1];
+                jintVec lStart;
+                jintVec lEnd = engineGetMouseLocation(this->a.eng);
 
                 lStart = this->ca.shape.point;
                 this->ca.vel.v = jintVecSub(lEnd, lStart);

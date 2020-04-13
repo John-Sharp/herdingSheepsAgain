@@ -150,16 +150,13 @@ static void rectActorLogicHandler(actor * a)
 static void rectActorSetPositionToMouseLocation(
         rectActor * this)
 {
-    int mouse_x, mouse_y;
     jint w, h;
     w = jintRectGetWidth(&this->ca.shape.rect);
     h = jintRectGetHeight(&this->ca.shape.rect);
 
-    SDL_GetMouseState(&mouse_x, &mouse_y);
-    this->ca.shape.rect.bl.v[0] = mouse_x;
-    this->ca.shape.rect.bl.v[1] = this->a.eng->h - mouse_y;
-    this->ca.shape.rect.tr.v[0] = mouse_x + w;
-    this->ca.shape.rect.tr.v[1] = this->a.eng->h - mouse_y + h;
+    this->ca.shape.rect.bl = engineGetMouseLocation(this->a.eng);
+    this->ca.shape.rect.tr.v[0] = this->ca.shape.rect.bl.v[0] + w;
+    this->ca.shape.rect.tr.v[1] = this->ca.shape.rect.bl.v[1] + h;
 
     this->rectAnchorPoint = this->ca.shape.rect.bl;
 }
@@ -167,13 +164,10 @@ static void rectActorSetPositionToMouseLocation(
 static void rectActorSetDimensionToMouseLocation(
         rectActor * this)
 {
-    jint mouseCoords[2];
+    jintVec mouseCoords = engineGetMouseLocation(this->a.eng);
 
-    SDL_GetMouseState(&mouseCoords[0], &mouseCoords[1]);
-    mouseCoords[1] = this->a.eng->h - mouseCoords[1];
-
-    jint wh[2] = {mouseCoords[0] - this->rectAnchorPoint.v[0],
-        mouseCoords[1] - this->rectAnchorPoint.v[1]};
+    jint wh[2] = {mouseCoords.v[0] - this->rectAnchorPoint.v[0],
+        mouseCoords.v[1] - this->rectAnchorPoint.v[1]};
 
     jint axis;
     for (axis = 0; axis < 2; axis++)
@@ -185,7 +179,7 @@ static void rectActorSetDimensionToMouseLocation(
         else
         {
             this->ca.shape.rect.tr.v[axis] = this->rectAnchorPoint.v[axis];
-            this->ca.shape.rect.bl.v[axis] = mouseCoords[axis];
+            this->ca.shape.rect.bl.v[axis] = mouseCoords.v[axis];
         }
     }
 }
@@ -193,9 +187,8 @@ static void rectActorSetDimensionToMouseLocation(
 static void rectActorSetVelocityToMouseLocation(
         rectActor * this)
 {
-    jintVec lStart, lEnd;
-    SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
-    lEnd.v[1] = this->a.eng->h - lEnd.v[1];
+    jintVec lStart;
+    jintVec lEnd = engineGetMouseLocation(this->a.eng);
 
     lStart = this->ca.shape.rect.bl;
     lStart.v[0] += jintRectGetWidth(&this->ca.shape.rect)/2;

@@ -22,6 +22,7 @@
 * draw collision points DONE
 * fix that collsions aren't detected between line and point DONE
 * choose velocity for other objects DONE
-* switch focus ability
-* add get mouse position function for game coordinates
+* switch focus ability DONE
+* add get mouse position function for game coordinates DONE
+* switch focus ability in pause mode 
 * add <*>ListAddWithStorage function for adding objects and managing memory

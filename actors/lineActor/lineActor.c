@@ -21,29 +21,22 @@ lineActor * createLineActor(
 static void lineActorSetPositionToMouseLocation(
         lineActor * this)
 {
-    int mouse_x, mouse_y;
-
-    SDL_GetMouseState(&mouse_x, &mouse_y);
-    this->ca.shape.line.rStart.v[0] = mouse_x;
-    this->ca.shape.line.rStart.v[1] = this->a.eng->h - mouse_y;
+    this->ca.shape.line.rStart = engineGetMouseLocation(this->a.eng);
     this->lineAnchorPoint = this->ca.shape.line.rStart;
 }
 
 static void lineActorSetDimensionToMouseLocation(
         lineActor * this)
 {
-    jint mouseCoords[2];
-
-    SDL_GetMouseState(&mouseCoords[0], &mouseCoords[1]);
-    mouseCoords[1] = this->a.eng->h - mouseCoords[1];
+    jintVec mouseCoords = engineGetMouseLocation(this->a.eng);
 
     jint coord = this->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
 
-    jint length = mouseCoords[coord] - this->lineAnchorPoint.v[coord];
+    jint length = mouseCoords.v[coord] - this->lineAnchorPoint.v[coord];
 
     if (length < 0)
     {
-        this->ca.shape.line.rStart.v[coord] = mouseCoords[coord];
+        this->ca.shape.line.rStart.v[coord] = mouseCoords.v[coord];
         this->ca.shape.line.length = -length;
     }
     else
@@ -106,9 +99,8 @@ void lineActorLogicHandler(actor * a)
             this->ca.frameStart = a->eng->currentFrame;
             if (lineActorIsFocussedActor(this))
             {
-                jintVec lStart, lEnd;
-                SDL_GetMouseState(&lEnd.v[0], &lEnd.v[1]);
-                lEnd.v[1] = a->eng->h - lEnd.v[1];
+                jintVec lStart;
+                jintVec lEnd = engineGetMouseLocation(this->a.eng);
 
                 lStart = this->ca.shape.line.rStart;
                 jint coordIndex = this->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
