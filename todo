@@ -24,5 +24,5 @@
 * choose velocity for other objects DONE
 * switch focus ability DONE
 * add get mouse position function for game coordinates DONE
-* switch focus ability in pause mode 
+* switch focus ability in pause mode DONE
 * add <*>ListAddWithStorage function for adding objects and managing memory

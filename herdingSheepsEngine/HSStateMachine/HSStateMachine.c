@@ -450,9 +450,10 @@ SBStateMachine * createHSStateMachine(herdingSheepsEngine * eng)
 
     ret = SBStateMachineAddState(
             stateMachine,
-            HS_GAME_STATE_PAUSED, 3,
+            HS_GAME_STATE_PAUSED, 4,
             HS_GAME_STATE_TOKEN_SPACE, goToRunning,
             HS_GAME_STATE_TOKEN_RIGHT, skipForward,
+            HS_GAME_STATE_TOKEN_F, switchFocus,
             HS_GAME_STATE_TOKEN_RIGHT_MODIFIED, skipForward10);
     if (ret != SB_STATE_MACHINE_OK)
     {
