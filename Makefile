@@ -40,8 +40,11 @@ generateCollDetectListCode: dataStructures/templates/listTemplate.h dataStructur
 	mkdir -p collDetect/listHeaders collDetect/listCode
 	dataStructures/generateList.py collDetect/listHeaders collDetect/listCode collGroup:collGroup
 
-collDetectT: generateCollDetectListCode collDetect/collDetect.h collDetect/collDetect.c
-	$(CC) -IjTypes collDetect/collDetect.c $(CFLAGS) -c
+collDetectT: generateCollDetectListCode collDetect/collDetect.h\
+	collDetect/collDetect.c\
+	collDetect/collisionFrameCalculate.h\
+	collDetect/collisionFrameCalculate.c
+	$(CC) -IjTypes collDetect/collDetect.c collDetect/collisionFrameCalculate.c $(CFLAGS) -c
 
 generateHerdingSheepsEngineListCode: dataStructures/templates/listTemplate.h dataStructures/templates/listTemplate.inc
 	dataStructures/generateList.py herdingSheepsEngine/listHeaders herdingSheepsEngine/listCode objectActor:objectActor jint:jint
@@ -69,4 +72,6 @@ objectActor: actors/objectActor/objectActor.h actors/objectActor/objectActor.c
 	$(CC) -IjTypes actors/objectActor/objectActor.c $(CFLAGS) -c
 
 all: engine herdingSheepsEngineT textBoxActor frameRateBar infoBox collisionDiagramActor pointActor lineActor rectActor objectActor collDetectT studiousBroccoliT hsStateMachine main.c 
-	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o textBoxActor.o frameRateBar.o infoBox.o collisionDiagramActor.o pointActor.o lineActor.o rectActor.o objectActor.o collDetect.o studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps
+	$(CC) -IjTypes -IcollDetect -IstudiousBroccoli main.c engine.o herdingSheepsEngine.o inputProcessor.o jTypes.o frameRateTracker.o textBoxActor.o frameRateBar.o infoBox.o collisionDiagramActor.o pointActor.o lineActor.o rectActor.o objectActor.o collDetect.o \
+		collisionFrameCalculate.o \
+		studiousBroccoli.o HSStateMachine.o $(CFLAGS) -o herdingSheeps

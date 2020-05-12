@@ -7,6 +7,8 @@
 #include "listCode/objectActorList.inc"
 #include "listCode/jintList.inc"
 
+#include <collisionFrameCalculate.h>
+
 typedef enum STARTUP_CLICK_STATE {
     STARTUP_CLICK_STATE_POSITION_SELECT,
     STARTUP_CLICK_STATE_VELOCITY_SELECT,
