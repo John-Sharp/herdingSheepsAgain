@@ -140,6 +140,15 @@ void herdingSheepsEngineCalculateFocussedObjectCollisionPoints(herdingSheepsEngi
     if (!this->objectActorList)
         return;
 
+
+    jintList * l;
+    while ((l = this->collFrameList))
+    {
+        this->collFrameList = l->next;
+        free(l->val);
+        free(l);
+    }
+
     collActor * focussedCollActor = objectActorGetCollActor(this->objectActorList->val);
     objectActorList * listNode;
     for (listNode = this->objectActorList->next; listNode != NULL; listNode = listNode->next)
@@ -224,4 +233,5 @@ void herdingSheepsEngineSwitchFocus(herdingSheepsEngine * this)
     {}
     node->next = oldHead;
     oldHead->next = NULL;
+    herdingSheepsEngineCalculateFocussedObjectCollisionPoints(this);
 }
