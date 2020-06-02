@@ -22,11 +22,36 @@ void herdingSheepsPreRender(engine * e)
     HSStateMachineProcessInput(hsEng->mainStateMachine);
 }
 
+void herdingSheepsPreLogic(engine * e)
+{
+    herdingSheepsEngine * this = e->owner;
+
+    HS_GAME_STATE currentState;
+    SBStateMachineGetCurrentState(
+        this->mainStateMachine, &currentState);
+    if (currentState == HS_GAME_STATE_RUNNING)
+    {
+        collEngineProcessFrame(this->collEngine);
+    }
+}
+
+void herdingSheepsCollHandler(collActor * ca1, collActor * ca2)
+{
+    printf("I have been called, exiting\n\n");
+    exit(0);
+    // TODO set velocity to reverse here
+}
+
 herdingSheepsEngine * initHerdingSheepsEngine(herdingSheepsEngine * eng)
 {
     eng->engine = createEngine(800, 600, eng);
+    eng->collEngine = createCollEngine();
+    collEngineUpsertCollGroup(eng->collEngine,
+            HS_COLLISION_CATEGORY, HS_COLLISION_CATEGORY,
+            herdingSheepsCollHandler);
 
     enginePreRenderCallBackReg(eng->engine, herdingSheepsPreRender);
+    enginePreLogicCallBackReg(eng->engine, herdingSheepsPreLogic);
 
     // setup collisionDiagram
     {

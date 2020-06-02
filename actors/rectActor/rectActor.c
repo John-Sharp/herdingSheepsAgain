@@ -39,9 +39,14 @@ void rectActorInit(
         .shape = {
             .rect = params->rect 
         },
-        .vel = {.v = {{0, 0}}, .s = 80}
+        .vel = {.v = {{0, 0}}, .s = 80},
+        .categoryNumber = HS_COLLISION_CATEGORY,
+        .nextScheduledCollision = NULL
     };
     this->ca = ca;
+    collEngineRegisterCollActor(
+            ((herdingSheepsEngine *)eng->owner)->collEngine,
+            &this->ca);
 
     this->originalRect = params->rect;
 
@@ -57,6 +62,9 @@ void rectActorInit(
 void rectActorDeinit(rectActor * this)
 {
     actorEngineDereg(&this->a);
+    collEngineDeregisterCollActor(
+            ((herdingSheepsEngine *)this->a.eng->owner)->collEngine,
+            &this->ca);
 }
 
 void rectActorGetRect(
@@ -194,7 +202,9 @@ static void rectActorSetVelocityToMouseLocation(
     lStart.v[0] += jintRectGetWidth(&this->ca.shape.rect)/2;
     lStart.v[1] += jintRectGetHeight(&this->ca.shape.rect)/2;
 
-    this->ca.vel.v = jintVecSub(lEnd, lStart);
+    jintVecScaled v = {.v = jintVecSub(lEnd, lStart), .s = 80};
+    rectActorSetVelocity(
+            &this->oa, &v);
 }
 
 static void rectActorResetAppearence(objectActor * oa)
@@ -207,7 +217,9 @@ static void rectActorSetVelocity(
         objectActor * oa, const jintVecScaled * v)
 {
     rectActor * this = oa->ptr.ra;
-    this->ca.vel = *v;
+    collEngineCollActorSetVelocity(
+            ((herdingSheepsEngine *)this->a.eng->owner)->collEngine,
+            &this->ca, v);
 }
 
 static collActor * rectActorGetCollActor(

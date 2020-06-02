@@ -61,6 +61,15 @@ static bool lineActorIsFocussedActor(
     return false;
 }
    
+void lineActorSetVelocity(
+        objectActor * oa, const jintVecScaled * v)
+{
+    lineActor * this = oa->ptr.la;
+    collEngineCollActorSetVelocity(
+            ((herdingSheepsEngine *)this->a.eng->owner)->collEngine,
+            &this->ca, v);
+}
+
 void lineActorLogicHandler(actor * a)
 {
     lineActor * this = a->owner;
@@ -105,22 +114,15 @@ void lineActorLogicHandler(actor * a)
                 lStart = this->ca.shape.line.rStart;
                 jint coordIndex = this->ca.type == COLL_ACTOR_TYPE_H_LINE ? 0 : 1;
                 lStart.v[coordIndex] += this->ca.shape.line.length/2;
-                this->ca.vel.v = jintVecSub(lEnd, lStart);
-                this->ca.vel.s = 80;
                 this->ca.frameStart = a->eng->currentFrame;
+                jintVecScaled v = {.v = jintVecSub(lEnd, lStart), .s = 80};
+                lineActorSetVelocity(&this->oa, &v);
             }
             break;
         }
         default:
             break;
     }
-}
-
-void lineActorSetVelocity(
-        objectActor * oa, const jintVecScaled * v)
-{
-    lineActor * this = oa->ptr.la;
-    this->ca.vel = *v;
 }
 
 collActor * lineActorGetCollActor(
@@ -146,9 +148,15 @@ void lineActorInit(
         .shape = {
             .line = params->line 
         },
-        .vel = {.v = {{0, 0}}, .s = 80}
+        .vel = {.v = {{0, 0}}, .s = 80},
+        .categoryNumber = HS_COLLISION_CATEGORY,
+        .nextScheduledCollision = NULL
     };
     this->ca = ca;
+    collEngineRegisterCollActor(
+            ((herdingSheepsEngine *)eng->owner)->collEngine,
+            &this->ca);
+
     this->originalLine = this->ca.shape.line;
 
     this->oa.type = params->line.direction == AX_PL_DIR_Y ? \
@@ -164,6 +172,9 @@ void lineActorInit(
 void lineActorDeinit(lineActor * this)
 {
     actorEngineDereg(&this->a);
+    collEngineDeregisterCollActor(
+            ((herdingSheepsEngine *)this->a.eng->owner)->collEngine,
+            &this->ca);
 }
 
 void lineActorGetLine(

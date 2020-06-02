@@ -90,7 +90,9 @@ void pointActorSetVelocity(
         objectActor * oa, const jintVecScaled * v)
 {
     pointActor * this = oa->ptr.pa;
-    this->ca.vel = *v;
+    collEngineCollActorSetVelocity(
+            ((herdingSheepsEngine *)this->a.eng->owner)->collEngine,
+            &this->ca, v);
 }
 
 collActor * pointActorGetCollActor(
@@ -116,9 +118,14 @@ void initPointActor(engine * eng, pointActor * this)
         .vel = {
             .v = {{0,0}},
             .s = 80
-        }
+        },
+        .categoryNumber = HS_COLLISION_CATEGORY,
+        .nextScheduledCollision = NULL
     };
     this->ca = ca;
+    collEngineRegisterCollActor(
+            ((herdingSheepsEngine *)eng->owner)->collEngine,
+            &this->ca);
 
     this->oa.type = OBJECT_ACTOR_TYPE_POINT;
     this->oa.ptr.pa = this;
@@ -132,6 +139,9 @@ void initPointActor(engine * eng, pointActor * this)
 void pointActorDeinit(pointActor * this)
 {
     actorEngineDereg(&this->a);
+    collEngineDeregisterCollActor(
+            ((herdingSheepsEngine *)this->a.eng->owner)->collEngine,
+            &this->ca);
 }
 
 void pointActorGetPosition(pointActor * this, jintVec * r)

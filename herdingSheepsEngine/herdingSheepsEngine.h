@@ -16,8 +16,14 @@
 
 #include <studiousBroccoli.h>
 
+enum 
+{
+    HS_COLLISION_CATEGORY = 1
+};
+
 typedef struct herdingSheepsEngine {
     engine * engine;
+    collEngine * collEngine;
 
     collisionDiagramActor collisionDiagram;
     textBoxActor frameRateBar;
