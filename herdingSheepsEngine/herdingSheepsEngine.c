@@ -35,9 +35,11 @@ void herdingSheepsPreLogic(engine * e)
     }
 }
 
-void herdingSheepsCollHandler(collActor * ca1, collActor * ca2)
+void herdingSheepsCollHandler(
+        collActor * ca1, collActor * ca2, const jintVec * norm)
 {
-    printf("I have been called, exiting\n\n");
+    printf("I have been called, exiting (ca1 type: %u norm : (%d, %d))\n\n",
+            ca1->type, norm->v[0], norm->v[1]);
     exit(0);
     // TODO set velocity to reverse here
 }
@@ -180,8 +182,10 @@ void herdingSheepsEngineCalculateFocussedObjectCollisionPoints(herdingSheepsEngi
     {
         collActor * otherCollActor = objectActorGetCollActor(listNode->val);
         jint collFrame;
+        jintVec norm;
         if (calculateNextCollisionFrame(
                     &collFrame,
+                    &norm,
                     focussedCollActor, otherCollActor) == COLL_FRAME_CALC_OK)
         {
             jint * collFrameStorage = malloc(sizeof(*collFrameStorage));
