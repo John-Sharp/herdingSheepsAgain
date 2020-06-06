@@ -41,6 +41,15 @@ static bool pointActorIsFocussedActor(
     return false;
 }
 
+void pointActorSetVelocity(
+        objectActor * oa, const jintVecScaled * v)
+{
+    pointActor * this = oa->ptr.pa;
+    collEngineCollActorSetVelocity(
+            ((herdingSheepsEngine *)this->a.eng->owner)->collEngine,
+            &this->ca, v);
+}
+
 void pointActorLogicHandler(actor * a)
 {
     pointActor * this = a->owner;
@@ -66,9 +75,13 @@ void pointActorLogicHandler(actor * a)
                 jintVec lEnd = engineGetMouseLocation(this->a.eng);
 
                 lStart = this->ca.shape.point;
-                this->ca.vel.v = jintVecSub(lEnd, lStart);
-                this->ca.vel.s = 80;
-                this->ca.frameStart = a->eng->currentFrame;
+                jintVecScaled vel;
+                vel.v = jintVecSub(lEnd, lStart);
+                vel.s = 80;
+                pointActorSetVelocity(
+                        &this->oa, 
+                        &vel);
+                // this->ca.frameStart = a->eng->currentFrame;
             }
             break;
         }
@@ -84,15 +97,6 @@ void pointActorLogicHandler(actor * a)
         default:
             break;
     }
-}
-
-void pointActorSetVelocity(
-        objectActor * oa, const jintVecScaled * v)
-{
-    pointActor * this = oa->ptr.pa;
-    collEngineCollActorSetVelocity(
-            ((herdingSheepsEngine *)this->a.eng->owner)->collEngine,
-            &this->ca, v);
 }
 
 collActor * pointActorGetCollActor(
